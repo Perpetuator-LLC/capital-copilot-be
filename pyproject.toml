@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "capital-copilot"
+version = "0.1.0"
+description = "Capital Copilot is a tool to help aggregate market data, setup alerts, automate trading, and provide AI insights."
+authors = ["Nik <nik.cimino@gmail.com>"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.0.3"
+django-allauth = "^0.61.1"
+
+
+[tool.poetry.group.dev.dependencies]
+langchain = "^0.1.11"
+langchain-openai = "^0.0.8"
+gitpython = "^3.1.42"
+black = "^24.2.0"
+isort = "^5.13.2"
+flake8 = "^7.0.0"
+django-extensions = "^3.2.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
