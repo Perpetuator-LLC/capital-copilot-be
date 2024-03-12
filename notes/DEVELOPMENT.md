@@ -1,5 +1,12 @@
 [//]: # (Copyright © 2024 eContriver LLC)
 
+# Concepts
+
+## CLI First
+
+This project uses a CLI first approach. The CLI is the primary interface for the user. After that IDEs etc. are used for 
+development, but you must be able to run any code generation or manipulation from the CLI.
+
 # Git Commits
 
 ## Generating new Versions
@@ -53,6 +60,43 @@ This project uses `flake8` to lint the code. To run this tool, use the following
 poetry run flake8 .
 ```
 
+This project uses `mypy` to type check the code. To run this tool, use the following command:
+
+```shell
+poetry run mypy .
+```
+
+# Pre-Commit Setup
+
+This project uses `pre-commit` to run the above tools before each commit. To install `pre-commit`, use the following command:
+
+```shell
+poetry add pre-commit
+poetry run pre-commit install
+```
+
+# Pre-Commit Update
+
+To update the pre-commit hooks, use the following command:
+
+```shell
+poetry run pre-commit autoupdate
+```
+
+_NOTE: This will update the `.pre-commit-config.yaml` file. Remember to update the `pyproject.toml` versions._
+
+# Manually Running Pre-Commit
+
+To manually run the pre-commit hooks, use the following command:
+
+```shell
+poetry run pre-commit run --all-files
+```
+
+To run one of the tools use:
+```shell
+pre-commit run mypy --all-files
+```
 
 # Python Environment
 

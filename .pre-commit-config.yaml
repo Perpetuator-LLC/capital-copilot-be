@@ -1,0 +1,43 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 24.2.0
+    hooks:
+      - id: black
+        language_version: python3
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        language_version: python3
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        language_version: python3
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: MyPy
+        entry: poetry run mypy
+        language: system
+        types: [python]
+        files: .
+
+#  - repo: https://github.com/pre-commit/mirrors-mypy
+#    rev: v1.9.0
+#    hooks:
+#      - id: mypy
+#        additional_dependencies: [types-setuptools, types-requests]
+
+  - repo: local
+    hooks:
+      - id: version-check
+        name: Version Sync Check
+        entry: python -m scripts.check_versions_sync
+        language: system
+        files: '(\.pre-commit-config\.yaml|pyproject\.toml)'
+        pass_filenames: false
+  

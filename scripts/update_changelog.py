@@ -5,21 +5,18 @@ import logging
 import os
 import sys
 
-script_dir = os.path.dirname(os.path.realpath(__file__))
-# sys.path.append(os.path.realpath(os.path.join(script_dir, '../ace-stack/base')))
-repo_dir = os.path.realpath(os.path.join(script_dir, ".."))
-# sys.path.append(repo_dir)
-
 from git import Repo
-from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
+from langchain_openai import ChatOpenAI
 
-# from ace_shared.ace_shared import configure_logging
-# from research.research_shared import process_env
+from copilot.copilot_shared import configure_logging, process_env
 
 
 def main():
     configure_logging(logging.INFO)
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    repo_dir = os.path.realpath(os.path.join(script_dir, ".."))
+
     process_env(script_dir)
 
     old_tag = "v0.1.0"
