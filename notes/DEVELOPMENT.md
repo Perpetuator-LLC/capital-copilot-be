@@ -72,7 +72,8 @@ This project uses `pre-commit` to run the above tools before each commit. To ins
 
 ```shell
 poetry add pre-commit
-poetry run pre-commit install
+poetry shell
+pre-commit install
 ```
 
 # Pre-Commit Update
@@ -80,7 +81,7 @@ poetry run pre-commit install
 To update the pre-commit hooks, use the following command:
 
 ```shell
-poetry run pre-commit autoupdate
+pre-commit autoupdate
 ```
 
 _NOTE: This will update the `.pre-commit-config.yaml` file. Remember to update the `pyproject.toml` versions._
@@ -90,9 +91,11 @@ _NOTE: This will update the `.pre-commit-config.yaml` file. Remember to update t
 To manually run the pre-commit hooks, use the following command:
 
 ```shell
-poetry shell
 pre-commit run --all-files
 ```
+
+**WARNING**: When running these manually sometimes a file will be flagged that `git commit` will not flag. This is because
+the `git` invocation only checks the _staged_ files, whereas running this command will check all files.
 
 To run one of the tools use:
 ```shell

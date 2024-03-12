@@ -43,6 +43,16 @@ repos:
 
   - repo: local
     hooks:
+      - id: copyright-check
+        name: Copyright Check
+        entry: python -m scripts.check_copyright
+        language: system
+        types: [python]
+        files: .
+        pass_filenames: true
+
+  - repo: local
+    hooks:
       - id: version-check
         name: Version Sync Check
         entry: python -m scripts.check_versions_sync

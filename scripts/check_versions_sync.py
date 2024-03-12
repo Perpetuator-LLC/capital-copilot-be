@@ -1,5 +1,21 @@
 #!/usr/bin/env python3
-# Copyright (c) 2024 eContriver LLC
+# ------------------------------------------------------------------------------
+#  Copyright (c) 2024 eContriver LLC
+#  This file is part of Capital Copilot from eContriver.
+#  -
+#  Capital Copilot from eContriver is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  any later version.
+#  -
+#  Capital Copilot from eContriver is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  -
+#  You should have received a copy of the GNU General Public License
+#  along with Capital Copilot from eContriver.  If not, see <https://www.gnu.org/licenses/>.
+# ------------------------------------------------------------------------------
 
 import logging
 import os
@@ -42,13 +58,6 @@ def load_pyproject_versions(repo_dir):
             poetry.get("group", {}).get("dev", {}).get("dependencies", {})
         )
     return {**dependencies, **dev_dependencies}
-
-
-# def load_precommit_versions():
-#     with open(os.path.join(repo_dir, '.pre-commit-config.yaml'), 'r') as precommit_file:
-#         precommit_config = yaml.safe_load(precommit_file)
-#         hooks = sum([repo.get('hooks', []) for repo in precommit_config.get('repos', [])], [])
-#     return {hook['id']: hook.get('rev', '') for hook in hooks}
 
 
 def load_precommit_versions(repo_dir):
