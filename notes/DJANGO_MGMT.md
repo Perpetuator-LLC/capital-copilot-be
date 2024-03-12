@@ -1,3 +1,12 @@
+# Run Server
+
+To run the server use:
+
+```shell
+python manage.py migrate
+python manage.py runserver
+```
+
 # Database
 
 To connect to the database use:
@@ -17,7 +26,4 @@ auth_user                      socialaccount_socialapp
 auth_user_groups               socialaccount_socialapp_sites
 auth_user_user_permissions     socialaccount_socialtoken    
 django_admin_log        
-```
-
-```sqlite
 ```

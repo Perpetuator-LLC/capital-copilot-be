@@ -90,7 +90,8 @@ _NOTE: This will update the `.pre-commit-config.yaml` file. Remember to update t
 To manually run the pre-commit hooks, use the following command:
 
 ```shell
-poetry run pre-commit run --all-files
+poetry shell
+pre-commit run --all-files
 ```
 
 To run one of the tools use:

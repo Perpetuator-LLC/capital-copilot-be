@@ -11,6 +11,28 @@ import yaml
 from copilot.copilot_shared import configure_logging
 
 
+def main():
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    repo_dir = os.path.realpath(os.path.join(script_dir, ".."))
+    configure_logging(logging.INFO)
+    pyproject_versions = load_pyproject_versions(repo_dir)
+    logging.debug(f"pyproject.toml versions: {pyproject_versions}")
+    precommit_versions = load_precommit_versions(repo_dir)
+    logging.debug(f".pre-commit-config.yaml versions: {precommit_versions}")
+    mismatches = check_versions_sync(pyproject_versions, precommit_versions)
+    if mismatches:
+        logging.info(
+            "Version mismatches found between pyproject.toml and .pre-commit-config.yaml:"
+        )
+        for tool, pyproject_version, precommit_version in mismatches:
+            logging.info(
+                f"{tool}: pyproject.toml={pyproject_version}, .pre-commit-config.yaml={precommit_version}"
+            )
+        sys.exit(1)
+    else:
+        logging.info("All versions are in sync.")
+
+
 def load_pyproject_versions(repo_dir):
     with open(os.path.join(repo_dir, "pyproject.toml"), "r") as pyproject_file:
         pyproject = toml.load(pyproject_file)
@@ -60,28 +82,6 @@ def check_versions_sync(pyproject_versions, precommit_versions):
                 (tool, pyproject_version, precommit_versions[tool])
             )
     return mismatched_versions
-
-
-def main():
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-    repo_dir = os.path.realpath(os.path.join(script_dir, ".."))
-    configure_logging(logging.INFO)
-    pyproject_versions = load_pyproject_versions(repo_dir)
-    logging.debug(f"pyproject.toml versions: {pyproject_versions}")
-    precommit_versions = load_precommit_versions(repo_dir)
-    logging.debug(f".pre-commit-config.yaml versions: {precommit_versions}")
-    mismatches = check_versions_sync(pyproject_versions, precommit_versions)
-    if mismatches:
-        logging.info(
-            "Version mismatches found between pyproject.toml and .pre-commit-config.yaml:"
-        )
-        for tool, pyproject_version, precommit_version in mismatches:
-            logging.info(
-                f"{tool}: pyproject.toml={pyproject_version}, .pre-commit-config.yaml={precommit_version}"
-            )
-        sys.exit(1)
-    else:
-        logging.info("All versions are in sync.")
 
 
 if __name__ == "__main__":
