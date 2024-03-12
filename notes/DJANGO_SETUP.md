@@ -94,6 +94,10 @@ Scopes: For basic authentication and profile information, ensure the following s
 - profile
 - openid
 
+From the admin site make sure to also 'choose' the sites for the social application:
+- econtriver.com
+- 127.0.0.1:8000
+
 ## GitHub
 
 Visit: https://github.com/settings/apps (Settings -> Developer Settings)

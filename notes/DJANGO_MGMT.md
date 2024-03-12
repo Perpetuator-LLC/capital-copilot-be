@@ -27,3 +27,12 @@ auth_user_groups               socialaccount_socialapp_sites
 auth_user_user_permissions     socialaccount_socialtoken    
 django_admin_log        
 ```
+
+# Routes
+
+To see the routes use:
+
+```shell
+python manage.py show_urls
+```
+
