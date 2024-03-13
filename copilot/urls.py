@@ -36,12 +36,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from users.views import landing_page
+from users import views
 
 urlpatterns = [
-    path(
-        "", landing_page, name="landing_page"
-    ),  # Set as the root or another path as you prefer
+    path("", views.landing_page, name="landing_page"),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
+    path("accounts/social/", views.social_accounts, name="social_accounts"),
+    path(
+        "accounts/social/add/<provider_id>/",
+        views.add_social_account,
+        name="add_social_account",
+    ),
+    path(
+        "accounts/social/remove/<int:account_id>/",
+        views.remove_social_account,
+        name="remove_social_account",
+    ),
 ]

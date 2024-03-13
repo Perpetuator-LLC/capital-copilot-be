@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Social Accounts{% endblock %}
+
+{% block content %}
+<a href="{% url 'landing_page' %}">Home</a><br>
+<h2>Linked Social Accounts</h2>
+<ul>
+    {% for account in accounts %}
+    <li>{{ account.provider }} - {{ account.uid }} <a href="{% url 'remove_social_account' account.id %}">Remove</a></li>
+    {% endfor %}
+</ul>
+
+<h2>Add a Social Account</h2>
+<a href="{% url 'add_social_account' 'github' %}">Link GitHub Account</a><br>
+<a href="{% url 'add_social_account' 'google' %}">Link Google Account</a>
+{% endblock %}

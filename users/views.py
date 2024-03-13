@@ -15,28 +15,41 @@
 #  You should have received a copy of the GNU General Public License
 #  along with Capital Copilot from eContriver.  If not, see <https://www.gnu.org/licenses/>.
 # ------------------------------------------------------------------------------
-
-from django.shortcuts import render
-
-# from django import forms
-# from django.contrib.auth.forms import UserCreationForm
-# from django.contrib.auth.models import User
+from allauth.socialaccount import providers
+from allauth.socialaccount.models import SocialAccount
+from allauth.socialaccount.providers.oauth.client import OAuthError
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
 
 
 def landing_page(request):
     return render(request, "landing_page.html")
 
 
-# class CustomUserCreationForm(UserCreationForm):
-#     email = forms.EmailField(required=True)
-#
-#     class Meta:
-#         model = User
-#         fields = ("username", "email", "password1", "password2")
-#
-#     def save(self, commit=True):
-#         user = super().save(commit=False)
-#         user.email = self.cleaned_data["email"]
-#         if commit:
-#             user.save()
-#         return user
+@login_required
+def social_accounts(request):
+    """View to list all linked social accounts for the current user"""
+    accounts = SocialAccount.objects.filter(user=request.user)
+    return render(request, "users/social_accounts.html", {"accounts": accounts})
+
+
+@login_required
+def add_social_account(request, provider_id):
+    """Initiate the process of adding a new social account"""
+    try:
+        provider = providers.registry.get_class(provider_id)
+        auth_url = provider.get_login_url(provider, request)
+        return redirect(auth_url)
+    except KeyError:
+        return HttpResponse("Provider not found", status=404)
+    except OAuthError as e:
+        return HttpResponse(f"OAuth error: {e}", status=400)
+
+
+@login_required
+def remove_social_account(request, account_id):
+    """Remove a linked social account"""
+    account = SocialAccount.objects.get(pk=account_id, user=request.user)
+    account.delete()
+    return redirect("social_accounts")
