@@ -22,11 +22,12 @@ import os
 import sys
 from datetime import datetime
 
-from copilot.copilot_shared import configure_logging
+from copilot.copilot_shared import configure_logging, process_env
 
 
 def main():
-    configure_logging(logging.INFO)
+    process_env()
+    configure_logging()
     script_dir = os.path.dirname(os.path.realpath(__file__))
     repo_dir = os.path.realpath(os.path.join(script_dir, ".."))
     files = sys.argv[1:] if len(sys.argv) > 1 else [repo_dir]
@@ -34,19 +35,22 @@ def main():
     failed = False
 
     for file in files:
-        if not check_header(file):
-            print(f"GPL header check failed for {file}")
+        check_file = file if os.path.isfile(file) else os.path.realpath(os.path.join(repo_dir, file))
+        if not check_header(check_file):
+            checked_file = file if os.path.samefile(check_file, file) else (f"{file} (also checked {check_file}")
+            logging.error(f"GPL header check failed for {checked_file}")
             failed = True
 
     if failed:
         sys.exit(1)
+    logging.debug(f"GPL header check passed for {files}")
 
 
 def check_header(filename):
+    logging.debug(f"Checking file {filename}")
     with open(filename, "r") as file:
         content = file.read()
         return expected_copyright() in content
-        # return content.startswith(expected_copyright())
 
 
 def expected_copyright():

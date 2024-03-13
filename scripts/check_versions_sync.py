@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # ------------------------------------------------------------------------------
 #  Copyright (c) 2024 eContriver LLC
 #  This file is part of Capital Copilot from eContriver.
@@ -24,13 +23,14 @@ import sys
 import toml
 import yaml
 
-from copilot.copilot_shared import configure_logging
+from copilot.copilot_shared import configure_logging, process_env
 
 
 def main():
+    process_env()
+    configure_logging()
     script_dir = os.path.dirname(os.path.realpath(__file__))
     repo_dir = os.path.realpath(os.path.join(script_dir, ".."))
-    configure_logging(logging.INFO)
     pyproject_versions = load_pyproject_versions(repo_dir)
     logging.debug(f"pyproject.toml versions: {pyproject_versions}")
     precommit_versions = load_precommit_versions(repo_dir)

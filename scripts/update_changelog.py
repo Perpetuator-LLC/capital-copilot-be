@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # ------------------------------------------------------------------------------
 #  Copyright (c) 2024 eContriver LLC
 #  This file is part of Capital Copilot from eContriver.
@@ -29,7 +28,8 @@ from copilot.copilot_shared import configure_logging, process_env
 
 
 def main():
-    configure_logging(logging.INFO)
+    process_env()
+    configure_logging()
     script_dir = os.path.dirname(os.path.realpath(__file__))
     repo_dir = os.path.realpath(os.path.join(script_dir, ".."))
 

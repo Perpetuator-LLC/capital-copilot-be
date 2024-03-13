@@ -61,3 +61,11 @@ repos:
         files: '(\.pre-commit-config\.yaml|pyproject\.toml)'
         pass_filenames: false
   
+  -   repo: local
+      hooks:
+        -   id: semantic-commit-message
+            name: 'Check Commit Message Format'
+            entry: python -m scripts.check_commit_msg
+            language: system
+            stages: [commit-msg]
+            files: ''

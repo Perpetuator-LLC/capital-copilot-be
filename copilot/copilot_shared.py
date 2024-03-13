@@ -19,11 +19,8 @@
 import json
 import logging
 import os
-import sys
 
-import dotenv
-
-# Shall only use python builtins/standard packages here
+from dotenv import load_dotenv
 
 
 def configure_logging(level=None):
@@ -54,8 +51,6 @@ def print_pkg_versions():
 
 
 def get_log_level():
-    if os.getenv("DEBUG") == "1":  # NOTE: this is legacy, use LOG_LEVEL instead
-        return logging.DEBUG
     log_level_mapping = {
         "DEBUG": logging.DEBUG,
         "INFO": logging.INFO,
@@ -73,27 +68,9 @@ def get_collection():
     return collection
 
 
-def process_env(script_dir, env=None):
-    envs = ["prod", "stage"]
-    env = env if env or len(sys.argv) <= 1 else sys.argv[1]
-    if env not in envs:
-        raise ValueError(
-            f"Incorrect arguments provided, expecting {str(envs)} but got {None if len(sys.argv) <= 1 else sys.argv[1]}"
-        )
-    dotenv_file = find_dotenv(script_dir, env)
-    dotenv.load_dotenv(dotenv_file)
-    return env
-
-
-def find_dotenv(starting_directory, config_env=None):
-    if not os.path.isdir(starting_directory):
-        raise ValueError(f"The provided path '{starting_directory}' is not a valid directory.")
-    current_directory = starting_directory
-    while True:
-        dotenv_path = os.path.join(current_directory, f".env.{config_env}" if config_env else ".env")
-        if os.path.isfile(dotenv_path):
-            logging.debug(f"env file found at: {dotenv_path}")
-            return dotenv_path
-        if os.path.dirname(current_directory) == current_directory:
-            raise FileNotFoundError("'.env' file not found in any of the parent directories.")
-        current_directory = os.path.dirname(current_directory)
+def process_env():
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    base_dir = os.path.realpath(os.path.join(script_dir, ".."))
+    dotenv_file = os.path.join(base_dir, ".env")
+    load_dotenv(dotenv_file)
+    return dotenv_file

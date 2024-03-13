@@ -102,6 +102,16 @@ To run one of the tools use:
 pre-commit run mypy --all-files
 ```
 
+# Check Scripts
+
+This project uses `check` scripts to implement custom code quality checks. To run these tools, use the following 
+commands:
+
+```shell
+python -m scripts.check_commit_msg .git/COMMIT_EDITMSG
+python -m scripts.check_copyright ./users/admin.py
+```
+
 # Python Environment
 
 ## Errors
