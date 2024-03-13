@@ -4,6 +4,7 @@
 
 {% block content %}
 <h1>Welcome to Our Site!</h1>
+<a href="{% url 'contact' %}">Contact Us</a>
 {% if user.is_authenticated %}
 <a href="{% url 'account_logout' %}">Logout</a>
 <a href="{% url 'account_change_password' %}">Change Password</a>

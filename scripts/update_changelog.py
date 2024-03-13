@@ -88,9 +88,7 @@ def summarize(changelog, old_tag, new_tag):
             "## Cleanups"
             "<list_of_cleanups>"
         ),
-        HumanMessage(
-            content=f"Convert the following commits into a summary: {changelog}"
-        ),
+        HumanMessage(content=f"Convert the following commits into a summary: {changelog}"),
     ]
     response = chat.invoke(messages)
     logging.info(response.content)

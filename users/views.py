@@ -15,12 +15,21 @@
 #  You should have received a copy of the GNU General Public License
 #  along with Capital Copilot from eContriver.  If not, see <https://www.gnu.org/licenses/>.
 # ------------------------------------------------------------------------------
+
+import datetime
+
 from allauth.socialaccount import providers
 from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.providers.oauth.client import OAuthError
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.utils import timezone
+
+from .forms import ContactForm
+from .models import ContactSubmission
 
 
 def landing_page(request):
@@ -53,3 +62,47 @@ def remove_social_account(request, account_id):
     account = SocialAccount.objects.get(pk=account_id, user=request.user)
     account.delete()
     return redirect("social_accounts")
+
+
+def contact(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            ip_address = get_client_ip(request)
+            last_submission = (
+                ContactSubmission.objects.filter(ip_address=ip_address).order_by("-submission_time").first()
+            )
+            name = form.cleaned_data["name"]
+            email = form.cleaned_data["email"]
+            message = form.cleaned_data["message"]
+            debounce_time = datetime.timedelta(minutes=5)
+            if not last_submission or (timezone.now() - last_submission.submission_time > debounce_time):
+                email_message = f"From: {name}\n\nEmail: {email}\n\n{message}"
+                send_mail(
+                    "Capital Copilot - Contact form submission",
+                    email_message,
+                    "nik@econtriver.com",
+                    ["support@econtriver.com"],
+                    fail_silently=False,
+                )
+                ContactSubmission.objects.create(
+                    name=name, email=email, message=message, ip_address=ip_address
+                )  # Log this submission
+                messages.success(request, "Your message has been sent successfully.")
+                return redirect("landing_page")
+            else:
+                messages.warning(request, "A contact us form was recently submitted.")
+                return redirect("landing_page")
+    else:
+        form = ContactForm()
+    return render(request, "contact.html", {"form": form})
+
+
+def get_client_ip(request):
+    """Get the client IP address from the request object."""
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(",")[0]
+    else:
+        ip = request.META.get("REMOTE_ADDR")
+    return ip

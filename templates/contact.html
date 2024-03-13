@@ -1,0 +1,7 @@
+<a href="{% url 'landing_page' %}">Back to Home</a>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send</button>
+</form>

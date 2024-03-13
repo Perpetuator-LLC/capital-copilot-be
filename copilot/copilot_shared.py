@@ -87,19 +87,13 @@ def process_env(script_dir, env=None):
 
 def find_dotenv(starting_directory, config_env=None):
     if not os.path.isdir(starting_directory):
-        raise ValueError(
-            f"The provided path '{starting_directory}' is not a valid directory."
-        )
+        raise ValueError(f"The provided path '{starting_directory}' is not a valid directory.")
     current_directory = starting_directory
     while True:
-        dotenv_path = os.path.join(
-            current_directory, f".env.{config_env}" if config_env else ".env"
-        )
+        dotenv_path = os.path.join(current_directory, f".env.{config_env}" if config_env else ".env")
         if os.path.isfile(dotenv_path):
             logging.debug(f"env file found at: {dotenv_path}")
             return dotenv_path
         if os.path.dirname(current_directory) == current_directory:
-            raise FileNotFoundError(
-                "'.env' file not found in any of the parent directories."
-            )
+            raise FileNotFoundError("'.env' file not found in any of the parent directories.")
         current_directory = os.path.dirname(current_directory)

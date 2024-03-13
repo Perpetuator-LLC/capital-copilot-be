@@ -53,4 +53,5 @@ urlpatterns = [
         views.remove_social_account,
         name="remove_social_account",
     ),
+    path("contact/", views.contact, name="contact"),
 ]

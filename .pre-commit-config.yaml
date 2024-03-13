@@ -49,6 +49,7 @@ repos:
         language: system
         types: [python]
         files: .
+        exclude: '.*/migrations/.*'
         pass_filenames: true
 
   - repo: local

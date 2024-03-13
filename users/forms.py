@@ -16,8 +16,10 @@
 #  along with Capital Copilot from eContriver.  If not, see <https://www.gnu.org/licenses/>.
 # ------------------------------------------------------------------------------
 
-from django.contrib import admin
+from django import forms
 
-from .models import ContactSubmission
 
-admin.site.register(ContactSubmission)
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    message = forms.CharField(widget=forms.Textarea)

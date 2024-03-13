@@ -18,6 +18,11 @@
 </header>
 
 <main>
+    {% if messages %}
+      {% for message in messages %}
+        <div>{{ message }}</div>
+      {% endfor %}
+    {% endif %}
     <!-- Main content placeholder, to be overridden by child templates -->
     {% block content %}{% endblock %}
 </main>

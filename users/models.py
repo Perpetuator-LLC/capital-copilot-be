@@ -16,6 +16,13 @@
 #  along with Capital Copilot from eContriver.  If not, see <https://www.gnu.org/licenses/>.
 # ------------------------------------------------------------------------------
 
-# from django.db import models
+from django.db import models
 
-# Create your models here.
+
+class ContactSubmission(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    message = models.TextField()
+    ip_address = models.GenericIPAddressField()
+    submission_time = models.DateTimeField(auto_now_add=True)
+    resolved = models.BooleanField(default=False)

@@ -37,13 +37,9 @@ def main():
     logging.debug(f".pre-commit-config.yaml versions: {precommit_versions}")
     mismatches = check_versions_sync(pyproject_versions, precommit_versions)
     if mismatches:
-        logging.info(
-            "Version mismatches found between pyproject.toml and .pre-commit-config.yaml:"
-        )
+        logging.info("Version mismatches found between pyproject.toml and .pre-commit-config.yaml:")
         for tool, pyproject_version, precommit_version in mismatches:
-            logging.info(
-                f"{tool}: pyproject.toml={pyproject_version}, .pre-commit-config.yaml={precommit_version}"
-            )
+            logging.info(f"{tool}: pyproject.toml={pyproject_version}, .pre-commit-config.yaml={precommit_version}")
         sys.exit(1)
     else:
         logging.info("All versions are in sync.")
@@ -54,9 +50,7 @@ def load_pyproject_versions(repo_dir):
         pyproject = toml.load(pyproject_file)
         poetry = pyproject.get("tool", {}).get("poetry", {})
         dependencies = poetry.get("dependencies", {})
-        dev_dependencies = (
-            poetry.get("group", {}).get("dev", {}).get("dependencies", {})
-        )
+        dev_dependencies = poetry.get("group", {}).get("dev", {}).get("dependencies", {})
     return {**dependencies, **dev_dependencies}
 
 
@@ -87,9 +81,7 @@ def check_versions_sync(pyproject_versions, precommit_versions):
         normalized_pyproject_version = normalize_version(pyproject_version)
         normalized_precommit_version = normalize_version(precommit_versions[tool])
         if normalized_pyproject_version != normalized_precommit_version:
-            mismatched_versions.append(
-                (tool, pyproject_version, precommit_versions[tool])
-            )
+            mismatched_versions.append((tool, pyproject_version, precommit_versions[tool]))
     return mismatched_versions
 
 
