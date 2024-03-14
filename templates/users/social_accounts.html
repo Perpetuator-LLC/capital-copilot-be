@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
+
 {% block title %}Social Accounts{% endblock %}
 
 {% block content %}
-<a href="{% url 'landing_page' %}">Home</a><br>
 <h2>Linked Social Accounts</h2>
 <ul>
     {% for account in accounts %}

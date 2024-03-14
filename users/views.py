@@ -33,7 +33,7 @@ from .models import ContactSubmission
 
 
 def landing_page(request):
-    return render(request, "landing_page.html")
+    return render(request, "landing/home.html")
 
 
 @login_required
@@ -95,7 +95,7 @@ def contact(request):
                 return redirect("landing_page")
     else:
         form = ContactForm()
-    return render(request, "contact.html", {"form": form})
+    return render(request, "landing/contact.html", {"form": form})
 
 
 def get_client_ip(request):
