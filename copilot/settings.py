@@ -27,16 +27,15 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
 import os
 from typing import List
 
-from copilot.copilot_shared import process_env
+from copilot.copilot_shared import configure_logging, process_env
 
-# configure_logging(logging.INFO)
 script_dir = os.path.dirname(os.path.realpath(__file__))
 base_dir = os.path.realpath(os.path.join(script_dir, ".."))
 process_env()
+configure_logging()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -80,7 +79,7 @@ ROOT_URLCONF = "copilot.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": os.path.join(base_dir, "templates"),
+        "DIRS": [os.path.join(base_dir, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
