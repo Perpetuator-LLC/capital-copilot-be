@@ -1,24 +1,29 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Capital Copilot{% endblock %}</title>
-    <link rel="stylesheet" href="{ % static 'css/style.css' %}">
-    {% block head %}{% endblock %}
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block head_title %}Capital Copilot
+            {% endblock head_title %}
+        </title>
+        {% block extra_head %}
+        {% endblock extra_head %}
+    </head>
+    <body>
+        {% block body %}
+            {% include 'snippets/messages.html' %}
+            {% include 'snippets/header.html' %}
 
-{% include 'snippets/header.html' %}
+            {% block content %}
+            {% endblock content %}
 
-<main>
-    {% include 'snippets/messages.html' %}
-    {% block content %}{% endblock %}
-</main>
+            {% include 'snippets/footer.html' %}
+        {% endblock body %}
 
-{% include 'snippets/footer.html' %}
-
-<script src="{ % static 'js/script.js' %}"></script>
-{% block scripts %}{% endblock %}
-</body>
+        {% block extra_body %}
+        {% endblock extra_body %}
+    </body>
 </html>

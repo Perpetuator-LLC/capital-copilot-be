@@ -1,19 +1,40 @@
+{% load i18n %}
 <header>
     <nav>
+        <strong>{% trans "Menu:" %}</strong>
         <ul>
-            <li><a href="{% url 'landing_page' %}">Home</a></li>
-            <li><a href="{% url 'contact' %}">Contact</a></li>
-    {% if user.is_authenticated %}
-    <li><a href="{% url 'account_logout' %}">Logout</a></li>
-    <li><a href="{% url 'account_change_password' %}">Change Password</a></li>
-    <li><a href="{% url 'account_email' %}">Change Email</a></li>
-    <li><a href="{% url 'social_accounts' %}">Manage Social Accounts</a></li>
-        {% if user.is_staff %}
-        <li><a href="{% url 'admin:index' %}">Admin</a></li>
-        {% endif %}
-    {% else %}
-        <li><a href="{% url 'account_login' %}">Login</a></li>
-    {% endif %}
+            <li>
+                <a href="{% url 'landing_page' %}">{% trans "Home" %}</a>
+            </li>
+            <li>
+                <a href="{% url 'contact' %}">{% trans "Contact" %}</a>
+            </li>
+            {% if user.is_authenticated %}
+                <li>
+                    <a href="{% url 'account_email' %}">{% trans "Change Email" %}</a>
+                </li>
+                <li>
+                    <a href="{% url 'account_change_password' %}">{% trans "Change Password" %}</a>
+                </li>
+                <li>
+                    <a href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
+                </li>
+                <li>
+                    <a href="{% url 'social_accounts' %}">{% trans "Manage Social Accounts" %}</a>
+                </li>
+                {% if user.is_staff %}
+                <li>
+                    <a href="{% url 'admin:index' %}">{% trans "Admin" %}</a>
+                </li>
+                {% endif %}
+            {% else %}
+                <li>
+                    <a href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+                </li>
+                <li>
+                    <a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+                </li>
+            {% endif %}
         </ul>
     </nav>
     <hr />
