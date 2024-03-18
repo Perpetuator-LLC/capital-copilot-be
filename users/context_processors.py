@@ -52,3 +52,21 @@ def footer_items(request):
         items.append({"name": _("Admin"), "link": reverse("admin:index")})
 
     return {"footer_items": items}
+
+
+def dark_mode_context(request):
+    """
+    This context processor adds a user's dark mode preference to the context, so we can use it in templates. This is
+    only needed so that dark and light modes don't flash on load. By setting the color scheme in the HTML, we can
+    avoid this.
+    :param request: The request object.
+    :return: A dictionary with the user's dark mode preference.
+    """
+    user_prefers_dark_mode = True
+
+    if request.user.is_authenticated:
+        user_prefers_dark_mode = request.user.preferences.dark_mode
+
+    return {
+        "user_prefers_dark_mode": user_prefers_dark_mode,
+    }

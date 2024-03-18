@@ -92,6 +92,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "users.context_processors.menu_items",
                 "users.context_processors.footer_items",
+                "users.context_processors.dark_mode_context",
             ],
         },
     },
