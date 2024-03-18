@@ -22,7 +22,12 @@ module.exports = {
     './templates/*.html',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: '#ff7700', // Custom primary color
+        secondary: '#944eff' // Custom secondary color
+      }
+    },
   },
   plugins: [],
 }

@@ -16,11 +16,14 @@ see <https://www.gnu.org/licenses/>.
 
 {% load i18n %}
 {% if messages %}
-    <div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="bg-stone-300 text-stone-700 rounded-lg p-4">
         <strong>{% trans "Messages:" %}</strong>
         <ul>
-            {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
         </ul>
-        <hr />
     </div>
+</div>
 {% endif %}

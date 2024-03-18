@@ -1,0 +1,86 @@
+<!--
+Copyright (c) 2024 eContriver LLC
+This file is part of Capital Copilot from eContriver.
+
+Capital Copilot from eContriver is free software: you can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation, either version 3 of the License, or any later
+version.
+
+Capital Copilot from eContriver is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received a copy of the GNU General Public License along with Capital Copilot from eContriver.  If not,
+see <https://www.gnu.org/licenses/>.
+-->
+
+{% extends "account/base_manage_email.html" %}
+{% load allauth i18n %}
+
+{% block head_title %}
+{% trans "Email Addresses" %}
+{% endblock head_title %}
+
+{% block content %}
+<div class="max-w-lg mx-auto mt-10">
+    <h1 class="text-2xl font-semibold text-stone-900 dark:text-stone-400 mb-6">{% trans "Email Addresses" %}</h1>
+    {% if emailaddresses %}
+    <p class="mb-4">{% trans 'The following email addresses are associated with your account:' %}</p>
+    <form action="{% url 'account_email' %}" method="post" class="space-y-4">
+        {% csrf_token %}
+        {% for radio in emailaddress_radios %}
+        {% with emailaddress=radio.emailaddress %}
+        <div>
+            <label for="{{ radio.id }}" class="flex items-center space-x-2">
+                <input type="radio" id="{{ radio.id }}" name="email" value="{{ emailaddress.email }}" {% if radio.checked %}checked{% endif %} class="form-radio">
+                <span>{{ emailaddress.email }}</span>
+            </label>
+            <div class="flex space-x-2 mt-1">
+                {% if emailaddress.verified %}
+                <span class="bg-green-200 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-green-700 dark:text-green-300">{% trans 'Verified' %}</span>
+                {% else %}
+                <span class="bg-yellow-200 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-300">{% trans 'Unverified' %}</span>
+                {% endif %}
+                {% if emailaddress.primary %}
+                <span class="bg-blue-200 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-700 dark:text-blue-300">{% trans 'Primary' %}</span>
+                {% endif %}
+            </div>
+        </div>
+        {% endwith %}
+        {% endfor %}
+        <div class="flex space-x-2">
+            <button type="submit" name="action_primary" class="bg-stone-800 text-white py-2 px-4 rounded hover:bg-stone-700">{% trans 'Make Primary' %}</button>
+            <button type="submit" name="action_send" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">{% trans 'Re-send Verification' %}</button>
+            <button type="submit" name="action_remove" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">{% trans 'Remove' %}</button>
+        </div>
+    </form>
+    {% else %}
+    {% include "account/snippets/warn_no_email.html" %}
+    {% endif %}
+
+    {% if can_add_email %}
+    <h2 class="text-2xl font-semibold text-stone-900 mt-8 mb-4">{% trans "Add Email Address" %}</h2>
+    <form action="{% url 'account_email' %}" method="post" class="space-y-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" name="action_add" class="bg-stone-800 text-white py-2 px-4 rounded hover:bg-stone-700">{% trans 'Add Email' %}</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock content %}
+
+{% block extra_body %}
+<script type="text/javascript">
+    (function() {
+        var message = "{% trans 'Do you really want to remove the selected email address?' %}";
+        var actions = document.getElementsByName('action_remove');
+        if (actions.length) {
+            actions[0].addEventListener("click", function(e) {
+                if (!confirm(message)) {
+                    e.preventDefault();
+                }
+            });
+        }
+    })();
+</script>
+{% endblock extra_body %}

@@ -14,13 +14,26 @@ You should have received a copy of the GNU General Public License along with Cap
 see <https://www.gnu.org/licenses/>.
 -->
 
-{% extends "base.html" %}
+{% extends "account/base_manage.html" %}
+{% load allauth i18n %}
 
-{% block title %}Landing Page{% endblock %}
+{% block head_title %}
+{% trans "Sign Out" %}
+{% endblock head_title %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-    <h1 class="text-2xl font-semibold">Welcome to Our Site!</h1>
-    <!-- Additional content goes here -->
+    <h1 class="text-2xl font-semibold dark:text-stone-400 text-stone-900 mb-4">{% trans "Sign Out" %}</h1>
+    <p class="mb-4">{% trans 'Are you sure you want to sign out?' %}</p>
+    {% url 'account_logout' as action_url %}
+    <form method="post" action="{{ action_url }}" class="space-y-4">
+        {% csrf_token %}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <button type="submit" class="py-2 px-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded">
+            {% trans 'Sign Out' %}
+        </button>
+    </form>
 </div>
-{% endblock %}
+{% endblock content %}
