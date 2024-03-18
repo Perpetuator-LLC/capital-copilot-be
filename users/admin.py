@@ -18,6 +18,7 @@
 
 from django.contrib import admin
 
-from .models import ContactSubmission
+from .models import ContactSubmission, UserPreferences
 
 admin.site.register(ContactSubmission)
+admin.site.register(UserPreferences)

@@ -1,9 +1,30 @@
-<footer>
-    <hr />
-    Copyright (c) eContriver 2024
-    <nav>
-        <ul>
-            <li><a href="https://discord.gg/RqFW3468wY">Discord</a></li>
-        </ul>
-    </nav>
+<footer class="bg-gray-800 text-white">
+    <div class="max-w-screen-xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="xl:grid xl:grid-cols-3 xl:gap-8">
+            <div class="mt-12 grid grid-cols-2 gap-8 xl:mt-0 xl:col-span-2">
+                <div class="md:grid md:grid-cols-2 md:gap-8">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">
+                            Resources
+                        </h3>
+                        <ul class="mt-4 space-y-4">
+                            {% for item in footer_items %}
+                                <li>
+                                    <a href="{{ item.link }}" class="text-base text-gray-300 hover:text-white">
+                                        {{ item.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="border-t border-gray-700">
+        <p class="mt-8 text-base text-gray-400 xl:mt-0">
+            &copy; 2024 eContriver. All rights reserved.
+        </p>
+    </div>
 </footer>
+

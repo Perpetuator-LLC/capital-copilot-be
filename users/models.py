@@ -26,3 +26,8 @@ class ContactSubmission(models.Model):
     ip_address = models.GenericIPAddressField()
     submission_time = models.DateTimeField(auto_now_add=True)
     resolved = models.BooleanField(default=False)
+
+
+class UserPreferences(models.Model):
+    user = models.OneToOneField("auth.User", on_delete=models.CASCADE, related_name="preferences")
+    dark_mode = models.BooleanField(default=True)

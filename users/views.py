@@ -17,6 +17,7 @@
 # ------------------------------------------------------------------------------
 
 import datetime
+import os
 
 from allauth.socialaccount import providers
 from allauth.socialaccount.models import SocialAccount
@@ -24,12 +25,12 @@ from allauth.socialaccount.providers.oauth.client import OAuthError
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
 
 from .forms import ContactForm
-from .models import ContactSubmission
+from .models import ContactSubmission, UserPreferences
 
 
 def landing_page(request):
@@ -39,8 +40,14 @@ def landing_page(request):
 @login_required
 def social_accounts(request):
     """View to list all linked social accounts for the current user"""
+    user = request.user
+    preferences = UserPreferences.objects.filter(user=user).first()
     accounts = SocialAccount.objects.filter(user=request.user)
-    return render(request, "users/social_accounts.html", {"accounts": accounts})
+    context = {
+        "dark_mode": preferences.dark_mode if preferences else False,
+        "accounts": accounts,
+    }
+    return render(request, "users/social_accounts.html", context=context)
 
 
 @login_required
@@ -81,8 +88,8 @@ def contact(request):
                 send_mail(
                     "Capital Copilot - Contact form submission",
                     email_message,
-                    "nik@econtriver.com",
-                    ["support@econtriver.com"],
+                    os.getenv("DEFAULT_FROM_EMAIL"),
+                    [os.getenv("CONTACT_EMAIL")],
                     fail_silently=False,
                 )
                 ContactSubmission.objects.create(
@@ -106,3 +113,13 @@ def get_client_ip(request):
     else:
         ip = request.META.get("REMOTE_ADDR")
     return ip
+
+
+@login_required
+def set_dark_mode(request):
+    if request.method == "POST":
+        user_pref, created = UserPreferences.objects.get_or_create(user=request.user)
+        user_pref.dark_mode = request.POST.get("darkMode") == "true"
+        user_pref.save()
+        return JsonResponse({"success": True})
+    return JsonResponse({"success": False})

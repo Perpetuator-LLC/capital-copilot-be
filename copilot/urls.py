@@ -54,4 +54,5 @@ urlpatterns = [
         name="remove_social_account",
     ),
     path("contact/", views.contact, name="contact"),
+    path("set_dark_mode/", views.set_dark_mode, name="set_dark_mode"),
 ]

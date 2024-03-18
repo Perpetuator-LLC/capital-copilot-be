@@ -1,0 +1,20 @@
+{
+  "name": "capital-copilot",
+  "version": "1.0.0",
+  "description": "A tool to help aggregate market data, setup alerts, automate trading, and provide AI insights.",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "tailwindcss build -i src/styles.css -o static/css/styles.css",
+    "watch:css": "tailwindcss build -i src/styles.css -o static/css/styles.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^10.4.18",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1"
+  },
+  "devDependencies": {}
+}

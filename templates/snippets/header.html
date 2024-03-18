@@ -1,41 +1,52 @@
 {% load i18n %}
+{% load static %}
 <header>
-    <nav>
-        <strong>{% trans "Menu:" %}</strong>
-        <ul>
-            <li>
-                <a href="{% url 'landing_page' %}">{% trans "Home" %}</a>
-            </li>
-            <li>
-                <a href="{% url 'contact' %}">{% trans "Contact" %}</a>
-            </li>
-            {% if user.is_authenticated %}
-                <li>
-                    <a href="{% url 'account_email' %}">{% trans "Change Email" %}</a>
-                </li>
-                <li>
-                    <a href="{% url 'account_change_password' %}">{% trans "Change Password" %}</a>
-                </li>
-                <li>
-                    <a href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
-                </li>
-                <li>
-                    <a href="{% url 'social_accounts' %}">{% trans "Manage Social Accounts" %}</a>
-                </li>
-                {% if user.is_staff %}
-                <li>
-                    <a href="{% url 'admin:index' %}">{% trans "Admin" %}</a>
-                </li>
-                {% endif %}
-            {% else %}
-                <li>
-                    <a href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
-                </li>
-                <li>
-                    <a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
-                </li>
-            {% endif %}
-        </ul>
+    <nav x-data="{ open: false }" class="bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{% url 'landing_page' %}" class="flex-shrink-0">
+                        <img src="{% static 'images/CapitalCopilot_medium.png' %}" alt="Capital Copilot" class="h-16 w-auto">
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <!-- Desktop Menu Items -->
+                        {% for item in menu_items %}
+                            <a href="{{ item.link }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{{ item.name }}</a>
+                        {% endfor %}
+                        <!-- Dark Mode Toggle -->
+<!--                        <button @click="darkMode = !darkMode" class="p-2 bg-gray-200 dark:bg-gray-800 text-black dark:text-white">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>-->
+<!--                        </button>-->
+                        <div x-data="darkMode()" x-init="init()">
+                            <button @click="toggleDarkMode()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                            </button>
+                        </div>
+<!--                        <div x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }" :class="{ 'dark': darkMode }">-->
+<!--                            <button @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode); updatePreference(darkMode)" class="p-2">-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>-->
+<!--                            </button>-->
+<!--                        </div>-->
+                    </div>
+                </div>
+                <div class="-mr-2 flex md:hidden">
+                    <!-- Mobile menu button -->
+                    <button @click="open = !open" class="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="open" class="md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                {% for item in menu_items %}
+                    <a href="{{ item.link }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">{{ item.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
     </nav>
-    <hr />
 </header>

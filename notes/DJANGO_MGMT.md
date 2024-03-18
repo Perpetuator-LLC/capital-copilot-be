@@ -49,16 +49,30 @@ the migrations to keep the number of migrations low until we again deploy to pro
 To reset migrations use:
 
 ```shell
+cd ..
 mv users/migrations{,-old}
-mv db.sqlite3{,-old}
-python manage.py migrate --fake users zero
+cp db.sqlite3{,-old}
 python manage.py makemigrations users
+python manage.py migrate --fake users zero
 ```
 
 If all is good, then:
 
 ```shell
-python manage.py migrate
+cd ..
+python manage.py migrate --fake
+```
+
+If there are problems, then we can restore the old migrations and database:
+
+```shell
+mv users/migrations{-old,}
+mv db.sqlite3{-old,}
+```
+
+Once we are done with development, we can remove the old migrations and database:
+
+```shell
 rm -rf users/migrations-old
 rm -f db.sqlite3-old
 ```

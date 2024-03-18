@@ -13,4 +13,15 @@
 <h2>Add a Social Account</h2>
 <a href="{% url 'add_social_account' 'github' %}">Link GitHub Account</a><br>
 <a href="{% url 'add_social_account' 'google' %}">Link Google Account</a>
-{% endblock %}
+{% endblock content %}
+
+{% block extra_body %}
+<h1>Welcome to Our Site!</h1>
+<ul>
+    {% if dark_mode %}
+    <li>Dark</li>
+    {% else %}
+    <li>Light</li>
+    {% endif %}
+</ul>
+{% endblock extra_body %}

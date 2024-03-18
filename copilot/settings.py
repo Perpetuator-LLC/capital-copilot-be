@@ -87,8 +87,11 @@ TEMPLATES = [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.template.context_processors.i18n",
+                "django.template.context_processors.static",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "users.context_processors.menu_items",
+                "users.context_processors.footer_items",
             ],
         },
     },
@@ -143,6 +146,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(base_dir, "staticfiles")
+STATICFILES_DIRS = [os.path.join(base_dir, "static")]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -180,3 +185,11 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 SOCIALACCOUNT_ADAPTER = "users.adapters.MixedSocialAccountAdapter"
 
 USE_I18N = True
+
+LANGUAGES = [
+    ("en", "English"),
+    ("es", "Spanish"),
+    # Add more languages as needed
+]
+
+LANGUAGE_CODE = "en-us"
