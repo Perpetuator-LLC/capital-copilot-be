@@ -55,4 +55,5 @@ urlpatterns = [
     ),
     path("contact/", views.contact, name="contact"),
     path("set_dark_mode/", views.set_dark_mode, name="set_dark_mode"),
+    path("users/preferences.js", views.user_preferences_js, name="user_preferences_js"),
 ]

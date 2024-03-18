@@ -27,6 +27,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.utils import timezone
 
 from .forms import ContactForm
@@ -123,3 +124,37 @@ def set_dark_mode(request):
         user_pref.save()
         return JsonResponse({"success": True})
     return JsonResponse({"success": False})
+
+
+# @login_required
+# def get_dark_mode(request):
+#     user_pref, created = UserPreferences.objects.get_or_create(user=request.user)
+#     return JsonResponse({"darkMode": user_pref.dark_mode})
+#
+#     # if request.method == "POST":
+#     #     user_pref, created = UserPreferences.objects.get_or_create(user=request.user)
+#     #     user_pref.dark_mode = request.POST.get("darkMode") == "true"
+#     #     user_pref.save()
+#     #     return JsonResponse({"success": True})
+#     # return JsonResponse({"success": False})
+
+
+def user_preferences_js(request):
+    default_preferences = {
+        "dark_mode": True,
+        "is_authenticated": False,
+        # Add defaults for other preferences as needed
+    }
+
+    if request.user.is_authenticated:
+        user_preferences, _ = UserPreferences.objects.get_or_create(user=request.user)
+        preferences = {
+            "dark_mode": user_preferences.dark_mode,
+            "is_authenticated": True,
+            # Add other preferences as needed
+        }
+    else:
+        preferences = default_preferences
+
+    js_content = render_to_string("users/preferences.js", {"user_preferences": preferences})
+    return HttpResponse(js_content, content_type="application/javascript")

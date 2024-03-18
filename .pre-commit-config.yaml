@@ -47,7 +47,7 @@ repos:
         name: Copyright Check
         entry: python -m scripts.check_copyright
         language: system
-        types: [python]
+        types: [python, javascript, html]
         files: .
         exclude: '.*/migrations/.*'
         pass_filenames: true

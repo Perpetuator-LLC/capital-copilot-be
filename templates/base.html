@@ -11,8 +11,9 @@
             {% endblock head_title %}
         </title>
         <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+        <script defer src="{% url 'user_preferences_js' %}"></script>
+        <script defer src="{% static 'js/darkModeComponent.js' %}"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        <script src="{% static 'js/darkModeComponent.js' %}"></script>
         <link href="{% static 'css/styles.css' %}" rel="stylesheet">
         {% block extra_head %}
         {% endblock extra_head %}
