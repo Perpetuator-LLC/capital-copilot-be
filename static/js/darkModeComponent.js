@@ -17,6 +17,7 @@ If not, see <https://www.gnu.org/licenses/>.
 function darkMode() {
         return {
             dark: localStorage.getItem('darkMode') === 'true' || userPreferences.darkMode || false,
+            noTransition: true, // disable slider transition on page load
             init() {
                 if (this.isUserAuthenticated()) {
                     this.dark = userPreferences.darkMode;
@@ -24,6 +25,9 @@ function darkMode() {
                 } else {
                     this.dark = localStorage.getItem('darkMode') === 'true' || false;
                 }
+                this.$nextTick(() => {
+                    this.noTransition = false;
+                });
                 document.documentElement.classList.toggle('dark', this.dark);
                 this.$watch('dark', newVal => this.handleDarkModeChange(newVal));
             },

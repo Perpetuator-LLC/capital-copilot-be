@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="run dev servers" type="CompoundRunConfigurationType">
+    <toRun name="watch:css" type="js.build_tools.npm" />
+    <toRun name="runserver" type="PythonConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>

@@ -1,5 +1,3 @@
-{% extends "account/base_manage.html" %}
-
 {% comment "Copyright" %}
 Copyright (c) 2024 eContriver LLC
 This file is part of Capital Copilot from eContriver.
@@ -16,25 +14,15 @@ You should have received a copy of the GNU General Public License along with Cap
 see <https://www.gnu.org/licenses/>.
 {% endcomment %}
 
-{% load allauth i18n %}
-
-{% block head_title %}
-{% trans "Sign Out" %}
-{% endblock head_title %}
-
-{% block content %}
-<div class="form-container">
-    <h1>{% trans "Sign Out" %}</h1>
-    <p>{% trans 'Are you sure you want to sign out?' %}</p>
-    {% url 'account_logout' as action_url %}
-    <form method="post" action="{{ action_url }}" class="space-y-4">
-        {% csrf_token %}
-        {% if redirect_field_value %}
-        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-        {% endif %}
-        <button type="submit" class="action-button button-red">
-            {% trans 'Sign Out' %}
-        </button>
-    </form>
+{% load allauth socialaccount %}
+{% get_providers as socialaccount_providers %}
+{% if socialaccount_providers %}
+<div class="flex space-x-2 mt-1" >
+        {% for provider in socialaccount_providers %}
+            <a href="{% provider_login_url provider.id process='login' %}" style="flex-grow: 1;" class="inline-flex items-center {{ provider.id|add:'-button-class' }} text-white py-2 px-4 rounded bg-blue-500 hover:bg-stone-800 mb-4">
+                <span class="inline-block mr-2">{% include "socialaccount/snippets/icon_"|add:provider.id|add:".html" %}</span>
+                Using {{ provider.name }}
+            </a>
+        {% endfor %}
 </div>
-{% endblock content %}
+{% endif %}

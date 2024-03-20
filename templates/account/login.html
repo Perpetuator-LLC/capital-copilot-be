@@ -1,4 +1,6 @@
-<!--
+{% extends "account/base_entrance.html" %}
+
+{% comment "Copyright" %}
 Copyright (c) 2024 eContriver LLC
 This file is part of Capital Copilot from eContriver.
 
@@ -12,45 +14,38 @@ for more details.
 
 You should have received a copy of the GNU General Public License along with Capital Copilot from eContriver.  If not,
 see <https://www.gnu.org/licenses/>.
--->
+{% endcomment %}
 
-{% extends "account/base_entrance.html" %}
 {% load i18n %}
 {% load allauth account %}
+{% load common_tags %}
 
-{% block head_title %}
-{% trans "Sign In" %}
+{% block head_title %}Sign In
 {% endblock head_title %}
 
 {% block content %}
-<div class="max-w-lg mx-auto mt-10 bg-stone-200 text-stone-700 rounded-lg p-6 shadow-lg">
-    <h1 class="text-2xl font-semibold text-stone-900 mb-4">{% trans "Sign In" %}</h1>
-    <p class="mb-6">
-        {% blocktrans %}If you have not created an account yet, then please
-        <a href="{{ signup_url }}" class="text-blue-500 hover:text-blue-700">sign up</a> first.{% endblocktrans %}
-    </p>
-
-    {% url 'account_login' as login_url %}
-    {% element form form=form method="post" action=login_url tags="entrance,login" %}
-    {% slot body %}
-    {% csrf_token %}
-    {% element fields form=form unlabeled=True %}
-    {% endelement %}
-    {% if redirect_field_value %}
-    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-    {% endif %}
-    {% endslot %}
-    {% slot actions %}
-    {% element button type="submit" tags="prominent,login" %}
-    {% trans "Sign In" %}
-    {% endelement %}
-    {% endslot %}
-    {% endelement %}
-
+    <h1>{% trans "Sign In" %}</h1>
     {% if SOCIALACCOUNT_ENABLED %}
-    <div class="mt-6">
+    <div class="mb-6">
         {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
     </div>
     {% endif %}
-</div>
+
+    <h2>{% trans "Using e-mail" %}</h2>
+
+    <p>
+        {% blocktrans %}If you have not created an account yet, then please
+        <a href="{{ signup_url }}" class="link">sign up</a> first.{% endblocktrans %}
+    </p>
+
+    {% url 'account_login' as login_url %}
+    <form method="post" action="{{ login_url }}" x-data>
+        {% csrf_token %}
+        {% include 'snippets/form_fields.html' %}
+
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <button type="submit" class="action-button button-primary w-full">{% trans "Sign In" %}</button>
+    </form>
 {% endblock content %}

@@ -1,4 +1,4 @@
-<!--
+{% comment "Copyright" %}
 Copyright (c) 2024 eContriver LLC
 This file is part of Capital Copilot from eContriver.
 
@@ -12,7 +12,7 @@ for more details.
 
 You should have received a copy of the GNU General Public License along with Capital Copilot from eContriver.  If not,
 see <https://www.gnu.org/licenses/>.
--->
+{% endcomment %}
 
 {% load i18n %}
 {% load static %}
@@ -39,9 +39,12 @@ see <https://www.gnu.org/licenses/>.
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
                     </button>
                 </div>
-                <div x-data="darkMode()" x-init="init()">
-                    <button @click="toggleDarkMode()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                <div x-data="darkMode()" x-init="init()" class="bg-stone-800 inline-flex items-center justify-center p-2 rounded-full hover:text-white hover:bg-stone-700 cursor-pointer">
+                    <button @click="toggleDarkMode()" class="relative w-14 h-8 rounded-full bg-stone-600">
+                        <div :class="{'translate-x-6': !dark, 'no-transition': noTransition}" class="absolute top-1 left-1 w-6 h-6 bg-stone-800 rounded-full flex items-center justify-center transition-transform duration-300 icon-container">
+                            <svg x-show="dark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon w-5 h-5 text-stone-400"> <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path> </svg>
+                            <svg x-show="!dark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun w-5 h-5 text-yellow-500"> <circle cx="12" cy="12" r="5"></circle> <line x1="12" y1="1" x2="12" y2="3"></line> <line x1="12" y1="21" x2="12" y2="23"></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line> <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line> <line x1="1" y1="12" x2="3" y2="12"></line> <line x1="21" y1="12" x2="23" y2="12"></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line> <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line> </svg>
+                        </div>
                     </button>
                 </div>
             </div>

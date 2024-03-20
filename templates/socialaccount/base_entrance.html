@@ -1,4 +1,6 @@
-<!--
+{% extends "base.html" %}
+
+{% comment "Copyright" %}
 Copyright (c) 2024 eContriver LLC
 This file is part of Capital Copilot from eContriver.
 
@@ -12,7 +14,16 @@ for more details.
 
 You should have received a copy of the GNU General Public License along with Capital Copilot from eContriver.  If not,
 see <https://www.gnu.org/licenses/>.
--->
+{% endcomment %}
 
-{% extends "base.html" %}
-{% block content %}{% endblock content %}
+{% block body %}
+{% include 'snippets/messages.html' %}
+{% include 'snippets/header.html' %}
+
+<div class="socialaccount-entrance form-container">
+    {% block content %}
+    {% endblock content %}
+</div>
+
+{% include 'snippets/footer.html' %}
+{% endblock body %}

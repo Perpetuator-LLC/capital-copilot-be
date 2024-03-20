@@ -1,4 +1,6 @@
-<!--
+<link rel="stylesheet" href="../../src/styles.css">{% extends "account/base_entrance.html" %}
+
+{% comment "Copyright" %}
 Copyright (c) 2024 eContriver LLC
 This file is part of Capital Copilot from eContriver.
 
@@ -12,39 +14,55 @@ for more details.
 
 You should have received a copy of the GNU General Public License along with Capital Copilot from eContriver.  If not,
 see <https://www.gnu.org/licenses/>.
--->
+{% endcomment %}
 
-{% extends "account/base_entrance.html" %}
 {% load allauth i18n %}
-{% load crispy_forms_tags %}
+{% load common_tags %}
 
 {% block head_title %}
 {% trans "Signup" %}
 {% endblock head_title %}
 
 {% block content %}
-<div class="max-w-lg mx-auto mt-10 bg-stone-200 rounded-lg p-6 shadow-lg">
-    <h1 class="text-2xl font-semibold text-stone-900 mb-4">{% trans "Sign Up" %}</h1>
-    <p class="mb-4">
-        {% blocktrans %}Already have an account? Then please <a href="{{ login_url }}" class="text-blue-500 hover:text-blue-700">sign in</a>.{% endblocktrans %}
+    <h1>{% trans "Sign Up" %}</h1>
+
+    {% if SOCIALACCOUNT_ENABLED %}
+    <div class="mb-6">
+        {% include "socialaccount/snippets/login.html" %}
+    </div>
+    {% endif %}
+
+    <h2>{% trans "Using e-mail" %}</h2>
+
+    <p>
+        {% blocktrans %}Already have an account? Then please <a href="{{ login_url }}" class="link">sign in</a>.{% endblocktrans %}
     </p>
 
     {% url 'account_signup' as action_url %}
     <form method="post" action="{{ action_url }}" class="space-y-4">
         {% csrf_token %}
-        {{ form|crispy }}  <!-- Assuming you're using django-crispy-forms or similar for form rendering -->
+
+        {% for field in form.visible_fields %}
+        <div class="mb-3" id="div_{{ field.name }}">
+            <label for="id_{{ field.name }}" class="block text-gray-700 text-sm font-bold mb-2">
+                {{ field.label }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+            </label>
+            {{ field|add_class:"leading-normal rounded-lg border-gray-300 appearance-none py-2 px-4 border block text-gray-700 bg-white w-full focus:outline-none" }}
+            {% if field.help_text %}
+            <small class="text-form-h2-text dark:text-form-h2-text-dark" id="id_{{ field.name }}_helptext">{{ field.help_text }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+            <div class="inline-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
         {% if redirect_field_value %}
         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
         {% endif %}
-        <button type="submit" class="w-full py-2 px-4 bg-stone-800 text-white rounded hover:bg-stone-700 focus:outline-none focus:ring-2 focus:ring-stone-600 focus:ring-opacity-50">
+        <button type="submit" class="action-button button-primary w-full">
             {% trans "Sign Up" %}
         </button>
     </form>
 
-    {% if SOCIALACCOUNT_ENABLED %}
-    <div class="mt-6">
-        {% include "socialaccount/snippets/login.html" %}
-    </div>
-    {% endif %}
-</div>
 {% endblock content %}

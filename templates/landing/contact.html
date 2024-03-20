@@ -1,4 +1,6 @@
-<!--
+{% extends "base.html" %}
+
+{% comment "Copyright" %}
 Copyright (c) 2024 eContriver LLC
 This file is part of Capital Copilot from eContriver.
 
@@ -12,31 +14,20 @@ for more details.
 
 You should have received a copy of the GNU General Public License along with Capital Copilot from eContriver.  If not,
 see <https://www.gnu.org/licenses/>.
--->
+{% endcomment %}
 
-{% extends "base.html" %}
+{% load i18n common_tags %}
 
 {% block head_title %}Contact Us{% endblock %}
 
 {% block content %}
-<div class="max-w-md mx-auto mt-10 bg-stone-200 rounded-lg p-6 shadow-lg">
-    <h2 class="text-2xl font-semibold text-stone-900 mb-4">Contact Us</h2>
+<div class="form-container">
+    <h1>Contact Us</h1>
     <form method="post" class="space-y-4">
         {% csrf_token %}
-        {% for field in form %}
-        <div>
-            <label for="{{ field.id_for_label }}" class="block text-stone-900 font-medium">{{ field.label }}</label>
-            {{ field }}
-            {% if field.help_text %}
-            <p class="text-sm text-stone-600">{{ field.help_text }}</p>
-            {% endif %}
-            {% for error in field.errors %}
-            <p class="text-red-500 text-xs italic">{{ error }}</p>
-            {% endfor %}
-        </div>
-        {% endfor %}
-        <button type="submit" class="w-full py-2 px-4 bg-stone-800 text-white rounded hover:bg-stone-700 focus:outline-none focus:ring-2 focus:ring-stone-600 focus:ring-opacity-50">
-            Send
+        {% include 'snippets/form_fields.html' %}
+        <button type="submit" class="action-button button-primary w-full">
+            {% trans 'Send' %}
         </button>
     </form>
 </div>

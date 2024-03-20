@@ -101,7 +101,7 @@ def contact(request):
             else:
                 messages.warning(request, "A contact us form was recently submitted.")
                 return redirect("landing_page")
-    else:
+    else:  # GET request, etc.
         form = ContactForm()
     return render(request, "landing/contact.html", {"form": form})
 

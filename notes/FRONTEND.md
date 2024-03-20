@@ -96,3 +96,14 @@ Go here and copy the SVG:
 - https://lucide.dev/icons/menu
 
 Style it with Tailwind CSS.
+
+
+# Font
+
+Heading font: Montserrat
+
+Content font: Raleway
+
+Code font: Source Code Pro
+
+These are loaded in base.html directly from Google CDN.

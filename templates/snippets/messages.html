@@ -1,4 +1,4 @@
-<!--
+{% comment "Copyright" %}
 Copyright (c) 2024 eContriver LLC
 This file is part of Capital Copilot from eContriver.
 
@@ -12,16 +12,16 @@ for more details.
 
 You should have received a copy of the GNU General Public License along with Capital Copilot from eContriver.  If not,
 see <https://www.gnu.org/licenses/>.
--->
+{% endcomment %}
+
 
 {% load i18n %}
 {% if messages %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-    <div class="bg-stone-300 text-stone-700 rounded-lg p-4">
-        <strong>{% trans "Messages:" %}</strong>
+<div class="page-messages">
+    <div class="messages-container">
         <ul>
             {% for message in messages %}
-            <li>{{ message }}</li>
+            <li class="border message-{{ message.tags }}">{{ message }}</li>
             {% endfor %}
         </ul>
     </div>

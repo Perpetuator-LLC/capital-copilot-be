@@ -1,4 +1,6 @@
-<!--
+{% extends "account/base_manage_email.html" %}
+
+{% comment "Copyright" %}
 Copyright (c) 2024 eContriver LLC
 This file is part of Capital Copilot from eContriver.
 
@@ -12,18 +14,17 @@ for more details.
 
 You should have received a copy of the GNU General Public License along with Capital Copilot from eContriver.  If not,
 see <https://www.gnu.org/licenses/>.
--->
+{% endcomment %}
 
-{% extends "account/base_manage_email.html" %}
-{% load allauth i18n %}
+{% load allauth i18n common_tags %}
 
 {% block head_title %}
 {% trans "Email Addresses" %}
 {% endblock head_title %}
 
 {% block content %}
-<div class="max-w-lg mx-auto mt-10">
-    <h1 class="text-2xl font-semibold text-stone-900 dark:text-stone-400 mb-6">{% trans "Email Addresses" %}</h1>
+<div class="form-container">
+    <h1>{% trans "Email Addresses" %}</h1>
     {% if emailaddresses %}
     <p class="mb-4">{% trans 'The following email addresses are associated with your account:' %}</p>
     <form action="{% url 'account_email' %}" method="post" class="space-y-4">
@@ -36,22 +37,24 @@ see <https://www.gnu.org/licenses/>.
                 <span>{{ emailaddress.email }}</span>
             </label>
             <div class="flex space-x-2 mt-1">
-                {% if emailaddress.verified %}
-                <span class="bg-green-200 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-green-700 dark:text-green-300">{% trans 'Verified' %}</span>
-                {% else %}
-                <span class="bg-yellow-200 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-300">{% trans 'Unverified' %}</span>
-                {% endif %}
+                <span class="{% if emailaddress.verified %}status-verified{% else %}status-unverified{% endif %} status-badge">
+                    {% if emailaddress.verified %}
+                        {% trans "Verified" %}
+                    {% else %}
+                        {% trans "Unverified" %}
+                    {% endif %}
+                </span>
                 {% if emailaddress.primary %}
-                <span class="bg-blue-200 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-700 dark:text-blue-300">{% trans 'Primary' %}</span>
+                <span class="status-primary status-badge">{% trans 'Primary' %}</span>
                 {% endif %}
             </div>
         </div>
         {% endwith %}
         {% endfor %}
         <div class="flex space-x-2">
-            <button type="submit" name="action_primary" class="bg-stone-800 text-white py-2 px-4 rounded hover:bg-stone-700">{% trans 'Make Primary' %}</button>
-            <button type="submit" name="action_send" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">{% trans 'Re-send Verification' %}</button>
-            <button type="submit" name="action_remove" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">{% trans 'Remove' %}</button>
+            <button type="submit" name="action_primary" class="action-button button-primary">{% trans 'Make Primary' %}</button>
+            <button type="submit" name="action_send" class="action-button button-blue">{% trans 'Re-send Verification' %}</button>
+            <button type="submit" name="action_remove" class="action-button button-red">{% trans 'Remove' %}</button>
         </div>
     </form>
     {% else %}
@@ -59,11 +62,28 @@ see <https://www.gnu.org/licenses/>.
     {% endif %}
 
     {% if can_add_email %}
-    <h2 class="text-2xl font-semibold text-stone-900 mt-8 mb-4">{% trans "Add Email Address" %}</h2>
+    <h2 class="form-heading mt-8">{% trans "Add Email Address" %}</h2>
     <form action="{% url 'account_email' %}" method="post" class="space-y-4">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" name="action_add" class="bg-stone-800 text-white py-2 px-4 rounded hover:bg-stone-700">{% trans 'Add Email' %}</button>
+
+        {% for field in form.visible_fields %}
+        <div class="mb-3" id="div_{{ field.name }}">
+            <label for="id_{{ field.name }}" class="block text-gray-700 text-sm font-bold mb-2">
+                {{ field.label }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+            </label>
+            {{ field|add_class:"leading-normal rounded-lg border-gray-300 appearance-none py-2 px-4 border block text-gray-700 bg-white w-full focus:outline-none" }}
+            {% if field.help_text %}
+            <small class="text-gray-600">{{ field.help_text }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+            <div class="inline-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" name="action_add" class="action-button button-primary w-full">
+            {% trans 'Add Email' %}
+        </button>
     </form>
     {% endif %}
 </div>

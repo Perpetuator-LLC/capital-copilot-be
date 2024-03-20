@@ -1,0 +1,45 @@
+{% comment "Copyright" %}
+Copyright (c) 2024 eContriver LLC
+This file is part of Capital Copilot from eContriver.
+
+Capital Copilot from eContriver is free software: you can redistribute it and/or modify it under the terms of the GNU
+General Public License as published by the Free Software Foundation, either version 3 of the License, or any later
+version.
+
+Capital Copilot from eContriver is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received a copy of the GNU General Public License along with Capital Copilot from eContriver.  If not,
+see <https://www.gnu.org/licenses/>.
+{% endcomment %}
+
+
+{% load i18n common_tags %}
+{% include 'snippets/non_field_form_errors.html' %}
+
+{% for field in form.visible_fields %}
+<div class="mb-3" id="div_{{ field.name }}">
+    {% if field.widget_type == "checkbox" %}
+    <label class="inline-flex items-center">
+        {{ field|add_class:"form-checkbox text-indigo-600" }}
+        <span class="ml-2">{{ field.label }}</span>
+    </label>
+    {% else %}
+    <label for="id_{{ field.name }}" class="block">
+        {{ field.label }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+    </label>
+    {{ field|add_class:"block w-full" }}
+    {% endif %}
+    {% if field.help_text %}
+    <small class="inline-help">{{ field.help_text }}</small>
+    {% endif %}
+    {% for error in field.errors %}
+    <div class="inline-error">{{ error }}</div>
+    {% endfor %}
+</div>
+{% endfor %}
+
+{% if redirect_field_value %}
+<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+{% endif %}

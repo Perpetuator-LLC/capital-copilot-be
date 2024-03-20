@@ -32,8 +32,8 @@ def menu_items(request):
         items.append({"name": _("Logout"), "link": reverse("account_logout")})
         items.append({"name": _("Social Accounts"), "link": reverse("social_accounts")})
     else:
-        items.append({"name": _("Login"), "link": reverse("account_login")})
         items.append({"name": _("Sign Up"), "link": reverse("account_signup")})
+        items.append({"name": _("Login"), "link": reverse("account_login")})
 
     if request.user.is_staff:
         items.append({"name": _("Admin"), "link": reverse("admin:index")})
@@ -64,7 +64,7 @@ def dark_mode_context(request):
     """
     user_prefers_dark_mode = True
 
-    if request.user.is_authenticated:
+    if hasattr(request.user, "preferences") and hasattr(request.user.preferences, "dark_mode"):
         user_prefers_dark_mode = request.user.preferences.dark_mode
 
     return {
