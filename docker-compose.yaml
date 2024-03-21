@@ -1,0 +1,42 @@
+# Copyright (c) 2024 eContriver LLC
+
+version: '3.7'
+
+services:
+  web:
+    container_name: copilot_django
+    build: .
+    command: poetry run gunicorn copilot.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - static_volume:/app/static
+      - media_volume:/app/media
+      - ./db.sqlite3:/app/db.sqlite3
+    ports:
+      - "${DJANGO_PORT:-8000}:8000"
+    environment:
+      - VIRTUAL_HOST=copilot.econtriver.com
+      - VIRTUAL_PATH=/
+      - LETSENCRYPT_HOST=econtriver.com
+      - LETSENCRYPT_EMAIL=nik@econtriver.com
+    restart: always
+
+  nginx:
+    container_name: copilot_nginx
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - static_volume:/usr/share/nginx/html/static
+      - media_volume:/usr/share/nginx/html/media
+
+volumes:
+  static_volume:
+  media_volume:
+
+networks:
+  default:
+    name: nginx-proxy

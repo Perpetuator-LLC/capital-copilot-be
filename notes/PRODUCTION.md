@@ -34,7 +34,10 @@ python manage.py makemessages -l es
 python manage.py compilemessages
 ```
 
-# Tailwind CSS
+# Django Admin Setup
 
-Right now we are using a CDN version, but that is bulky. To speed up loadtimes we should use the JIT compiler and purge unused CSS.
-- however the cached version might be faster, we will have to check
+For the initial setup of the Django admin we need to run:
+
+```shell
+docker exec copilot_django poetry run python manage.py createsuperuser
+```
