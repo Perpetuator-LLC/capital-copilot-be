@@ -41,3 +41,13 @@ For the initial setup of the Django admin we need to run:
 ```shell
 docker exec copilot_django poetry run python manage.py createsuperuser
 ```
+
+# Back-up
+
+To back-up the database we need to run:
+
+```shell
+cp db.sqlite3{,-$(date +%Y%m%d)}
+```
+
+The `.env` file should be backed up too.
