@@ -34,12 +34,28 @@ python manage.py makemessages -l es
 python manage.py compilemessages
 ```
 
-# Django Admin Setup
+# Django Production
+
+See: https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+
+## Django Admin Setup
 
 For the initial setup of the Django admin we need to run:
 
 ```shell
 docker exec copilot_django poetry run python manage.py createsuperuser
+```
+
+## Django Check
+
+```shell
+docker exec copilot_django poetry run python manage.py check --deploy
+```
+
+# Docker Compose Invocation
+
+```shell
+COPILOT_NGINX_PORT=3321 docker-compose up -d --build
 ```
 
 # Back-up
