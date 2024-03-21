@@ -38,11 +38,18 @@ python manage.py compilemessages
 
 See: https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
+## Django Debug in Container
+
+```shell
+docker exec -it copilot_django sh
+```
+
 ## Django Admin Setup
 
 For the initial setup of the Django admin we need to run:
 
 ```shell
+docker exec copilot_django poetry run python manage.py migrate
 docker exec copilot_django poetry run python manage.py createsuperuser
 ```
 
