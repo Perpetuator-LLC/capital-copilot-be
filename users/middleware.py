@@ -31,11 +31,14 @@ class RestrictAdminMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        allowed_ips = os.getenv("ADMIN_ALLOWED_IPS", "").split(",")
         if request.path.startswith("/admin/"):
-            ip_addr = request.META.get("REMOTE_ADDR")
-            if not is_valid_ip(ip_addr, allowed_ips):
-                return HttpResponseForbidden("Access Denied")
+            allowed_ips = os.getenv("ADMIN_ALLOWED_IPS").split(",") if os.getenv("ADMIN_ALLOWED_IPS") else []
+            num_ips = len(allowed_ips)
+            if num_ips > 0:
+                ip_addr = request.META.get("REMOTE_ADDR")
+                if not is_valid_ip(ip_addr, allowed_ips):
+                    #return HttpResponseForbidden(f"Access Denied")
+                    return HttpResponseForbidden(f"Access Denied - Allowed: {allowed_ips} ({num_ips}) - Current: {ip_addr}")
 
         response = self.get_response(request)
         return response
