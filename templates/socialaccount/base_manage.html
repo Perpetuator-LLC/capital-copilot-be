@@ -16,4 +16,15 @@ You should have received a copy of the GNU General Public License along with Cap
 see <https://www.gnu.org/licenses/>.
 {% endcomment %}
 
-{% block content %}{% endblock content %}
+{% block body %}
+{% include 'snippets/messages.html' %}
+{% include 'snippets/header.html' %}
+
+<div class="socialaccount-entrance form-container">
+    {% block content %}
+    {% endblock content %}
+</div>
+
+{% include 'snippets/footer.html' %}
+{% endblock body %}
+
