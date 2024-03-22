@@ -16,6 +16,14 @@ You should have received a copy of the GNU General Public License along with Cap
 see <https://www.gnu.org/licenses/>.
 {% endcomment %}
 
-<div class="account-manage">
-{% block content %}{% endblock %}
+{% block body %}
+{% include 'snippets/messages.html' %}
+{% include 'snippets/header.html' %}
+
+<div class="account-manage form-container">
+    {% block content %}
+    {% endblock content %}
 </div>
+
+{% include 'snippets/footer.html' %}
+{% endblock body %}

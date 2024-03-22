@@ -85,6 +85,10 @@
     @apply border-orange-700 bg-orange-100 text-orange-500;
   }
 
+  .errorlist {
+    @apply border-red-400 bg-red-100 text-red-700 p-2 rounded-md;
+  }
+
   .message-error {
     @apply border-red-400 bg-red-100 text-red-700;
   }

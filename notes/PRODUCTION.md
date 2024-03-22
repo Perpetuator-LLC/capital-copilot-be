@@ -40,6 +40,11 @@ See: https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 ## Django Debug in Container
 
+To see the logs and follow:
+```shell
+docker-compose logs -f
+```
+
 ```shell
 docker exec -it copilot_django sh
 ```
@@ -50,8 +55,17 @@ For the initial setup of the Django admin we need to run:
 
 ```shell
 docker exec copilot_django poetry run python manage.py migrate
-docker exec copilot_django poetry run python manage.py createsuperuser
 ```
+
+To create the super user you need a TTY, so you need to run:
+
+```shell
+docker exec -it copilot_django sh
+poetry run python manage.py createsuperuser
+```
+
+Once you login as the super user you need update the site to be econtriver.com and then
+add the social applications for GitHub and Google, make sure to link them to the site.
 
 ## Django Check
 

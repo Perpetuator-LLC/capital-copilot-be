@@ -23,7 +23,6 @@ see <https://www.gnu.org/licenses/>.
 {% endblock head_title %}
 
 {% block content %}
-<div class="form-container">
     <h1>{% trans "Email Addresses" %}</h1>
     {% if emailaddresses %}
     <p class="mb-4">{% trans 'The following email addresses are associated with your account:' %}</p>
@@ -86,7 +85,6 @@ see <https://www.gnu.org/licenses/>.
         </button>
     </form>
     {% endif %}
-</div>
 {% endblock content %}
 
 {% block extra_body %}
