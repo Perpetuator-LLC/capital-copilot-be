@@ -33,6 +33,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from copilot_plugin_view import views as copilot_plugin_view
 from django.contrib import admin
 from django.urls import include, path
 
@@ -40,6 +41,7 @@ from users import views
 
 urlpatterns = [
     path("", views.landing_page, name="landing_page"),
+    path("view/", copilot_plugin_view.plugins_page, name="external_plugins_page"),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("accounts/social/", views.social_accounts, name="social_accounts"),

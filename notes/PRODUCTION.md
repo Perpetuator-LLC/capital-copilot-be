@@ -16,7 +16,8 @@ npm run build:css
 
 ### Minimal CSS - WIP
 
-We are using a minimal CSS file to style the site. We are using Tailwind CSS to generate the CSS file. We are using the JIT compiler and purging unused CSS.
+We are using a minimal CSS file to style the site. We are using Tailwind CSS to generate the CSS file. We are using the
+JIT compiler and purging unused CSS.
 
 ```shell
 npm install cssnano
@@ -25,7 +26,7 @@ npm install cssnano
 
 May want to research using `whitenoise` to better serve static files in production too.
 
-## i18n 
+## i18n
 
 To compile messages for translation we need to run:
 
@@ -41,6 +42,7 @@ See: https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 ## Django Debug in Container
 
 To see the logs and follow:
+
 ```shell
 docker-compose logs -f
 ```
@@ -64,8 +66,8 @@ docker exec -it copilot_django sh
 poetry run python manage.py createsuperuser
 ```
 
-Once you login as the super user you need update the site to be econtriver.com and then
-add the social applications for GitHub and Google, make sure to link them to the site.
+Once you login as the super user you need update the site to be econtriver.com and then add the social applications for
+GitHub and Google, make sure to link them to the site.
 
 ## Django Check
 

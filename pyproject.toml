@@ -12,6 +12,9 @@ django = "^5.0.3"
 django-allauth = "^0.61.1"
 python-dotenv = "^1.0.1"
 gunicorn = "^21.2.0"
+mdformat = "^0.7.17"
+mdformat-black = "^0.1.1"
+copilot-plugin-view = {path = "../copilot-plugin-view", develop = true}
 
 [tool.poetry.group.dev.dependencies]
 langchain = "^0.1.11"

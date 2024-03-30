@@ -38,13 +38,13 @@ python manage.py show_urls
 
 # Squash Migrations
 
-This flow is not recommended for production environments. It's useful for development and testing. The value of this 
-flow is that we don't have to migrate data for empty columns etc. in development. We only need to worry about data 
-migration in production environments. 
+This flow is not recommended for production environments. It's useful for development and testing. The value of this
+flow is that we don't have to migrate data for empty columns etc. in development. We only need to worry about data
+migration in production environments.
 
-To accomplish this, during development, we can reset the migrations and the database. But once we go to production, 
-then the migrations are checked in, and we don't reset them. We then migrate on top of those, and we can keep squashing
-the migrations to keep the number of migrations low until we again deploy to production.
+To accomplish this, during development, we can reset the migrations and the database. But once we go to production, then
+the migrations are checked in, and we don't reset them. We then migrate on top of those, and we can keep squashing the
+migrations to keep the number of migrations low until we again deploy to production.
 
 To reset migrations use:
 

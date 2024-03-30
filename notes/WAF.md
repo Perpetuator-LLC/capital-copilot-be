@@ -1,14 +1,14 @@
-[//]: # (Copyright © 2024 Perpetuator LLC)
-
 # Cloudflare
 
 This project is served from:
+
 - https://copilot.econtriver.com
 
 The Staging area is:
+
 - https://copilot-staging.econtriver.com
 
-# Design 
+# Design
 
 Client -> Cloudflare -> AWS/Servers/etc.
 
