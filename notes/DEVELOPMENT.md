@@ -1,10 +1,8 @@
-[//]: # (Copyright © 2024 eContriver LLC)
-
 # Concepts
 
 ## CLI First
 
-This project uses a CLI first approach. The CLI is the primary interface for the user. After that IDEs etc. are used for 
+This project uses a CLI first approach. The CLI is the primary interface for the user. After that IDEs etc. are used for
 development, but you must be able to run any code generation or manipulation from the CLI.
 
 # Git Commits
@@ -12,18 +10,22 @@ development, but you must be able to run any code generation or manipulation fro
 ## Generating new Versions
 
 Update version in pyproject.toml.
+
 ```shell
 sed -i '' 's/^version = ".*"/version = "50.1.0"/' ./pyproject.toml
 grep '^version = ' ./pyproject.toml
 ```
 
 Update the changelog:
+
 ```shell
 ./scripts/update_changelog.py stage 
 ```
+
 _NOTE: The `stage` argument is used to access AI to summarize changes. It has no effect on the changelog._
 
 Add the Git tag and push it to the repository.
+
 ```shell
 git commit -m "Bump version to 50.1.0"
 git push origin feat/new-feature
@@ -68,7 +70,8 @@ poetry run mypy .
 
 # Pre-Commit Setup
 
-This project uses `pre-commit` to run the above tools before each commit. To install `pre-commit`, use the following command:
+This project uses `pre-commit` to run the above tools before each commit. To install `pre-commit`, use the following
+command:
 
 ```shell
 poetry add pre-commit
@@ -94,17 +97,18 @@ To manually run the pre-commit hooks, use the following command:
 pre-commit run --all-files
 ```
 
-**WARNING**: When running these manually sometimes a file will be flagged that `git commit` will not flag. This is because
-the `git` invocation only checks the _staged_ files, whereas running this command will check all files.
+**WARNING**: When running these manually sometimes a file will be flagged that `git commit` will not flag. This is
+because the `git` invocation only checks the _staged_ files, whereas running this command will check all files.
 
 To run one of the tools use:
+
 ```shell
 pre-commit run mypy --all-files
 ```
 
 # Check Scripts
 
-This project uses `check` scripts to implement custom code quality checks. To run these tools, use the following 
+This project uses `check` scripts to implement custom code quality checks. To run these tools, use the following
 commands:
 
 ```shell
@@ -121,6 +125,7 @@ ModuleNotFoundError: No module named '_lzma'
 ```
 
 On MacOS is fixed by:
+
 ```shell
 brew install xz
 pyenv uninstall 3.12

@@ -35,6 +35,18 @@ repos:
         types: [python]
         files: .
 
+  - repo: local
+    hooks:
+      - id: mdformat
+        name: mdformat
+        entry: mdformat
+        language: system
+        # Specify additional_dependencies if your pre-commit runs in an isolated environment
+        # additional_dependencies: [mdformat, mdformat-black]
+        args: ["--wrap", "120", "--number", "--end-of-line", "lf"]
+        types: [markdown]
+        files: .
+
 #  - repo: https://github.com/pre-commit/mirrors-mypy
 #    rev: v1.9.0
 #    hooks:

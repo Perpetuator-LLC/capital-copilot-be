@@ -37,8 +37,10 @@ class RestrictAdminMiddleware:
             if num_ips > 0:
                 ip_addr = request.META.get("REMOTE_ADDR")
                 if not is_valid_ip(ip_addr, allowed_ips):
-                    #return HttpResponseForbidden(f"Access Denied")
-                    return HttpResponseForbidden(f"Access Denied - Allowed: {allowed_ips} ({num_ips}) - Current: {ip_addr}")
+                    # return HttpResponseForbidden(f"Access Denied")
+                    return HttpResponseForbidden(
+                        f"Access Denied - Allowed: {allowed_ips} ({num_ips}) - Current: {ip_addr}"
+                    )
 
         response = self.get_response(request)
         return response

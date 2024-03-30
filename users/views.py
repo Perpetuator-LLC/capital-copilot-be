@@ -30,12 +30,45 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils import timezone
 
+from extensions.plugin_base import ActionProvider
+
 from .forms import ContactForm
 from .models import ContactSubmission, UserPreferences
 
+# def list_and_execute_actions(request, obj):
+#     actions = []
+#
+#     # Iterate over registered plugin classes
+#     for plugin_class in ActionProvider.plugins:
+#         # Instantiate the plugin with necessary arguments
+#         plugin_instance = plugin_class(request, obj)
+#
+#         # Optionally, store plugin information, like class name
+#         actions.append(plugin_instance.__class__.__name__)
+#
+#         # Execute the plugin's action
+#         # plugin_instance.perform()
+#
+#     # Return the list of action names for display or logging
+#     return actions
+
 
 def landing_page(request):
-    return render(request, "landing/home.html")
+    # actions = list_and_execute_actions(request, None)
+    context = {
+        # "actions": actions,
+        "plugins": [str(p) for p in ActionProvider.plugins],
+    }
+    return render(request, "landing/home.html", context=context)
+
+
+def internal_plugins_page(request):
+    # actions = list_and_execute_actions(request, None)
+    context = {
+        # "actions": actions,
+        "plugins": [str(p) for p in ActionProvider.plugins],
+    }
+    return render(request, "landing/home.html", context=context)
 
 
 @login_required
