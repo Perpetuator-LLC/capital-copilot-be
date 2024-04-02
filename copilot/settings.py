@@ -62,8 +62,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "common",
     "users",
-    # "copilot_plugin_view",
-    # "copilot_plugin_dashboard",
+    "copilot_plugin_view",
+    "copilot_plugin_dashboard",
 ]
 
 MIDDLEWARE = [
