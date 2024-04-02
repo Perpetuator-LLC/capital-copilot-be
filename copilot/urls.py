@@ -32,16 +32,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-
-from copilot_plugin_view import views as copilot_plugin_view
+from copilot_plugin_dashboard import views as dashboard_views
+from copilot_plugin_view import views as view_views
 from django.contrib import admin
 from django.urls import include, path
 
 from users import views
 
 urlpatterns = [
-    path("", views.landing_page, name="landing_page"),
-    path("view/", copilot_plugin_view.plugins_page, name="external_plugins_page"),
+    path("", views.home_page, name="home_page"),
+    path("landing/", views.landing_page, name="landing_page"),
+    path("dashboard/", dashboard_views.dashboard_page, name="dashboard_page"),
+    path("view/", view_views.dashboard_page, name="view_page"),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("accounts/social/", views.social_accounts, name="social_accounts"),

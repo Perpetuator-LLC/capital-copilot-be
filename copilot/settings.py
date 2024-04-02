@@ -62,7 +62,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "common",
     "users",
-    "copilot_plugin_view",
+    # "copilot_plugin_view",
+    # "copilot_plugin_dashboard",
 ]
 
 MIDDLEWARE = [
@@ -94,6 +95,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "users.context_processors.menu_items",
+                "users.context_processors.account_menu_items",
                 "users.context_processors.footer_items",
                 "users.context_processors.dark_mode_context",
             ],

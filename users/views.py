@@ -34,6 +34,13 @@ from .forms import ContactForm
 from .models import ContactSubmission, UserPreferences
 
 
+def home_page(request):
+    if request.user.is_authenticated:
+        return redirect("dashboard_page")
+    else:
+        return render(request, "landing/home.html")
+
+
 def landing_page(request):
     return render(request, "landing/home.html")
 

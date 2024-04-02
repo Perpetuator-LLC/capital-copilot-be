@@ -68,6 +68,8 @@ This project uses `mypy` to type check the code. To run this tool, use the follo
 poetry run mypy .
 ```
 
+To debug these, see the [IDE](IDE.md) section or just a a run configuration that executes poetry run and then debug it.
+
 # Pre-Commit Setup
 
 This project uses `pre-commit` to run the above tools before each commit. To install `pre-commit`, use the following
@@ -88,6 +90,9 @@ pre-commit autoupdate
 ```
 
 _NOTE: This will update the `.pre-commit-config.yaml` file. Remember to update the `pyproject.toml` versions._
+
+_NOTE: This project now uses `pre-commit` dependencies directly from the associated `pyproject.toml` file. This means
+that the `pre-commit autoupdate` command is probably not needed._
 
 # Manually Running Pre-Commit
 
@@ -128,6 +133,6 @@ On MacOS is fixed by:
 
 ```shell
 brew install xz
-pyenv uninstall 3.12
-pyenv install 3.12
+pyenv uninstall 3.11
+pyenv install 3.11
 ```

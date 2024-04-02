@@ -157,6 +157,22 @@
     @apply bg-orange-200 text-orange-800 dark:bg-orange-600 dark:text-orange-300;
   }
 
+  .dark .table-striped tbody tr:nth-child(odd) {
+    background-color: #333;
+  }
+
+  .dark .table-striped tbody tr:nth-child(even) {
+    background-color: #444;
+  }
+
+  .table-striped tbody tr:nth-child(odd) {
+    background-color: #eee;
+  }
+
+  .table-striped tbody tr:nth-child(even) {
+    background-color: #ddd;
+  }
+
   .no-transition {
     transition: none !important;
   }

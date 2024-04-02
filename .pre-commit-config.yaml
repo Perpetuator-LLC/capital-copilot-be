@@ -30,7 +30,13 @@ repos:
     hooks:
       - id: mypy
         name: MyPy
-        entry: poetry run mypy
+        # Here we are adding PYTHONPATH to the environment so that mypy can find copilot.settings
+        # This should not be needed, but it is a workaround for now as it seems to be a problem with mypy
+        # and it's django plugin when supporting local Django Apps that are external to the project.
+        # Once those plugins are released and we can depend on them, we can remove this.
+        # However, this may still be needed for development purposes - when testing local.
+        entry: sh -c 'PYTHONPATH=$PWD poetry run mypy "$@"' --
+        #entry: poetry run mypy
         language: system
         types: [python]
         files: .

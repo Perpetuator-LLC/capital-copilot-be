@@ -46,7 +46,7 @@ Also used for External Plugin Setup.
 To install the version of Python on the host system (any project could use this version):
 
 ```shell
-pyenv install 3.12
+pyenv install 3.11
 ```
 
 ### Switch to the new version of Python
@@ -55,7 +55,7 @@ To set the version of Python for this specific project:
 
 ```shell
 # Only if .python-version doesn't exist, run:
-pyenv local 3.12
+pyenv local 3.11
 ```
 
 _NOTE: This will create the `.python-version` file. Now changing into this directory will set the Python version._
@@ -69,7 +69,7 @@ Switch to the correct version of Python:
 ```shell
 python --version
 # If it is not right, then run:
-pyenv shell 3.12
+pyenv shell 3.11
 ```
 
 The shell has the correct version of Python. Now install `poetry` to the current version of Python:
@@ -105,7 +105,7 @@ Tell poetry what version of python is expected for this project:
 
 ```shell
 # If the pyproject.toml file already has a python version, then skip this step:
-poetry env use 3.12
+poetry env use 3.11
 ```
 
 ______________________________________________________________________

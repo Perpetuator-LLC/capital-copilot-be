@@ -1,7 +1,7 @@
 # Copyright (c) 2024 eContriver LLC
 
 # Build environment
-FROM python:3.12-slim as production
+FROM python:3.11-slim as production
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1

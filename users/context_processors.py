@@ -22,10 +22,18 @@ from django.utils.translation import gettext as _
 
 def menu_items(request):
     items = [
-        {"name": _("Home"), "link": reverse("landing_page")},
+        {"name": _("Home"), "link": reverse("home_page")},
         {"name": _("Contact"), "link": reverse("contact")},
     ]
 
+    if request.user.is_staff:
+        items.append({"name": _("Admin"), "link": reverse("admin:index")})
+
+    return {"menu_items": items}
+
+
+def account_menu_items(request):
+    items = []
     if request.user.is_authenticated:
         items.append({"name": _("Change Email"), "link": reverse("account_email")})
         items.append({"name": _("Change Password"), "link": reverse("account_change_password")})
@@ -35,18 +43,18 @@ def menu_items(request):
         items.append({"name": _("Sign Up"), "link": reverse("account_signup")})
         items.append({"name": _("Login"), "link": reverse("account_login")})
 
-    if request.user.is_staff:
-        items.append({"name": _("Admin"), "link": reverse("admin:index")})
-
-    return {"menu_items": items}
+    return {"account_menu_items": items}
 
 
 def footer_items(request):
     items = [
-        {"name": _("Home"), "link": reverse("landing_page")},
+        {"name": _("Home"), "link": reverse("home_page")},
         {"name": _("Contact"), "link": reverse("contact")},
         {"name": "Discord", "link": "https://discord.gg/RqFW3468wY"},
     ]
+
+    if request.user.is_authenticated:
+        items.append({"name": _("Commercial"), "link": reverse("landing_page")})
 
     if request.user.is_staff:
         items.append({"name": _("Admin"), "link": reverse("admin:index")})

@@ -16,12 +16,13 @@ see <https://www.gnu.org/licenses/>.
 
 {% load i18n %}
 {% load static %}
+
 <header>
-    <nav x-data="{ open: false }" class="bg-stone-800">
+    <nav x-data="{ open: false, accountMenuOpen: false }" class="bg-stone-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
-                    <a href="{% url 'landing_page' %}" class="flex-shrink-0">
+                    <a href="{% url 'home_page' %}" class="flex-shrink-0">
                         <img src="{% static 'images/CapitalCopilot_medium.png' %}" alt="Capital Copilot" class="h-16 w-auto">
                     </a>
                 </div>
@@ -31,6 +32,25 @@ see <https://www.gnu.org/licenses/>.
                         {% for item in menu_items %}
                             <a href="{{ item.link }}" class="text-stone-300 hover:bg-stone-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{{ item.name }}</a>
                         {% endfor %}
+                        {% if request.user.is_authenticated %}
+                        <div x-data="{ open: false, closeTimeout: null }" class="relative">
+                            <button @mouseenter="clearTimeout(closeTimeout); open = true" @mouseleave="closeTimeout = setTimeout(() => { open = false }, 200)" class="flex items-center text-stone-300 hover:bg-stone-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                                {{ request.user.email }}
+                                <svg class="ml-2 w-4 h-4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div x-show="open" @mouseenter="clearTimeout(closeTimeout)" @mouseleave="closeTimeout = setTimeout(() => { open = false }, 200)" class="absolute mt-1 w-48 bg-stone-700 rounded-md shadow-lg py-1">
+                                {% for item in account_menu_items %}
+                                <a href="{{ item.link }}" class="block px-4 py-2 text-sm text-stone-300 hover:bg-stone-600">{{ item.name }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% else %}
+                        {% for item in account_menu_items %}
+                        <a href="{{ item.link }}" class="text-stone-300 hover:bg-stone-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">{{ item.name }}</a>
+                        {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
                 <div class="-mr-2 flex md:hidden">
@@ -54,7 +74,10 @@ see <https://www.gnu.org/licenses/>.
         <div x-show="open" class="md:hidden">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 {% for item in menu_items %}
-                    <a href="{{ item.link }}" class="text-stone-300 hover:bg-stone-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">{{ item.name }}</a>
+                <a href="{{ item.link }}" class="text-stone-300 hover:bg-stone-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">{{ item.name }}</a>
+                {% endfor %}
+                {% for item in account_menu_items %}
+                <a href="{{ item.link }}" class="text-stone-300 hover:bg-stone-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">{{ item.name }}</a>
                 {% endfor %}
             </div>
         </div>
