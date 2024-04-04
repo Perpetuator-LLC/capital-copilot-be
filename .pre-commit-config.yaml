@@ -15,6 +15,7 @@ repos:
         entry: poetry run isort
         language: system
         types: [python]
+        args: [ "--profile", "black" ]
         files: .
 
   - repo: local

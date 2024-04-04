@@ -23,12 +23,13 @@ import sys
 import toml
 import yaml
 
-from copilot.copilot_shared import configure_logging, process_env
+from copilot.copilot_shared import process_env
+from copilot.logging_service import LoggingService
 
 
 def main():
     process_env()
-    configure_logging()
+    LoggingService.configure_logging()
     script_dir = os.path.dirname(os.path.realpath(__file__))
     repo_dir = os.path.realpath(os.path.join(script_dir, ".."))
     pyproject_versions = load_pyproject_versions(repo_dir)

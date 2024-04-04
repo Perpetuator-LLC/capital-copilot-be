@@ -30,12 +30,13 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from typing import List
 
-from copilot.copilot_shared import configure_logging, process_env
+from copilot.copilot_shared import process_env
+from copilot.logging_service import LoggingService
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 base_dir = os.path.realpath(os.path.join(script_dir, ".."))
 process_env()
-configure_logging()
+LoggingService.configure_logging()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/

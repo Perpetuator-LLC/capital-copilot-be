@@ -16,56 +16,13 @@
 #  along with Capital Copilot from eContriver.  If not, see <https://www.gnu.org/licenses/>.
 # ------------------------------------------------------------------------------
 
-import json
-import logging
 import os
 
 from dotenv import load_dotenv
 
-
-def configure_logging(level=None):
-    level = level if level else get_log_level()
-    logger = logging.getLogger()
-    logger.setLevel(level)
-    logging.basicConfig(level=level)
-
-
-def dump_object(obj):
-    def default_serializer(o):
-        if hasattr(o, "__dict__"):
-            return o.__dict__
-        else:
-            return str(o)
-
-    return json.dumps(obj, default=default_serializer, indent=2)
-
-
-def print_pkg_versions():
-    from importlib.metadata import distributions
-
-    for dist in distributions():
-        print(f"{dist.metadata['Name']} {dist.version}")
-    # import pkg_resources
-    # for dist in pkg_resources.working_set:
-    #     print(f"{dist.project_name} {dist.version}")
-
-
-def get_log_level():
-    log_level_mapping = {
-        "DEBUG": logging.DEBUG,
-        "INFO": logging.INFO,
-        "WARNING": logging.WARNING,
-        "ERROR": logging.ERROR,
-        "CRITICAL": logging.CRITICAL,
-    }
-    log_level_str = os.getenv("LOG_LEVEL", "INFO").upper()
-    log_level = log_level_mapping.get(log_level_str, logging.INFO)
-    return log_level
-
-
-def get_collection():
-    collection = "test-collection"
-    return collection
+# def get_collection():
+#     collection = "test-collection"
+#     return collection
 
 
 def process_env():

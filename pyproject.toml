@@ -12,13 +12,14 @@ django = "^5.0.3"
 django-allauth = "^0.61.1"
 python-dotenv = "^1.0.1"
 gunicorn = "^21.2.0"
+openbb = {extras = ["alpha-vantage", "charting"], version = "^4.1.6"}
+#openbb = {extras = ["all"], version = "^4.1.5"}
 copilot-plugin-view = {path = "../copilot-plugin-view", develop = true}
 copilot-plugin-dashboard = {path = "../copilot-plugin-dashboard", develop = true}
-openbb = {extras = ["all"], version = "^4.1.5"}
 
 [tool.poetry.group.dev.dependencies]
-langchain = "^0.1.11"
-langchain-openai = "^0.0.8"
+#langchain = "^0.1.11"
+#langchain-openai = "^0.0.8"
 gitpython = "^3.1.42"
 black = "^24.2.0"
 isort = "^5.13.2"
