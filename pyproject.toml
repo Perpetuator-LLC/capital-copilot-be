@@ -3,7 +3,7 @@ name = "capital-copilot"
 version = "0.1.0"
 description = "Capital Copilot is a tool to help aggregate market data, setup alerts, automate trading, and provide AI insights."
 authors = ["Nik <nik.cimino@gmail.com>"]
-license = "GPL-3.0-or-later"
+license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
