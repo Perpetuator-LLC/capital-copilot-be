@@ -10,7 +10,6 @@ import re
 import sys
 
 from copilot.copilot_shared import process_env
-from copilot.logging_service import LoggingService
 
 
 def check_message(semantic_pattern, message):
@@ -22,7 +21,8 @@ def check_message(semantic_pattern, message):
 
 def main():
     process_env()
-    LoggingService.configure_logging()
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
     logging.debug(f"Received commit message file: {sys.argv[1]}")
     with open(sys.argv[1], "r") as f:
         commit_message = f.read().strip()

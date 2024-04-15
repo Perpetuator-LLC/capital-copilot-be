@@ -12,12 +12,12 @@ import sys
 from datetime import datetime
 
 from copilot.copilot_shared import process_env
-from copilot.logging_service import LoggingService
 
 
 def main():
     process_env()
-    LoggingService.configure_logging()
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
     script_dir = os.path.dirname(os.path.realpath(__file__))
     repo_dir = os.path.realpath(os.path.join(script_dir, ".."))
     files = sys.argv[1:] if len(sys.argv) > 1 else [repo_dir]

@@ -19,12 +19,51 @@ import os
 from typing import List
 
 from copilot.copilot_shared import process_env
-from copilot.logging_service import LoggingService
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 base_dir = os.path.realpath(os.path.join(script_dir, ".."))
 process_env()
-LoggingService.configure_logging()
+
+log_dir = os.path.join(base_dir, "logs")
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{asctime} {levelname} {name} {funcName} {pathname}:{lineno} {module} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "file": {
+            "level": "DEBUG",
+            # 'class': 'logging.FileHandler',
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": "logs/copilot",
+            # 'when': 'M',  # Rotate every minute
+            "interval": 1,  # Interval is 1 minute
+            "backupCount": 5,  # Keep only the last 5 logs
+            "formatter": "verbose",
+        },
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file", "console"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        # You can add more loggers here for your custom apps
+    },
+}
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/

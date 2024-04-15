@@ -2,6 +2,24 @@
 omit =
     */scripts/*
     */migrations/*
+    */asgi.py
+    */wsgi.py
     */admin.py
     */apps.py
-    */tests.py
+    */test*.py
+
+[report]
+fail_under = 90
+show_missing = True
+#exclude_lines =
+#    # Have to re-enable the standard pragma
+#    pragma: no cover
+#
+#    # Don't complain if tests don't hit defensive assertion code:
+#    raise AssertionError
+#    raise NotImplementedError
+#
+#    # Don't complain if non-runnable code isn't run:
+#    if 0:
+#    if __name__ == .__main__.:
+#    if request.path.startswith("/admin/"):

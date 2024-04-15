@@ -1,12 +1,23 @@
 repos:
   - repo: local
     hooks:
-      - id: django-tests
-        name: Django Tests
-        entry: bash -c 'python manage.py test'
+      - id: django-coverage
+        name: Django Coverage
+        entry: bash -c 'coverage run --source='.' manage.py test && coverage html || (open htmlcov/index.html && false)'
         language: system
         always_run: true
         stages: [commit]
+        pass_filenames: false
+
+  #  - repo: local
+#    hooks:
+#      - id: django-tests
+#        name: Django Tests
+#        entry: bash -c 'python manage.py test'
+#        language: system
+#        always_run: true
+#        stages: [commit]
+
   - repo: local
     hooks:
       - id: black
@@ -90,11 +101,11 @@ repos:
         files: '(\.pre-commit-config\.yaml|pyproject\.toml)'
         pass_filenames: false
   
-  -   repo: local
-      hooks:
-        -   id: semantic-commit-message
-            name: 'Check Commit Message Format'
-            entry: python -m scripts.check_commit_msg
-            language: system
-            stages: [commit-msg]
-            files: ''
+  - repo: local
+    hooks:
+      - id: semantic-commit-message
+        name: 'Check Commit Message Format'
+        entry: python -m scripts.check_commit_msg
+        language: system
+        stages: [commit-msg]
+        files: ''

@@ -52,10 +52,10 @@ def add_social_account(request, provider_id):
     """Initiate the process of adding a new social account"""
     try:
         provider = providers.registry.get_class(provider_id)
+        if not provider:
+            return HttpResponse("Provider not found", status=404)
         auth_url = provider.get_login_url(provider, request)
         return redirect(auth_url)
-    except KeyError:
-        return HttpResponse("Provider not found", status=404)
     except OAuthError as e:
         return HttpResponse(f"OAuth error: {e}", status=400)
 
@@ -120,19 +120,6 @@ def set_dark_mode(request):
         user_pref.save()
         return JsonResponse({"success": True})
     return JsonResponse({"success": False})
-
-
-# @login_required
-# def get_dark_mode(request):
-#     user_pref, created = UserPreferences.objects.get_or_create(user=request.user)
-#     return JsonResponse({"darkMode": user_pref.dark_mode})
-#
-#     # if request.method == "POST":
-#     #     user_pref, created = UserPreferences.objects.get_or_create(user=request.user)
-#     #     user_pref.dark_mode = request.POST.get("darkMode") == "true"
-#     #     user_pref.save()
-#     #     return JsonResponse({"success": True})
-#     # return JsonResponse({"success": False})
 
 
 def user_preferences_js(request):
