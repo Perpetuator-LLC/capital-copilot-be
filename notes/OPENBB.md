@@ -70,7 +70,7 @@ create_app, app_factory.py:66
 
 The logs are sent to the following directory:
 
-```python
+```
 /Users/user/OpenBBUserData
 ```
 
@@ -151,4 +151,90 @@ $ poetry add "openbb[all]"
 $ time ./.venv/bin/python -m scripts.research.openbb_chart
 ...
 ./.venv/bin/python -m   16.03s user 12.30s system 169% cpu 17.042 total
+```
+
+# Indicators in OpenBB
+
+The indicators in OpenBB are calculated using the `plotly_ta` library. This library is a wrapper around the `ta`
+library.
+
+Here is a stack when indicators are applied:
+
+```
+to_dataframe, data_classes.py:201
+calculate_indicators, ta_class.py:299
+plot_fig, ta_class.py:457
+__plot__, ta_class.py:204
+plot, ta_class.py:250
+to_chart, to_chart.py:52
+to_chart, __init__.py:192
+update_graph, plotly_app.py:35
+add_context, _callback.py:82
+dispatch_with_args, dash_wrapper.py:705
+_update, views.py:95
+update, views.py:75
+_view_wrapper, csrf.py:65
+_get_response, base.py:197
+inner, exception.py:55
+__call__, middleware.py:34
+inner, exception.py:55
+__call__, middleware.py:99
+inner, exception.py:55
+middleware, middleware.py:29
+inner, exception.py:55
+__call__, deprecation.py:134
+inner, exception.py:55
+__call__, deprecation.py:134
+inner, exception.py:55
+__call__, deprecation.py:134
+inner, exception.py:55
+__call__, deprecation.py:134
+inner, exception.py:55
+__call__, deprecation.py:134
+inner, exception.py:55
+__call__, deprecation.py:134
+inner, exception.py:55
+__call__, deprecation.py:134
+inner, exception.py:55
+__call__, deprecation.py:134
+inner, exception.py:55
+get_response, base.py:140
+__call__, wsgi.py:124
+__call__, handlers.py:80
+run, handlers.py:137
+handle_one_request, basehttp.py:252
+handle, basehttp.py:229
+__init__, socketserver.py:755
+finish_request, socketserver.py:361
+process_request_thread, socketserver.py:691
+run, threading.py:982
+_bootstrap_inner, threading.py:1045
+_bootstrap, threading.py:1002
+```
+
+Here is an example of how to use the `plotly_ta` library:
+
+```python
+from openbb import obb
+from charting.core.plotly_ta.ta_class import PlotlyTA
+
+df = obb.equity.price.historical("SPY")
+indicators = dict(
+    sma=dict(length=[20, 50, 100]),
+    adx=dict(length=14),
+    macd=dict(fast=12, slow=26, signal=9),
+    rsi=dict(length=14),
+)
+fig = PlotlyTA.plot(df, indicators=indicators)
+fig.show()
+
+# If you want to plot the chart with the same indicators, you can
+# reuse the same instance of the class as follows:
+
+ta = PlotlyTA()
+fig = ta.plot(df, indicators=indicators)
+df2 = obb.equity.price.historical("AAPL")
+fig2 = ta.plot(df2)
+fig.show()
+fig2.show()
 ```

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "capital-copilot"
+name = "capital-copilot-be"
 version = "0.1.0"
 description = "Capital Copilot is a tool to help aggregate market data, setup alerts, automate trading, and provide AI insights."
 authors = ["Nik <nik.cimino@gmail.com>"]
@@ -17,6 +17,10 @@ openbb = {extras = ["alpha-vantage", "charting"], version = "^4.1.6"}
 copilot-plugin-view = {path = "../copilot-plugin-view", develop = true}
 copilot-plugin-dashboard = {path = "../copilot-plugin-dashboard", develop = true}
 coverage = "^7.4.4"
+django-plotly-dash = "^2.3.1"
+djangorestframework = "^3.15.1"
+django-cors-headers = "^4.3.1"
+djangorestframework-simplejwt = "^5.3.1"
 
 [tool.poetry.group.dev.dependencies]
 langchain = "^0.1.11"

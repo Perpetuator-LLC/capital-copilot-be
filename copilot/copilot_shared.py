@@ -9,10 +9,6 @@ import os
 
 from dotenv import load_dotenv
 
-# def get_collection():
-#     collection = "test-collection"
-#     return collection
-
 
 def process_env():
     script_dir = os.path.dirname(os.path.realpath(__file__))

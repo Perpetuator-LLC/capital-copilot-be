@@ -16,6 +16,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
+from datetime import timedelta
 from typing import List
 
 from copilot.copilot_shared import process_env
@@ -88,15 +89,42 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.google",
+    "django_plotly_dash.apps.DjangoPlotlyDashConfig",
+    "corsheaders",
     "common",
     "users",
     "copilot_plugin_view",
     "copilot_plugin_dashboard",
+    "rest_framework",
+    "rest_framework_simplejwt",
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": os.getenv("SECRET_KEY"),
+    "VERIFYING_KEY": None,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_TYPE_CLAIM": "token_type",
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -104,6 +132,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "django_plotly_dash.middleware.BaseMiddleware",
     "users.middleware.RestrictAdminMiddleware",
 ]
 
@@ -132,6 +161,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "copilot.wsgi.application"
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
 
 # Database
@@ -182,6 +213,10 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(base_dir, "staticfiles")
 STATICFILES_DIRS = [os.path.join(base_dir, "static")]
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -235,3 +270,26 @@ ACCOUNT_DEFAULT_HTTP_PROTOCOL = os.getenv("ACCOUNT_DEFAULT_HTTP_PROTOCOL", "http
 
 SESSION_COOKIE_SECURE = os.getenv("ACCOUNT_DEFAULT_HTTP_PROTOCOL", "http") == "https"
 CSRF_COOKIE_SECURE = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",
+]
+
+# # Allow credentials
+# CORS_ALLOW_CREDENTIALS = True
+#
+# # Allow specific headers
+# CORS_ALLOW_HEADERS = [
+#     'content-type',
+#     'authorization',
+#     ...
+# ]
+#
+# # Allow specific methods
+# CORS_ALLOW_METHODS = [
+#     'GET',
+#     'POST',
+#     'PUT',
+#     'DELETE',
+#     'OPTIONS'
+# ]

@@ -1,10 +1,10 @@
 {
-  "name": "capital-copilot",
+  "name": "capital-copilot-be",
   "version": "1.0.0",
   "description": "A tool to help aggregate market data, setup alerts, automate trading, and provide AI insights.",
   "main": "index.js",
   "scripts": {
-    "build:css": "tailwindcss build -i src/styles.css -o static/css/styles.css",
+    "build:css": "tailwindcss build -i src/styles.css -o static/css/styles.css --minify",
     "watch:css": "tailwindcss build -i src/styles.css -o static/css/styles.css --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

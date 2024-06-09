@@ -8,13 +8,13 @@ See the LICENSE file in the root of this project for the full license text.
 {% load i18n %}
 {% load static %}
 
-<header>
+<header class="w-full">
     <nav x-data="{ open: false, accountMenuOpen: false }" class="bg-stone-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
                     <a href="{% url 'home_page' %}" class="flex-shrink-0">
-                        <img src="{% static 'images/CapitalCopilot_medium.png' %}" alt="Capital Copilot" class="h-16 w-auto">
+                        <img src="{% static 'images/Capital_Copilot_Logo_Slanted.png' %}" alt="Capital Copilot" class="h-16 w-auto">
                     </a>
                 </div>
                 <div class="hidden md:block">
@@ -31,7 +31,7 @@ See the LICENSE file in the root of this project for the full license text.
                                     <path d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
-                            <div x-show="open" @mouseenter="clearTimeout(closeTimeout)" @mouseleave="closeTimeout = setTimeout(() => { open = false }, 200)" class="absolute mt-1 w-48 bg-stone-700 rounded-md shadow-lg py-1">
+                            <div x-show="open" @mouseenter="clearTimeout(closeTimeout)" @mouseleave="closeTimeout = setTimeout(() => { open = false }, 200)" class="absolute mt-1 w-48 bg-stone-700 rounded-md shadow-lg py-1 z-50">
                                 {% for item in account_menu_items %}
                                 <a href="{{ item.link }}" class="block px-4 py-2 text-sm text-stone-300 hover:bg-stone-600">{{ item.name }}</a>
                                 {% endfor %}

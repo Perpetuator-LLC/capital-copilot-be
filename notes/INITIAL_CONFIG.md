@@ -34,7 +34,7 @@ Start a new shell (run `zsh` or `bash` again) for these changes to take effect.
 Make sure to change into the project directory for most of the remaining commands:
 
 ```shell
-cd capital-copilot
+cd capital-copilot-be
 ```
 
 # Python and Poetry Setup

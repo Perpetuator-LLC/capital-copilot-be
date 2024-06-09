@@ -1,0 +1,141 @@
+_type: export
+__export_format: 4
+__export_date: 2024-06-04T02:55:39.110Z
+__export_source: insomnia.desktop.app:v9.2.0
+resources:
+  - _id: req_359b0d8863ad46fe9eacc2889471e93b
+    parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
+    modified: 1717469570097
+    created: 1717356120353
+    url: http://127.0.0.1:8000/api/token/
+    name: Get Refresh Token
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"username": "{{ _.username }}",
+        	"password": "{{ _.password }}"
+        }
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1717354776472
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: wrk_688f2b0a04ba46bab70b4bb385e11e07
+    parentId: null
+    modified: 1717354745382
+    created: 1717354745382
+    name: Capital Copilot
+    description: ""
+    scope: collection
+    _type: workspace
+  - _id: req_adaab43b4fd64835803af24bf4350222
+    parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
+    modified: 1717468926265
+    created: 1717468767695
+    url: http://127.0.0.1:8000/api/token/refresh/
+    name: Refresh Token
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: >-
+        {
+        	"refresh": "{% response 'body', 'req_359b0d8863ad46fe9eacc2889471e93b', 'b64::JC5yZWZyZXNo::46b', 'when-expired', 60 %}"
+        }
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    metaSortKey: -1717354776422
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_0e28e3dab04b4be9b0d5239cc1de1dfb
+    parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
+    modified: 1717469380793
+    created: 1717354776372
+    url: http://127.0.0.1:8000/api/
+    name: Get Price Data
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"ticker": "AAPL"
+        }
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_d3bd1b7520ae459595b37727a34839aa
+      - name: User-Agent
+        value: insomnia/9.2.0
+        id: pair_25fd3d4406874f64874e793e1388adb1
+      - id: pair_6aa67da1e15045c0a72d3d1d9a119539
+        name: Authorization
+        value: Bearer {% response 'body', 'req_359b0d8863ad46fe9eacc2889471e93b',
+          'b64::JC5hY2Nlc3M=::46b', 'never', 60 %}
+        description: ""
+    authentication:
+      type: none
+    metaSortKey: -1717354776372
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_a699de087d1b2662321944b743628b4c1fb0ccbe
+    parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
+    modified: 1717469693044
+    created: 1717354745383
+    name: Base Environment
+    data:
+      username: bob@perpetuator.com
+      password: cccccc-bbbbbb-aaaaaa
+    dataPropertyOrder:
+      "&":
+        - username
+        - password
+    color: null
+    isPrivate: false
+    metaSortKey: 1717354745383
+    _type: environment
+  - _id: jar_a699de087d1b2662321944b743628b4c1fb0ccbe
+    parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
+    modified: 1717354745384
+    created: 1717354745384
+    name: Default Jar
+    cookies: []
+    _type: cookie_jar

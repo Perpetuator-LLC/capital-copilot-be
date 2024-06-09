@@ -17,7 +17,7 @@ from copilot.copilot_shared import process_env
 def main():
     process_env()
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.ERROR)
     script_dir = os.path.dirname(os.path.realpath(__file__))
     repo_dir = os.path.realpath(os.path.join(script_dir, ".."))
     files = sys.argv[1:] if len(sys.argv) > 1 else [repo_dir]
@@ -28,12 +28,12 @@ def main():
         check_file = file if os.path.isfile(file) else os.path.realpath(os.path.join(repo_dir, file))
         if not check_header(check_file):
             checked_file = file if os.path.samefile(check_file, file) else (f"{file} (also checked {check_file}")
-            logging.error(f"GPL header check failed for {checked_file}")
+            logging.error(f"Copyright header check failed for {checked_file}")
             failed = True
 
     if failed:
         sys.exit(1)
-    logging.debug(f"GPL header check passed for {files}")
+    logging.debug(f"Copyright header check passed for {files}")
 
 
 def check_header(filename):

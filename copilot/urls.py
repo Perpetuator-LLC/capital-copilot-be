@@ -24,13 +24,26 @@ from copilot_plugin_dashboard import views as dashboard_views
 from copilot_plugin_view import views as view_views
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from api import views as api_views
 from users import views
 
 urlpatterns = [
     path("", views.home_page, name="home_page"),
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/", api_views.api, name="api"),
     path("landing/", views.landing_page, name="landing_page"),
+    path("test/", views.test, name="test"),
+    path("full/", dashboard_views.full_page, name="full_page"),
+    # path("dash/", dashboard_views.plotly_dash_page, name="plotly_dash_page"),
+    path("dash/", include("django_plotly_dash.urls")),
+    path("dash2/", dashboard_views.dash_view, name="dash_view"),
+    path("holding/", dashboard_views.holdings_page, name="holding_page"),
+    path("plotly/", dashboard_views.plotly_page, name="plotly_page"),
     path("dashboard/", dashboard_views.dashboard_page, name="dashboard_page"),
+    path("options/", dashboard_views.options_page, name="options_page"),
     path("view/", view_views.dashboard_page, name="view_page"),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),

@@ -169,3 +169,46 @@ send_mail(
     fail_silently=False,
 )
 ```
+
+# Django REST API Token Authentication
+
+Install Django REST Framework:
+
+```shell
+poetry add djangorestframework djangorestframework-simplejwt
+```
+
+Update Django settings to include the authentication classes:
+
+```python
+# settings.py
+
+INSTALLED_APPS = [
+    ...,
+    "rest_framework",
+    "rest_framework_simplejwt",
+]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
+```
+
+from datetime import timedelta
+
+SIMPLE_JWT = { 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5), 'REFRESH_TOKEN_LIFETIME': timedelta(days=1), ... } Add the
+token endpoints to your urls.py:
+
+python Copy code
+
+# urls.py
+
+from django.urls import path from rest_framework_simplejwt.views import ( TokenObtainPairView, TokenRefreshView, )
+
+urlpatterns = \[ ... path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'), ... \]

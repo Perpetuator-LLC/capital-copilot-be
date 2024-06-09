@@ -141,3 +141,7 @@ def user_preferences_js(request):
 
     js_content = render_to_string("users/preferences.js", {"user_preferences": preferences})
     return HttpResponse(js_content, content_type="application/javascript")
+
+
+def test(request):
+    return render(request, "test.html")

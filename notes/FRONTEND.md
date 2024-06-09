@@ -46,8 +46,8 @@ In the `package.json` file, add the following scripts:
 
 ```json
 "scripts": {
-  "build:css": "tailwindcss build src/styles.css -o static/css/styles.css",
-  "watch:css": "tailwindcss build src/styles.css -o static/css/styles.css --watch"
+  "build:css": "tailwindcss build -i src/styles.css -o static/css/styles.css --minify",
+  "watch:css": "tailwindcss build -i src/styles.css -o static/css/styles.css --watch"
 }
 ```
 

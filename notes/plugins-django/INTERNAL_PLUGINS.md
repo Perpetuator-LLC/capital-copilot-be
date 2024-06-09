@@ -1,5 +1,5 @@
 # Create Plugin (Django App)
 
 ```shell
-python manage.py startapp copilot-plugin-adapter
+python manage.py startapp api
 ```
