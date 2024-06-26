@@ -89,15 +89,19 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.google",
-    "django_plotly_dash.apps.DjangoPlotlyDashConfig",
+    # "django_plotly_dash.apps.DjangoPlotlyDashConfig",
     "corsheaders",
     "common",
     "users",
-    "copilot_plugin_view",
-    "copilot_plugin_dashboard",
+    # "copilot_plugin_view",
+    # "copilot_plugin_dashboard",
     "rest_framework",
     "rest_framework_simplejwt",
+    "api",
+    "graphene_django",
 ]
+
+GRAPHENE = {"SCHEMA": "api.schema.schema"}
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
@@ -107,8 +111,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=60),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": True,
     "ALGORITHM": "HS256",
@@ -132,7 +136,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
-    "django_plotly_dash.middleware.BaseMiddleware",
+    # "django_plotly_dash.middleware.BaseMiddleware",
     "users.middleware.RestrictAdminMiddleware",
 ]
 

@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2024-06-04T02:55:39.110Z
+__export_date: 2024-06-09T23:39:40.250Z
 __export_source: insomnia.desktop.app:v9.2.0
 resources:
   - _id: req_359b0d8863ad46fe9eacc2889471e93b
@@ -78,7 +78,7 @@ resources:
     _type: request
   - _id: req_0e28e3dab04b4be9b0d5239cc1de1dfb
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1717469380793
+    modified: 1717783141163
     created: 1717354776372
     url: http://127.0.0.1:8000/api/
     name: Get Price Data
@@ -116,6 +116,45 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
+  - _id: req_e67f5db618e943feba4cd239a1c47c22
+    parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
+    modified: 1717963381305
+    created: 1717959463431
+    url: http://127.0.0.1:8000/graphql/
+    name: GQL - Get Price Data
+    description: ""
+    method: POST
+    body:
+      mimeType: application/graphql
+      text: '{"query":"query {\n  getChartData(ticker: \"TSLA\")
+        {\n    success\n    message\n    ohlc
+        {\n      x\n      y\n    }\n    volume
+        {\n      x\n      y\n    }\n    ticker\n  }\n}\n"}'
+    preRequestScript: ""
+    parameters: []
+    headers:
+      - name: User-Agent
+        value: insomnia/9.2.0
+        id: pair_07011ef2da414201861d1ebdfdfab8b0
+      - name: Content-Type
+        value: application/json
+        id: pair_9c6f873b748e4a079c43c19ff196008e
+      - id: pair_f3b04422c21d4d39bc4fb321d499ee4c
+        name: Authorization
+        value: Bearer {% response 'body', 'req_adaab43b4fd64835803af24bf4350222',
+          'b64::JC5hY2Nlc3M=::46b', 'when-expired', 60 %}
+        description: ""
+    authentication: {}
+    metaSortKey: -1717354776272
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
   - _id: env_a699de087d1b2662321944b743628b4c1fb0ccbe
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
     modified: 1717469693044
@@ -134,8 +173,20 @@ resources:
     _type: environment
   - _id: jar_a699de087d1b2662321944b743628b4c1fb0ccbe
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1717354745384
+    modified: 1717963626326
     created: 1717354745384
     name: Default Jar
-    cookies: []
+    cookies:
+      - key: csrftoken
+        value: teW9vjXkcpXNJroUpflUFha1gyUSpsvl
+        expires: 2025-06-08T20:07:06.000Z
+        maxAge: 31449600
+        domain: 127.0.0.1
+        path: /
+        secure: true
+        hostOnly: true
+        creation: 2024-06-09T19:01:31.690Z
+        lastAccessed: 2024-06-09T20:07:06.326Z
+        sameSite: lax
+        id: 7b6b3ec4-422f-4370-a43f-39a3bb499334
     _type: cookie_jar

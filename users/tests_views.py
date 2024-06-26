@@ -22,13 +22,13 @@ class HomePageAndUserViewsTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-    def test_dashboard_page_loads_successfully(self):
-        self.client = Client()
-        self.user = User.objects.create_user("testuser", "test@example.com", "testpassword")
-        self.client.login(username="testuser", password="testpassword")
-        url = reverse("home_page")
-        response = self.client.get(url, follow=True)
-        self.assertEqual(response.status_code, 200)
+    # def test_dashboard_page_loads_successfully(self):
+    #     self.client = Client()
+    #     self.user = User.objects.create_user("testuser", "test@example.com", "testpassword")
+    #     self.client.login(username="testuser", password="testpassword")
+    #     url = reverse("home_page")
+    #     response = self.client.get(url, follow=True)
+    #     self.assertEqual(response.status_code, 200)
 
     def test_landing_page_loads_successfully(self):
         url = reverse("landing_page")

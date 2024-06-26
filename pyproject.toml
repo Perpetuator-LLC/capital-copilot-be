@@ -2,9 +2,10 @@
 name = "capital-copilot-be"
 version = "0.1.0"
 description = "Capital Copilot is a tool to help aggregate market data, setup alerts, automate trading, and provide AI insights."
-authors = ["Nik <nik.cimino@gmail.com>"]
+authors = ["Nik <nik@perpetuator.com>"]
 license = "MIT"
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.12"
@@ -12,19 +13,21 @@ django = "^5.0.3"
 django-allauth = "^0.61.1"
 python-dotenv = "^1.0.1"
 gunicorn = "^21.2.0"
-openbb = {extras = ["alpha-vantage", "charting"], version = "^4.1.6"}
+openbb = {extras = ["alpha-vantage", "charting", "ta"], version = "^4.1.6"}
 #openbb = {extras = ["all"], version = "^4.1.5"}
-copilot-plugin-view = {path = "../copilot-plugin-view", develop = true}
-copilot-plugin-dashboard = {path = "../copilot-plugin-dashboard", develop = true}
+#copilot-plugin-view = {path = "../copilot-plugin-view", develop = true}
+#copilot-plugin-dashboard = {path = "../copilot-plugin-dashboard", develop = true}
 coverage = "^7.4.4"
-django-plotly-dash = "^2.3.1"
+#django-plotly-dash = "^2.3.1"
 djangorestframework = "^3.15.1"
 django-cors-headers = "^4.3.1"
 djangorestframework-simplejwt = "^5.3.1"
+graphene-django = "^3.2.1"
+numpy = ">=1.0.0,<2.0.0"
 
 [tool.poetry.group.dev.dependencies]
-langchain = "^0.1.11"
-langchain-openai = "^0.0.8"
+#langchain = "^0.1.11"
+#langchain-openai = "^0.0.8"
 gitpython = "^3.1.42"
 black = "^24.2.0"
 isort = "^5.13.2"

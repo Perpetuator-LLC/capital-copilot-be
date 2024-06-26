@@ -1,3 +1,9 @@
+# TA Squeeze Pro
+
+See:
+
+- .venv/lib/python3.11/site-packages/pandas_ta/momentum/squeeze_pro.py
+
 # The Squeeze Indicator
 
 To get the data to calculate the squeeze indicator, we need to get the Bollinger Bands and Keltner Channels.

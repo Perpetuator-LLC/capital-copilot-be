@@ -123,8 +123,11 @@ poetry shell
 If you already have dependencies added, then you can install the dependencies:
 
 ```shell
-poetry install --no-root
+poetry install
 ```
+
+_NOTE: The `--no-root` is only needed if the project is configured as a package but the build doesn't release one. This
+project is not a package so the `pyproject.toml` has: `package-mode = false`_
 
 # For PyCharm
 
