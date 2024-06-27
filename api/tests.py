@@ -7,7 +7,7 @@ See the LICENSE file in the root of this project for the full license text.
 
 import json
 from datetime import date
-from unittest.mock import Mock, patch
+from unittest.mock import MagicMock, Mock, patch
 
 from django.contrib.auth.models import User
 from django.test import Client, RequestFactory, TestCase
@@ -68,12 +68,55 @@ class APITests(TestCase):
         mock_getenv.return_value = "fake_api_key"
 
         # Mock OpenBB response
-        mock_historical_data = Mock()
+
         mock_df = Mock()
         mock_df.iterrows.return_value = [
-            (date(2023, 1, 1), {"open": 100, "high": 110, "low": 90, "close": 105, "volume": 1000}),
-            (date(2023, 1, 2), {"open": 106, "high": 115, "low": 95, "close": 110, "volume": 1500}),
+            (
+                date(2023, 1, 1),
+                {
+                    "open": 100,
+                    "high": 110,
+                    "low": 90,
+                    "close": 105,
+                    "volume": 1000,
+                    "SQZ_ON": 1,
+                    "SQZ_20_2.0_20_1.5": 0,
+                },
+            ),
+            (
+                date(2023, 1, 2),
+                {
+                    "open": 106,
+                    "high": 115,
+                    "low": 95,
+                    "close": 110,
+                    "volume": 1500,
+                    "SQZ_ON": 1,
+                    "SQZ_20_2.0_20_1.5": 0,
+                },
+            ),
         ]
+
+        mock_ta = Mock()
+        mock_df.ta = mock_ta
+
+        mock_squeeze_result = MagicMock()
+        mock_ta.squeeze.return_value = mock_squeeze_result
+
+        mock_squeeze_series = MagicMock()
+
+        def mock_at(index):
+            if index[1] == "SQZ_ON":
+                return 1
+            else:
+                return 0
+
+        mock_squeeze_series.at.side_effect = mock_at
+        mock_squeeze_result.__getitem__.side_effect = lambda key: (
+            mock_squeeze_series if key in ["SQZ_ON"] else MagicMock()
+        )
+
+        mock_historical_data = MagicMock()
         mock_historical_data.to_df.return_value = mock_df
         mock_historical.return_value = mock_historical_data
 
@@ -209,13 +252,66 @@ class ChartDataTests(TestCase):
         mock_user = Mock()
         mock_user.is_authenticated = True
 
-        # Mock OpenBB response
-        mock_historical_data = Mock()
         mock_df = Mock()
         mock_df.iterrows.return_value = [
-            (date(2023, 1, 1), {"open": 100, "high": 110, "low": 90, "close": 105, "volume": 1000}),
-            (date(2023, 1, 2), {"open": 106, "high": 115, "low": 95, "close": 110, "volume": 1500}),
+            (
+                date(2023, 1, 1),
+                {
+                    "open": 100,
+                    "high": 110,
+                    "low": 90,
+                    "close": 105,
+                    "volume": 1000,
+                    "SQZ_ON": 1,
+                    "SQZ_20_2.0_20_1.5": 0,
+                },
+            ),
+            (
+                date(2023, 1, 2),
+                {
+                    "open": 106,
+                    "high": 115,
+                    "low": 95,
+                    "close": 110,
+                    "volume": 1500,
+                    "SQZ_ON": 1,
+                    "SQZ_20_2.0_20_1.5": 0,
+                },
+            ),
         ]
+
+        mock_ta = Mock()
+        mock_df.ta = mock_ta
+
+        mock_squeeze_result = MagicMock()
+        mock_ta.squeeze.return_value = mock_squeeze_result
+
+        # mock_squeeze_series = MagicMock()
+        #
+        # def mock_at(index):
+        #     if index[1] == "SQZ_ON":
+        #         return 1
+        #     else:
+        #         return 0
+        #
+        # def mock_squeeze_series_at(key):
+        #     if key == "SQZ_ON":
+        #         return 1
+        #     elif key == "SQZ_20_2.0_20_1.5":
+        #         return 5.0
+        #     else:
+        #         return 0
+
+        # mock_squeeze_series.at.side_effect = mock_at mock_squeeze_result.__getitem__.side_effect =
+        # mock_squeeze_series_at # mock_squeeze_result.__getitem__.side_effect = lambda key: mock_squeeze_series if
+        # key in ["SQZ_ON"] else MagicMock()
+
+        mock_historical_data = MagicMock()
+
+        # mock_df.iterrows.return_value = [ (date(2023, 1, 1), {"open": 100.0, "high": 110.0, "low": 90.0,
+        # "close": 105.0, "volume": 1000.0, "SQZ_ON": 12.0, "SQZ_20_2.0_20_1.5": 5.0}), (date(2023, 1, 2),
+        # {"open": 106.0, "high": 115.0, "low": 95.0, "close": 110.0, "volume": 1500.0, "SQZ_ON": 12.0,
+        # "SQZ_20_2.0_20_1.5": 5.0}), ]
         mock_historical_data.to_df.return_value = mock_df
         mock_historical.return_value = mock_historical_data
 
@@ -223,6 +319,10 @@ class ChartDataTests(TestCase):
         {
             getChartData(ticker: "AAPL") {
                 success
+                squeeze {
+                    x
+                    y
+                }
                 ohlc {
                     x
                     y
@@ -238,17 +338,22 @@ class ChartDataTests(TestCase):
         request = self.factory.get("/")
         request.user = mock_user
         executed = schema.execute(query, context_value=request)
+        self.maxDiff = None
         self.assertDictEqual(
             executed.formatted,
             {
                 "data": {
                     "getChartData": {
                         "success": True,
-                        "ohlc": [
-                            {"x": "2023-01-01", "y": [100, 110, 90, 105]},
-                            {"x": "2023-01-02", "y": [106, 115, 95, 110]},
+                        "squeeze": [
+                            {"x": "2023-01-01", "y": [1.0, 0.0]},
+                            {"x": "2023-01-02", "y": [1.0, 0.0]},
                         ],
-                        "volume": [{"x": "2023-01-01", "y": 1000}, {"x": "2023-01-02", "y": 1500}],
+                        "ohlc": [
+                            {"x": "2023-01-01", "y": [100.0, 110.0, 90.0, 105.0]},
+                            {"x": "2023-01-02", "y": [106.0, 115.0, 95.0, 110.0]},
+                        ],
+                        "volume": [{"x": "2023-01-01", "y": 1000.0}, {"x": "2023-01-02", "y": 1500.0}],
                         "ticker": "AAPL",
                     }
                 }
