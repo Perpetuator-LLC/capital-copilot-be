@@ -18,35 +18,6 @@ from rest_framework_simplejwt.tokens import AccessToken
 
 from api.schema import schema
 
-# from django.urls import reverse
-
-
-# from rest_framework.test import APIClient
-# from rest_framework_simplejwt.tokens import AccessToken
-
-
-# class GraphQLViewTests(TestCase):
-#     def setUp(self):
-#         self.client = APIClient()
-#         self.user = User.objects.create_user(username="testuser")
-#         self.user.set_password("securepassword")
-#         self.user.save()
-#         self.token = AccessToken.for_user(self.user)
-#
-#     def test_custom_graphql_view_with_authenticated_user(self):
-#         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {str(self.token)}')
-#         response = self.client.get(reverse('graphql'))
-#
-#         # Directly print or inspect the user to see what's happening
-#         print("Authenticated user:", response.wsgi_request.user)
-#
-#         self.assertTrue(response.wsgi_request.user.is_authenticated)
-#         self.assertEqual(response.wsgi_request.user, self.user)
-#
-#     def test_custom_graphql_view_with_no_authentication(self):
-#         response = self.client.get(reverse('graphql'))
-#         self.assertFalse(response.wsgi_request.user.is_authenticated)
-
 
 class APITests(TestCase):
     def setUp(self):
@@ -81,6 +52,15 @@ class APITests(TestCase):
                     "volume": 1000,
                     "SQZ_ON": 1,
                     "SQZ_20_2.0_20_1.5": 0,
+                    "KCLe_20_1.0": 85,
+                    "KCBe_20_1.0": 102,
+                    "KCUe_20_1.0": 120,
+                    "KCLe_20_2.0": 80,
+                    "KCBe_20_2.0": 102,
+                    "KCUe_20_2.0": 125,
+                    "KCLe_20_3.0": 75,
+                    "KCBe_20_3.0": 102,
+                    "KCUe_20_3.0": 130,
                 },
             ),
             (
@@ -93,6 +73,15 @@ class APITests(TestCase):
                     "volume": 1500,
                     "SQZ_ON": 1,
                     "SQZ_20_2.0_20_1.5": 0,
+                    "KCLe_20_1.0": 85,
+                    "KCBe_20_1.0": 102,
+                    "KCUe_20_1.0": 120,
+                    "KCLe_20_2.0": 80,
+                    "KCBe_20_2.0": 102,
+                    "KCUe_20_2.0": 125,
+                    "KCLe_20_3.0": 75,
+                    "KCBe_20_3.0": 102,
+                    "KCUe_20_3.0": 130,
                 },
             ),
         ]
@@ -137,65 +126,6 @@ class APITests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(json.loads(response.content)["data"]["getChartData"]["success"])
-
-    # Additional tests...
-
-
-# class APITests(TestCase):
-#     def setUp(self):
-#         self.client = Client()
-#         self.url = reverse('graphql')
-#         self.valid_ticker = "AAPL"
-#         self.invalid_ticker = ""
-#
-#     def test_requires_authentication(self):
-#         response = self.client.post(self.url, data={"ticker": self.valid_ticker})
-#         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-#
-#     @patch('os.getenv')
-#     @patch("openbb.package.equity_price.ROUTER_equity_price.historical")
-#     def test_successful_data_retrieval(self, mock_historical, mock_getenv):
-#         # Setup Mocks
-#         mock_getenv.return_value = 'fake_api_key'
-#         historical_data_mock = Mock()
-#         historical_data_mock.to_df.return_value = ...
-#         mock_historical.return_value = historical_data_mock
-#
-#         # Simulate authenticated request
-#         self.client.force_authenticate(user=Mock(is_authenticated=True))
-#         query = """
-#         query {
-#             getChartData(ticker: "AAPL") {
-#                 success
-#                 message
-#             }
-#         }
-#         """
-#         response = self.client.post(self.url, data=query)
-#
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertTrue(json.loads(response.content)['success'])
-#
-#     @patch('os.getenv')
-#     @patch("openbb.package.equity_price.ROUTER_equity_price.historical")
-#     def test_failed_data_retrieval(self, mock_historical, mock_getenv):
-#         mock_getenv.return_value = 'fake_api_key'
-#         mock_historical.side_effect = Exception("Data retrieval error")
-#
-#         self.client.force_authenticate(user=Mock(is_authenticated=True))
-#         response = self.client.post(self.url, data={"ticker": self.valid_ticker})
-#
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertFalse(json.loads(response.content)['success'])
-#         self.assertIn("Failed to load data for 'AAPL': Data retrieval error", str(response.content))
-#
-#     def test_invalid_ticker_provided(self):
-#         self.client.force_authenticate(user=Mock(is_authenticated=True))
-#         response = self.client.post(self.url, data={"ticker": self.invalid_ticker})
-#
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertFalse(json.loads(response.content)['success'])
-#         self.assertIn("No ticker provided", str(response.content))
 
 
 class ChartDataTests(TestCase):
@@ -263,7 +193,16 @@ class ChartDataTests(TestCase):
                     "close": 105,
                     "volume": 1000,
                     "SQZ_ON": 1,
-                    "SQZ_20_2.0_20_1.5": 0,
+                    "SQZ_20_2.0_20_1.5": 12,
+                    "KCLe_20_1.0": 85,
+                    "KCBe_20_1.0": 102,
+                    "KCUe_20_1.0": 120,
+                    "KCLe_20_2.0": 80,
+                    "KCBe_20_2.0": 102,
+                    "KCUe_20_2.0": 125,
+                    "KCLe_20_3.0": 75,
+                    "KCBe_20_3.0": 102,
+                    "KCUe_20_3.0": 130,
                 },
             ),
             (
@@ -274,8 +213,17 @@ class ChartDataTests(TestCase):
                     "low": 95,
                     "close": 110,
                     "volume": 1500,
-                    "SQZ_ON": 1,
-                    "SQZ_20_2.0_20_1.5": 0,
+                    "SQZ_ON": 0,
+                    "SQZ_20_2.0_20_1.5": 13,
+                    "KCLe_20_1.0": 85,
+                    "KCBe_20_1.0": 102,
+                    "KCUe_20_1.0": 120,
+                    "KCLe_20_2.0": 80,
+                    "KCBe_20_2.0": 102,
+                    "KCUe_20_2.0": 125,
+                    "KCLe_20_3.0": 75,
+                    "KCBe_20_3.0": 102,
+                    "KCUe_20_3.0": 130,
                 },
             ),
         ]
@@ -286,32 +234,8 @@ class ChartDataTests(TestCase):
         mock_squeeze_result = MagicMock()
         mock_ta.squeeze.return_value = mock_squeeze_result
 
-        # mock_squeeze_series = MagicMock()
-        #
-        # def mock_at(index):
-        #     if index[1] == "SQZ_ON":
-        #         return 1
-        #     else:
-        #         return 0
-        #
-        # def mock_squeeze_series_at(key):
-        #     if key == "SQZ_ON":
-        #         return 1
-        #     elif key == "SQZ_20_2.0_20_1.5":
-        #         return 5.0
-        #     else:
-        #         return 0
-
-        # mock_squeeze_series.at.side_effect = mock_at mock_squeeze_result.__getitem__.side_effect =
-        # mock_squeeze_series_at # mock_squeeze_result.__getitem__.side_effect = lambda key: mock_squeeze_series if
-        # key in ["SQZ_ON"] else MagicMock()
-
         mock_historical_data = MagicMock()
 
-        # mock_df.iterrows.return_value = [ (date(2023, 1, 1), {"open": 100.0, "high": 110.0, "low": 90.0,
-        # "close": 105.0, "volume": 1000.0, "SQZ_ON": 12.0, "SQZ_20_2.0_20_1.5": 5.0}), (date(2023, 1, 2),
-        # {"open": 106.0, "high": 115.0, "low": 95.0, "close": 110.0, "volume": 1500.0, "SQZ_ON": 12.0,
-        # "SQZ_20_2.0_20_1.5": 5.0}), ]
         mock_historical_data.to_df.return_value = mock_df
         mock_historical.return_value = mock_historical_data
 
@@ -319,6 +243,7 @@ class ChartDataTests(TestCase):
         {
             getChartData(ticker: "AAPL") {
                 success
+                message
                 squeeze {
                     x
                     y
@@ -345,9 +270,10 @@ class ChartDataTests(TestCase):
                 "data": {
                     "getChartData": {
                         "success": True,
+                        "message": None,
                         "squeeze": [
-                            {"x": "2023-01-01", "y": [1.0, 0.0]},
-                            {"x": "2023-01-02", "y": [1.0, 0.0]},
+                            {"x": "2023-01-01", "y": [1.0, 12.0]},
+                            {"x": "2023-01-02", "y": [0.0, 13.0]},
                         ],
                         "ohlc": [
                             {"x": "2023-01-01", "y": [100.0, 110.0, 90.0, 105.0]},

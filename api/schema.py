@@ -26,12 +26,18 @@ class SqueezeData(graphene.ObjectType):
     y = graphene.List(graphene.Float)
 
 
+class KcData(graphene.ObjectType):
+    x = graphene.DateTime()
+    y = graphene.List(graphene.Float)
+
+
 class ChartData(graphene.ObjectType):
     success = graphene.Boolean()
     message = graphene.String()
     ohlc = graphene.List(OHLCData)
     volume = graphene.List(VolumeData)
     squeeze = graphene.List(SqueezeData)
+    kc = graphene.List(KcData)
     ticker = graphene.String()
 
 
@@ -53,12 +59,15 @@ def resolve_get_chart_data(self, info, ticker):
             ohlc_data = []
             volume_data = []
             squeeze_data = []
+            kc_data = []
+
+            df.ta.kc(append=True, scalar=1)
+            df.ta.kc(append=True, scalar=2)
+            df.ta.kc(append=True, scalar=3)
 
             # Assuming squeeze function is correctly imported and used
             df.ta.squeeze(append=True)
             df.fillna(0, inplace=True)  # Replace NaN with 0
-            # squeeze_result = df.ta.squeeze()
-            # squeeze_result.fillna(0, inplace=True)  # Replace NaN with 0
             for timestamp, row in df.iterrows():
                 ohlc_data.append(OHLCData(x=timestamp, y=[row["open"], row["high"], row["low"], row["close"]]))
                 volume_data.append(VolumeData(x=timestamp, y=row["volume"]))
@@ -66,11 +75,28 @@ def resolve_get_chart_data(self, info, ticker):
                     SqueezeData(
                         x=timestamp,
                         y=[row["SQZ_ON"], row["SQZ_20_2.0_20_1.5"]],
-                        # y=[squeeze_result.at[timestamp, "SQZ_ON"], squeeze_result.at[timestamp, "SQZ_20_2.0_20_1.5"]],
+                    )
+                )
+                kc_data.append(
+                    KcData(
+                        x=timestamp,
+                        y=[
+                            row["KCLe_20_1.0"],
+                            row["KCBe_20_1.0"],
+                            row["KCUe_20_1.0"],
+                            row["KCLe_20_2.0"],
+                            row["KCBe_20_2.0"],
+                            row["KCUe_20_2.0"],
+                            row["KCLe_20_3.0"],
+                            row["KCBe_20_3.0"],
+                            row["KCUe_20_3.0"],
+                        ],
                     )
                 )
 
-            return ChartData(success=True, ohlc=ohlc_data, volume=volume_data, squeeze=squeeze_data, ticker=ticker)
+            return ChartData(
+                success=True, ohlc=ohlc_data, volume=volume_data, squeeze=squeeze_data, kc=kc_data, ticker=ticker
+            )
 
         except Exception as e:
             return ChartData(success=False, message=f"Failed to load data for '{ticker}': {e}")
