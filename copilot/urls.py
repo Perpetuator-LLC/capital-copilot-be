@@ -26,7 +26,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from api import views as api_views
+# from api import views as api_views
 from users import views
 
 urlpatterns = [
@@ -36,7 +36,7 @@ urlpatterns = [
     path("home/", views.home_page, name="home_page"),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    path("api/", api_views.api, name="api"),
+    # path("api/", api_views.api, name="api"),
     path("landing/", views.landing_page, name="landing_page"),
     path("test/", views.test, name="test"),
     # path("full/", dashboard_views.full_page, name="full_page"),
