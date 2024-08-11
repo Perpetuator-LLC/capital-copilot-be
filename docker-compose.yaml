@@ -1,4 +1,4 @@
-# Copyright (c) 2024 eContriver LLC
+# Copyright (c) 2024 Perpetuator LLC
 
 version: '3.7'
 
@@ -22,10 +22,10 @@ services:
     ports:
       - "${COPILOT_NGINX_PORT:-80}:80"
     environment:
-      - VIRTUAL_HOST=copilot.econtriver.com
+      - VIRTUAL_HOST=copilot.perpetuator.com
       - VIRTUAL_PATH=/
-      - LETSENCRYPT_HOST=copilot.econtriver.com
-      - LETSENCRYPT_EMAIL=nik@econtriver.com
+      - LETSENCRYPT_HOST=copilot.perpetuator.com
+      - LETSENCRYPT_EMAIL=nik@perpetuator.com
     depends_on:
       - web
     volumes:

@@ -2,11 +2,11 @@
 
 This project is served from:
 
-- https://copilot.econtriver.com
+- https://copilot.perpetuator.com
 
 The Staging area is:
 
-- https://copilot-staging.econtriver.com
+- https://copilot-staging.perpetuator.com
 
 # Design
 

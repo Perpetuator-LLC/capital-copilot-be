@@ -92,30 +92,31 @@ email, and adding any necessary scopes. Application Type: "Web application" Unde
 URI provided by Django AllAuth, typically:
 
 - http://localhost:8000/accounts/google/login/callback/ for local development
-- https://copilot.econtriver.com/accounts/google/login/callback/ for production Once the OAuth client is created, you'll
-  be provided with a Client ID and Client Secret. Keep these safe and confidential. Scopes: For basic authentication and
-  profile information, ensure the following scopes are added in the OAuth consent screen configuration:
+- https://copilot.perpetuator.com/accounts/google/login/callback/ for production Once the OAuth client is created,
+  you'll be provided with a Client ID and Client Secret. Keep these safe and confidential. Scopes: For basic
+  authentication and profile information, ensure the following scopes are added in the OAuth consent screen
+  configuration:
 - email
 - profile
 - openid
 
 From the admin site make sure to also 'choose' the sites for the social application:
 
-- econtriver.com
+- perpetuator.com
 - 127.0.0.1:8000
 
 ## GitHub
 
 Visit: https://github.com/settings/apps (Settings -> Developer Settings)
 
-Create New GitHub App Homepage: https://copilot.econtriver.com User authorization callback URLs:
+Create New GitHub App Homepage: https://copilot.perpetuator.com User authorization callback URLs:
 
 - http://localhost:8000/accounts/github/login/callback/ for local development
-- https://copilot.econtriver.com/accounts/github/login/callback/ for production
+- https://copilot.perpetuator.com/accounts/github/login/callback/ for production
 
-GitHub & Google Production Request eula - https://copilot.econtriver.com/eula/ privacy -
-https://copilot.econtriver.com/privacy/ status - https://copilot.econtriver.com/status/ terms -
-https://copilot.econtriver.com/terms/
+GitHub & Google Production Request eula - https://copilot.perpetuator.com/eula/ privacy -
+https://copilot.perpetuator.com/privacy/ status - https://copilot.perpetuator.com/status/ terms -
+https://copilot.perpetuator.com/terms/
 
 # Create the Templates
 
@@ -143,7 +144,7 @@ EMAIL_USE_TLS = True
 Then in the `local_settings.py` file, add the following:
 
 ```python
-DEFAULT_FROM_EMAIL = "user@econtriver.com"
+DEFAULT_FROM_EMAIL = "user@perpetuator.com"
 EMAIL_HOST_USER = "user@me.com"
 EMAIL_HOST_PASSWORD = "app-specific-password"
 ```

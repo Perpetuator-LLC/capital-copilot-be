@@ -1,4 +1,4 @@
-# Copyright (c) 2024 eContriver LLC
+# Copyright (c) 2024 Perpetuator LLC
 
 # Build environment
 FROM python:3.11-slim as production

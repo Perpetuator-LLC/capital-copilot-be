@@ -1,7 +1,7 @@
 """
-Copyright (c) 2024 eContriver LLC
+Copyright (c) 2024 Perpetuator LLC
 
-This file is part of Capital Copilot by eContriver LLC and is released under the MIT License.
+This file is part of Capital Copilot by Perpetuator LLC and is released under the MIT License.
 See the LICENSE file in the root of this project for the full license text.
 """
 
@@ -45,7 +45,7 @@ def check_header(filename):
 
 
 def expected_copyright():
-    pattern = re.compile(r"Copyright \(c\) .*" + str(datetime.now().year) + r" eContriver LLC")
+    pattern = re.compile(r"Copyright \(c\) .*" + str(datetime.now().year) + r" Perpetuator LLC")
     return pattern
 
 

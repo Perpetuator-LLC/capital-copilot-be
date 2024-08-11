@@ -66,7 +66,7 @@ docker exec -it copilot_django sh
 poetry run python manage.py createsuperuser
 ```
 
-Once you login as the super user you need update the site to be econtriver.com and then add the social applications for
+Once you login as the super user you need update the site to be perpetuator.com and then add the social applications for
 GitHub and Google, make sure to link them to the site.
 
 ## Django Check
