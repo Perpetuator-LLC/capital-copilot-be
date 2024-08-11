@@ -13,10 +13,12 @@ from django.contrib.auth.models import User
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import AccessToken
 
 from api.schema import schema
+from api.serializers import RegisterSerializer
 
 
 class APITests(TestCase):
@@ -126,6 +128,76 @@ class APITests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(json.loads(response.content)["data"]["getChartData"]["success"])
+
+
+class TestAutocomplete(TestCase):
+
+    def setUp(self):
+        self.client = Client(schema)
+        self.factory = RequestFactory()
+
+    @patch("openbb.package.equity.ROUTER_equity.search")
+    def test_successful_autocomplete_retrieval(self, mock_search):
+        mock_user = Mock()
+        mock_user.is_authenticated = True
+
+        mock_results = Mock()
+        mock_results.results = [
+            {"symbol": "AAPL", "name": "Apple Inc.", "cik": "320193"},
+            {"symbol": "CART", "name": "Maplebear Inc.", "cik": "1579091"},
+            {"symbol": "APLS", "name": "Apellis Pharmaceuticals, Inc.", "cik": "1492422"},
+            {"symbol": "APLE", "name": "Apple Hospitality REIT, Inc.", "cik": "1418121"},
+            {"symbol": "OLPX", "name": "OLAPLEX HOLDINGS, INC.", "cik": "1868726"},
+            {"symbol": "APLD", "name": "Applied Digital Corp.", "cik": "1144879"},
+            {"symbol": "CAPL", "name": "CrossAmerica Partners LP", "cik": "1538849"},
+            {"symbol": "APLT", "name": "Applied Therapeutics, Inc.", "cik": "1697532"},
+            {"symbol": "APLM", "name": "Apollomics Inc.", "cik": "1944885"},
+            {"symbol": "PAPL", "name": "Pineapple Financial Inc.", "cik": "1938109"},
+            {"symbol": "APLMW", "name": "Apollomics Inc.", "cik": "1944885"},
+        ]
+
+        # Mocking the return value of the autocomplete function
+        mock_search.return_value = mock_results
+
+        query = """
+        {
+            getAutocomplete(query: "APL") {
+                success
+                message
+                results {
+                    symbol
+                    name
+                    cik
+                }
+            }
+        }
+        """
+        request = self.factory.get("/")
+        request.user = mock_user
+        executed = schema.execute(query, context_value=request)
+        self.maxDiff = None
+        self.assertDictEqual(
+            executed.data,
+            {
+                "getAutocomplete": {
+                    "success": True,
+                    "message": None,
+                    "results": [
+                        {"symbol": "AAPL", "name": "Apple Inc.", "cik": "320193"},
+                        {"symbol": "CART", "name": "Maplebear Inc.", "cik": "1579091"},
+                        {"symbol": "APLS", "name": "Apellis Pharmaceuticals, Inc.", "cik": "1492422"},
+                        {"symbol": "APLE", "name": "Apple Hospitality REIT, Inc.", "cik": "1418121"},
+                        {"symbol": "OLPX", "name": "OLAPLEX HOLDINGS, INC.", "cik": "1868726"},
+                        {"symbol": "APLD", "name": "Applied Digital Corp.", "cik": "1144879"},
+                        {"symbol": "CAPL", "name": "CrossAmerica Partners LP", "cik": "1538849"},
+                        {"symbol": "APLT", "name": "Applied Therapeutics, Inc.", "cik": "1697532"},
+                        {"symbol": "APLM", "name": "Apollomics Inc.", "cik": "1944885"},
+                        {"symbol": "PAPL", "name": "Pineapple Financial Inc.", "cik": "1938109"},
+                        {"symbol": "APLMW", "name": "Apollomics Inc.", "cik": "1944885"},
+                    ],
+                }
+            },
+        )
 
 
 class ChartDataTests(TestCase):
@@ -316,3 +388,32 @@ class ChartDataTests(TestCase):
                 }
             },
         )
+
+
+class RegisterSerializerTests(TestCase):
+
+    def test_valid_data_creates_user(self):
+        data = {"username": "testuser", "email": "testuser@example.com", "password": "Testpassword123"}
+        serializer = RegisterSerializer(data=data)
+        self.assertTrue(serializer.is_valid())
+        user = serializer.save()
+
+        self.assertEqual(user.username, data["username"])
+        self.assertEqual(user.email, data["email"])
+        self.assertTrue(user.check_password(data["password"]))
+
+    def test_missing_username(self):
+        data = {"email": "testuser@example.com", "password": "Testpassword123"}
+        serializer = RegisterSerializer(data=data)
+        with self.assertRaises(ValidationError):
+            serializer.is_valid(raise_exception=True)
+
+    def test_invalid_password(self):
+        data = {
+            "username": "testuser",
+            "email": "testuser@example.com",
+            "password": "123",  # Assuming validate_password enforces stronger passwords
+        }
+        serializer = RegisterSerializer(data=data)
+        with self.assertRaises(ValidationError):
+            serializer.is_valid(raise_exception=True)

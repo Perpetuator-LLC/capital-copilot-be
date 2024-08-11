@@ -12,12 +12,11 @@ import sys
 from openbb import obb
 
 from copilot.copilot_shared import process_env
-from copilot.logging_service import LoggingService
 
 
 def main():
     process_env()
-    LoggingService.configure_logging({"stdout": logging.DEBUG})
+    # configure_logging({"stdout": logging.DEBUG})
     ticker = sys.argv[1] if len(sys.argv) > 1 else "MSFT"
     logging.debug(f"Loading ticker: {ticker}")
 

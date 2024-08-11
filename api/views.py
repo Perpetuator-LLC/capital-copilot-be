@@ -5,50 +5,78 @@ This file is part of Capital Copilot by eContriver LLC and is released under the
 See the LICENSE file in the root of this project for the full license text.
 """
 
-# import os
-#
-# from django.http import JsonResponse
-# from openbb import obb
-# from rest_framework.decorators import api_view, permission_classes
-# from rest_framework.permissions import IsAuthenticated
-#
-#
-# @api_view(["POST"])
-# @permission_classes([IsAuthenticated])
-# def api(request):
-#     """
-#     Return chart data as JSON instead of rendering HTML.
-#     """
-#     response_data = {}
-#     ticker = request.data.get("ticker").upper() if request.method == "POST" else "TSLA"
-#
-#     if ticker:
-#         try:
-#             obb.user.credentials.alpha_vantage_api_key = os.getenv("ALPHA_VANTAGE_API_KEY")
-#             historical_data = obb.equity.price.historical(symbol=ticker, provider="alpha_vantage")
-#             df = historical_data.to_df()
-#
-#             df["BB_upper"], df["BB_middle"], df["BB_lower"] = obb.ta.bbands(df["close"], length=20, std=2)
-#             # Prepare OHLC and Volume data
-#             ohlc_data = []
-#             volume_data = []
-#
-#             for timestamp, row in df.iterrows():
-#                 date = timestamp
-#                 ohlc_data.append({"x": date, "y": [row["open"], row["high"], row["low"], row["close"]]})
-#                 volume_data.append({"x": date, "y": row["volume"]})
-#
-#             response_data = {
-#                 "success": True,
-#                 "ohlc": ohlc_data,
-#                 "volume": volume_data,
-#                 "ticker": ticker,
-#             }
-#
-#         except Exception as e:
-#             response_data = {"success": False, "message": f"Failed to load data for '{ticker}': {e}"}
-#
-#     else:
-#         response_data = {"success": False, "message": "No ticker provided"}
-#
-#     return JsonResponse(response_data)
+from allauth.socialaccount.helpers import complete_social_login
+from allauth.socialaccount.providers.github.views import GitHubOAuth2Adapter
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from django.contrib.auth.models import User
+from rest_framework import generics, status, views
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from .serializers import RegisterSerializer
+
+# from rest_framework_simplejwt.views import TokenObtainPairView
+
+
+# from .serializers import CustomTokenObtainPairSerializer, RegisterSerializer
+
+
+# class CustomTokenObtainPairView(TokenObtainPairView):
+#     serializer_class = CustomTokenObtainPairSerializer
+
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        refresh = RefreshToken.for_user(user)
+        return Response(
+            {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+
+class SocialLoginView(views.APIView):
+    permission_classes = (AllowAny,)
+
+    def post(self, request, provider):
+        token = request.data.get("access_token")
+        adapter_class = {
+            "google": GoogleOAuth2Adapter,
+            "github": GitHubOAuth2Adapter,
+        }.get(provider)
+
+        if adapter_class is None:
+            return Response({"error": "Unsupported provider"}, status=status.HTTP_400_BAD_REQUEST)
+
+        adapter = adapter_class()
+        app = adapter.get_provider().get_app(request)
+        token = adapter.parse_token({"access_token": token})
+        social_login = adapter.complete_login(request, app, token, response={"access_token": token})
+
+        try:
+            complete_social_login(request, social_login)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = social_login.user
+        if not user.is_active:
+            return Response({"error": "User inactive or deleted"}, status=status.HTTP_400_BAD_REQUEST)
+
+        refresh = RefreshToken.for_user(user)
+        return Response(
+            {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            },
+            status=status.HTTP_200_OK,
+        )

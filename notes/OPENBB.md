@@ -45,7 +45,7 @@ This library uses `posthog` for logging. The logging is done in the following wa
 from openbb import obb
 ```
 
-Inside of this import the followign stack will be called:
+Inside of this import the following stack will be called:
 
 ```
 __init__, posthog_handler.py:31

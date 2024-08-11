@@ -68,10 +68,10 @@ indicators -t TSLA -i 1d -s 2021-01-01 -e 2021-12-31 -f csv -i bbands -i kc -i s
 
 # TODO
 
-- \[ \] Cookies Warning
+- \[x\] Cookies Warning
 - \[ \] Stripe
-- \[ \] EULA
-- \[ \] Privacy Policy
+- \[x\] Terms and Conditions
+- \[x\] Privacy Policy
 
 ## Features
 

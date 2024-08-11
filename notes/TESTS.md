@@ -1,3 +1,8 @@
+# Capturing data for Mocks
+
+It is generally best for GraphQL data mocks to run the test without the mock and capture the data that is returned. Just
+set a breakpoint in the schema and run the test. Then copy the data from the response and use it in the mock.
+
 # Run Tests
 
 ```shell

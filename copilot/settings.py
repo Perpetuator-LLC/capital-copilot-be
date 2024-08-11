@@ -137,7 +137,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
     # "django_plotly_dash.middleware.BaseMiddleware",
-    "users.middleware.RestrictAdminMiddleware",
+    # "users.middleware.RestrictAdminMiddleware",
+    # "api.middleware.ValidateUserMiddleware",
 ]
 
 ROOT_URLCONF = "copilot.urls"

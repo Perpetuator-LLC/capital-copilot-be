@@ -26,16 +26,27 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from api.views import RegisterView, SocialLoginView
+
 # from api import views as api_views
 from users import views
+
+# from api.views import CustomTokenObtainPairView, RegisterView, SocialLoginView
+
 
 urlpatterns = [
     path("graphql/", include("api.urls")),
     path("graphql/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("graphql/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("home/", views.home_page, name="home_page"),
+    # path("api/token/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    # path("api/auth/social/", include("allauth.socialaccount.urls")),
+    # path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    # path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/register/", RegisterView.as_view(), name="auth_register"),
+    path("api/social/<str:provider>/", SocialLoginView.as_view(), name="social_login"),
     # path("api/", api_views.api, name="api"),
     path("landing/", views.landing_page, name="landing_page"),
     path("test/", views.test, name="test"),
