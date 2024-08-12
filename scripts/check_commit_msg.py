@@ -6,6 +6,7 @@ See the LICENSE file in the root of this project for the full license text.
 """
 
 import logging
+import os
 import re
 import sys
 
@@ -21,8 +22,7 @@ def check_message(semantic_pattern, message):
 
 def main():
     process_env()
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logging.getLogger().setLevel(os.getenv("LOG_LEVEL", "INFO"))
     logging.debug(f"Received commit message file: {sys.argv[1]}")
     with open(sys.argv[1], "r") as f:
         commit_message = f.read().strip()

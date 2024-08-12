@@ -44,6 +44,8 @@ django-stubs = "^4.2.7"
 mdformat = "^0.7.17"
 mdformat-black = "^0.1.1"
 coverage = "^7.4.4"
+langchain = "^0.2.12"
+langchain-openai = "^0.1.21"
 
 [tool.black]
 line-length = 120

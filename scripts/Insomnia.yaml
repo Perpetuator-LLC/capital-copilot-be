@@ -1,32 +1,38 @@
 _type: export
 __export_format: 4
-__export_date: 2024-06-09T23:39:40.250Z
-__export_source: insomnia.desktop.app:v9.2.0
+__export_date: 2024-08-12T18:06:14.888Z
+__export_source: insomnia.desktop.app:v9.3.3
 resources:
-  - _id: req_359b0d8863ad46fe9eacc2889471e93b
+  - _id: req_a6a5b865bc3b47978d5a0024454d8304
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1717469570097
-    created: 1717356120353
-    url: http://127.0.0.1:8000/api/token/
-    name: Get Refresh Token
+    modified: 1722942659433
+    created: 1721845637809
+    url: http://127.0.0.1:8000/graphql/
+    name: GQL - Get Autocomplete
     description: ""
     method: POST
     body:
-      mimeType: application/json
-      text: |-
-        {
-        	"username": "{{ _.username }}",
-        	"password": "{{ _.password }}"
-        }
-    preRequestScript: ""
+      mimeType: application/graphql
+      text: '{"query":"query {\n  getAutocomplete(query: \"APL\")
+        {\n    success\n    message\n\t\tresults
+        {\n\t\t\tsymbol\n\t\t\tname\n\t\t\tcik\n\t\t}\n  }\n}\n"}'
     parameters: []
     headers:
-      - name: Content-Type
-        value: application/json
       - name: User-Agent
         value: insomnia/9.2.0
+        id: pair_07011ef2da414201861d1ebdfdfab8b0
+      - name: Content-Type
+        value: application/json
+        id: pair_9c6f873b748e4a079c43c19ff196008e
+      - id: pair_f3b04422c21d4d39bc4fb321d499ee4c
+        name: Authorization
+        value: Bearer {% response 'body', 'req_adaab43b4fd64835803af24bf4350222',
+          'b64::JC5hY2Nlc3M=::46b', 'when-expired', 60 %}
+        description: ""
+        disabled: false
     authentication: {}
-    metaSortKey: -1717354776472
+    preRequestScript: ""
+    metaSortKey: -1717354776372
     isPrivate: false
     pathParameters: []
     settingStoreCookies: true
@@ -44,29 +50,40 @@ resources:
     description: ""
     scope: collection
     _type: workspace
-  - _id: req_adaab43b4fd64835803af24bf4350222
+  - _id: req_e67f5db618e943feba4cd239a1c47c22
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1717468926265
-    created: 1717468767695
-    url: http://127.0.0.1:8000/api/token/refresh/
-    name: Refresh Token
+    modified: 1720325131279
+    created: 1717959463431
+    url: http://127.0.0.1:8000/graphql/
+    name: GQL - Get Price Data
     description: ""
     method: POST
     body:
-      mimeType: application/json
-      text: >-
-        {
-        	"refresh": "{% response 'body', 'req_359b0d8863ad46fe9eacc2889471e93b', 'b64::JC5yZWZyZXNo::46b', 'when-expired', 60 %}"
-        }
-    preRequestScript: ""
+      mimeType: application/graphql
+      text: '{"query":"query {\n  getChartData(ticker: \"TSLA\")
+        {\n    success\n    message\n\t\tsqueeze
+        {\n\t\t\tx\n\t\t\ty\n\t\t}\n    ohlc
+        {\n      x\n      y\n    }\n    volume
+        {\n      x\n      y\n    }\n\t\tkc
+        {\n\t\t\tx\n\t\t\ty\n\t\t}\n\t\tearnings
+        {\n\t\t\tsymbol\n\t\t\tname\n\t\t\treportDate\n\t\t\tfiscalDateEnding\n\t\t\testimate\n\t\t\tcurrency\n\t\t}\n    ticker\n  }\n}\n"}'
     parameters: []
     headers:
-      - name: Content-Type
-        value: application/json
       - name: User-Agent
         value: insomnia/9.2.0
+        id: pair_07011ef2da414201861d1ebdfdfab8b0
+      - name: Content-Type
+        value: application/json
+        id: pair_9c6f873b748e4a079c43c19ff196008e
+      - id: pair_f3b04422c21d4d39bc4fb321d499ee4c
+        name: Authorization
+        value: Bearer {% response 'body', 'req_adaab43b4fd64835803af24bf4350222',
+          'b64::JC5hY2Nlc3M=::46b', 'when-expired', 60 %}
+        description: ""
+        disabled: false
     authentication: {}
-    metaSortKey: -1717354776422
+    preRequestScript: ""
+    metaSortKey: -1717354776272
     isPrivate: false
     pathParameters: []
     settingStoreCookies: true
@@ -78,7 +95,7 @@ resources:
     _type: request
   - _id: req_0e28e3dab04b4be9b0d5239cc1de1dfb
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1717783141163
+    modified: 1722942657971
     created: 1717354776372
     url: http://127.0.0.1:8000/api/
     name: Get Price Data
@@ -90,7 +107,6 @@ resources:
         {
         	"ticker": "AAPL"
         }
-    preRequestScript: ""
     parameters: []
     headers:
       - name: Content-Type
@@ -106,7 +122,8 @@ resources:
         description: ""
     authentication:
       type: none
-    metaSortKey: -1717354776372
+    preRequestScript: ""
+    metaSortKey: -1710944422498.25
     isPrivate: false
     pathParameters: []
     settingStoreCookies: true
@@ -116,36 +133,96 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_e67f5db618e943feba4cd239a1c47c22
+  - _id: req_adaab43b4fd64835803af24bf4350222
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1717963381305
-    created: 1717959463431
-    url: http://127.0.0.1:8000/graphql/
-    name: GQL - Get Price Data
+    modified: 1722942655899
+    created: 1717468767695
+    url: http://127.0.0.1:8000/api/token/refresh/
+    name: Refresh Token
     description: ""
     method: POST
     body:
-      mimeType: application/graphql
-      text: '{"query":"query {\n  getChartData(ticker: \"TSLA\")
-        {\n    success\n    message\n    ohlc
-        {\n      x\n      y\n    }\n    volume
-        {\n      x\n      y\n    }\n    ticker\n  }\n}\n"}'
-    preRequestScript: ""
+      mimeType: application/json
+      text: >-
+        {
+        	"refresh": "{% response 'body', 'req_359b0d8863ad46fe9eacc2889471e93b', 'b64::JC5yZWZyZXNo::46b', 'when-expired', 60 %}"
+        }
     parameters: []
     headers:
-      - name: User-Agent
-        value: insomnia/9.2.0
-        id: pair_07011ef2da414201861d1ebdfdfab8b0
       - name: Content-Type
         value: application/json
-        id: pair_9c6f873b748e4a079c43c19ff196008e
-      - id: pair_f3b04422c21d4d39bc4fb321d499ee4c
-        name: Authorization
-        value: Bearer {% response 'body', 'req_adaab43b4fd64835803af24bf4350222',
-          'b64::JC5hY2Nlc3M=::46b', 'when-expired', 60 %}
-        description: ""
+      - name: User-Agent
+        value: insomnia/9.2.0
     authentication: {}
-    metaSortKey: -1717354776272
+    preRequestScript: ""
+    metaSortKey: -1710944422485.75
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_359b0d8863ad46fe9eacc2889471e93b
+    parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
+    modified: 1722943360935
+    created: 1717356120353
+    url: http://127.0.0.1:8000/api/token/
+    name: Get Refresh Token
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"username": "{{ _.username }}",
+        	"password": "{{ _.password }}"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    preRequestScript: ""
+    metaSortKey: -1710944422460.75
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_e5bd1277d25c447090b914556acfa07c
+    parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
+    modified: 1722960779147
+    created: 1722942634281
+    url: http://127.0.0.1:8000/api/register/
+    name: Register
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"username": "{{ _.username }}",
+        	"email": "{{ _.email }}",
+        	"password": "{{ _.password }}"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    preRequestScript: ""
+    metaSortKey: -1710944422410.75
     isPrivate: false
     pathParameters: []
     settingStoreCookies: true
@@ -157,15 +234,17 @@ resources:
     _type: request
   - _id: env_a699de087d1b2662321944b743628b4c1fb0ccbe
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1717469693044
+    modified: 1722943390873
     created: 1717354745383
     name: Base Environment
     data:
-      username: bob@perpetuator.com
+      username: bob
+      email: bob@perpetuator.com
       password: cccccc-bbbbbb-aaaaaa
     dataPropertyOrder:
       "&":
         - username
+        - email
         - password
     color: null
     isPrivate: false
@@ -173,20 +252,20 @@ resources:
     _type: environment
   - _id: jar_a699de087d1b2662321944b743628b4c1fb0ccbe
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1717963626326
+    modified: 1723309368802
     created: 1717354745384
     name: Default Jar
     cookies:
       - key: csrftoken
         value: teW9vjXkcpXNJroUpflUFha1gyUSpsvl
-        expires: 2025-06-08T20:07:06.000Z
+        expires: 2025-08-09T17:02:48.000Z
         maxAge: 31449600
         domain: 127.0.0.1
         path: /
         secure: true
         hostOnly: true
         creation: 2024-06-09T19:01:31.690Z
-        lastAccessed: 2024-06-09T20:07:06.326Z
+        lastAccessed: 2024-08-10T17:02:48.802Z
         sameSite: lax
-        id: 7b6b3ec4-422f-4370-a43f-39a3bb499334
+        id: be0edace-a1cf-43aa-b001-47d7a9ed2fbb
     _type: cookie_jar

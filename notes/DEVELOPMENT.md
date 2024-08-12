@@ -19,10 +19,8 @@ grep '^version = ' ./pyproject.toml
 Update the changelog:
 
 ```shell
-./scripts/update_changelog.py stage 
+python -m scripts.update_changelog
 ```
-
-_NOTE: The `stage` argument is used to access AI to summarize changes. It has no effect on the changelog._
 
 Add the Git tag and push it to the repository.
 
