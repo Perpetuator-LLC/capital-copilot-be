@@ -29,8 +29,8 @@ RUN poetry install --no-interaction --no-ansi
 COPY . .
 
 # Install npm dependencies and run build:css
-RUN npm install && \
-    npm run build:css
+#RUN npm install && \
+#    npm run build:css
 
 # Collect static files
 RUN poetry run python manage.py collectstatic --no-input

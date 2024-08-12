@@ -14,7 +14,7 @@ from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
-from rest_framework.test import APIClient
+from rest_framework.test import APIClient, APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
 
 from api.schema import schema
@@ -417,3 +417,29 @@ class RegisterSerializerTests(TestCase):
         serializer = RegisterSerializer(data=data)
         with self.assertRaises(ValidationError):
             serializer.is_valid(raise_exception=True)
+
+
+class RegisterViewTests(APITestCase):
+
+    def test_register_user(self):
+        url = reverse("auth_register")
+        data = {"username": "newuser", "email": "newuser@example.com", "password": "Newuserpassword123"}
+        response = self.client.post(url, data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIn("access", response.data)
+        self.assertIn("refresh", response.data)
+
+        user = User.objects.get(username=data["username"])
+        self.assertEqual(user.email, data["email"])
+        self.assertTrue(user.check_password(data["password"]))
+
+    def test_register_with_invalid_data(self):
+        url = reverse("auth_register")
+        data = {"username": "", "email": "invalidemail", "password": "123"}
+        response = self.client.post(url, data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("username", response.data)
+        self.assertIn("email", response.data)
+        self.assertIn("password", response.data)

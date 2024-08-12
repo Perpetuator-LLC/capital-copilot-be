@@ -36,8 +36,8 @@ from users import views
 
 urlpatterns = [
     path("graphql/", include("api.urls")),
-    path("graphql/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("graphql/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    # path("graphql/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    # path("graphql/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("home/", views.home_page, name="home_page"),
     # path("api/token/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
