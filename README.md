@@ -66,42 +66,51 @@ income -t TSLA -s 2021-01-01 -e 2021-12-31 -f csv
 indicators -t TSLA -i 1d -s 2021-01-01 -e 2021-12-31 -f csv -i bbands -i kc -i squeeze -o c1
 ```
 
+# DONE
+
+- Cookies Warning
+- Terms and Conditions
+- Privacy Policy
+- Multiple users same email needs to be blocked
+- Multiple users same username needs to be blocked
+
 # TODO
 
-- \[x\] Cookies Warning
-- \[ \] Stripe
-- \[x\] Terms and Conditions
-- \[x\] Privacy Policy
+- Email verification
+- Register with Code (CODE-USER_ID) 5 invites
+- Crypto feed, summarize, with editing post
+- Social login
+- Stripe
 
 ## Features
 
-- \[ \] Blog
-- \[ \] Search History -> Auto Watchlist
-  - \[ \] List of IN Watchlists on Dashboard
-- \[ \] Stock to Indexes
-  - \[ \] List of IN Indexes on Dashboard
-- \[ \] Per Sector Heat Map
-- \[ \] DCF
-  - \[ \] DCF to Blog Posts
-- \[ \] TTM Squeeze number triggering
-  - \[ \] TTM Squeeze to Blog Posts
-  - \[ \] TTM Squeeze to Watchlist
-  - \[ \] TTM Squeeze to number uptrend + triggering per sector
-  - \[ \] TTM Squeeze to number downtrend + triggering per sector
-- \[ \] TTM Squeeze setting up with 5 dots
-- \[ \] ML on TTM Squeeze for 90% of stocks and then check with remaining 10%
-  - \[ \] Get Price data and calculate the TTM Squeeze, or get the TTM Squeeze data
-- \[ \] Earnings + Economic Calendar
-  - \[ \] Earnings Calendar
-  - \[ \] Earnings History
-  - \[ \] Earnings Blog
-  - \[ \] Economic Calendar
-  - \[ \] Economic History
-  - \[ \] Economic Blog
-  - \[ \] All showing on Dashboard Sidebar
-- \[ \] M2V Velocity of Money
-  - \[ \] Normally 1.5-2.5, current state
-  - \[ \] M2V to Blog Posts based on current expectations
+- Blog
+- Search History -> Auto Watchlist
+  - List of IN Watchlists on Dashboard
+- Stock to Indexes
+  - List of IN Indexes on Dashboard
+- Per Sector Heat Map
+- DCF
+  - DCF to Blog Posts
+- TTM Squeeze number triggering
+  - TTM Squeeze to Blog Posts
+  - TTM Squeeze to Watchlist
+  - TTM Squeeze to number uptrend + triggering per sector
+  - TTM Squeeze to number downtrend + triggering per sector
+- TTM Squeeze setting up with 5 dots
+- ML on TTM Squeeze for 90% of stocks and then check with remaining 10%
+  - Get Price data and calculate the TTM Squeeze, or get the TTM Squeeze data
+- Earnings + Economic Calendar
+  - Earnings Calendar
+  - Earnings History
+  - Earnings Blog
+  - Economic Calendar
+  - Economic History
+  - Economic Blog
+  - All showing on Dashboard Sidebar
+- M2V Velocity of Money
+  - Normally 1.5-2.5, current state
+  - M2V to Blog Posts based on current expectations
 
 To build
 

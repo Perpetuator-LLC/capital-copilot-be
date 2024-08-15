@@ -26,3 +26,24 @@ See the LICENSE file in the root of this project for the full license text.
 #                     return JsonResponse({'detail': 'User does not exist or is not active'}, status=401)
 #         except Exception as e:
 #             return JsonResponse({'detail': str(e)}, status=401)
+
+from django.http import JsonResponse
+from rest_framework import status
+
+from copilot import settings
+
+
+class JSONErrorMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
+
+    @staticmethod
+    def process_exception(request, exception):
+        error = "An error occurred (uncaught)"
+        if settings.DEBUG:
+            error += str(exception)
+        return JsonResponse({"exceptions": error}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

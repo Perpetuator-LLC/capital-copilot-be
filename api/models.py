@@ -5,6 +5,9 @@ This file is part of Capital Copilot by Perpetuator LLC and is released under th
 See the LICENSE file in the root of this project for the full license text.
 """
 
-# from django.db import models
+from django.db import models
 
-# Create your models here.
+
+class UserPreferences(models.Model):
+    user = models.OneToOneField("auth.User", on_delete=models.CASCADE, related_name="preferences")
+    dark_mode = models.BooleanField(default=True)

@@ -5,6 +5,8 @@ This file is part of Capital Copilot by Perpetuator LLC and is released under th
 See the LICENSE file in the root of this project for the full license text.
 """
 
-# from django.contrib import admin
+from django.contrib import admin
 
-# Register your models here.
+from .models import UserPreferences
+
+admin.site.register(UserPreferences)

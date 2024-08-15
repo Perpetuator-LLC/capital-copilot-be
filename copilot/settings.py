@@ -92,7 +92,7 @@ INSTALLED_APPS = [
     # "django_plotly_dash.apps.DjangoPlotlyDashConfig",
     "corsheaders",
     "common",
-    "users",
+    # "users",
     # "copilot_plugin_view",
     # "copilot_plugin_dashboard",
     "rest_framework",
@@ -108,6 +108,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    # "EXCEPTION_HANDLER": "api.exception_handler.api_exception_handler"
 }
 
 SIMPLE_JWT = {
@@ -139,6 +140,7 @@ MIDDLEWARE = [
     # "django_plotly_dash.middleware.BaseMiddleware",
     # "users.middleware.RestrictAdminMiddleware",
     # "api.middleware.ValidateUserMiddleware",
+    "api.middleware.JSONErrorMiddleware",
 ]
 
 ROOT_URLCONF = "copilot.urls"
@@ -156,10 +158,10 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "users.context_processors.menu_items",
-                "users.context_processors.account_menu_items",
-                "users.context_processors.footer_items",
-                "users.context_processors.dark_mode_context",
+                # "users.context_processors.menu_items",
+                # "users.context_processors.account_menu_items",
+                # "users.context_processors.footer_items",
+                # "users.context_processors.dark_mode_context",
             ],
         },
     },

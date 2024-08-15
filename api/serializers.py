@@ -5,9 +5,19 @@ This file is part of Capital Copilot by Perpetuator LLC and is released under th
 See the LICENSE file in the root of this project for the full license text.
 """
 
+import logging
+from smtplib import SMTPException
+
+from allauth.account.models import EmailAddress
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
+from django.db import transaction
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
+from copilot import settings
+
+# from rest_framework.response import Response
 
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -35,10 +45,46 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("username", "email", "password")
+        fields = (
+            "username",
+            "email",
+            "password",
+        )
+        # optional_fields = ("first_name", "last_name",)
 
     def create(self, validated_data):
-        user = User.objects.create(username=validated_data["username"], email=validated_data["email"])
-        user.set_password(validated_data["password"])
-        user.save()
-        return user
+        try:
+            with transaction.atomic():
+                # Check if email already exists in EmailAddress
+                if EmailAddress.objects.filter(email=validated_data["email"]).exists():
+                    # TODO: Can we route these to the input field?
+                    raise serializers.ValidationError({"email": "A user with that email already exists."})
+
+                # Create the user
+                user = User.objects.create(username=validated_data.get("username", ""), email=validated_data["email"])
+                user.set_password(validated_data["password"])
+                user.save()
+
+                # Create the EmailAddress object
+                email_address = EmailAddress.objects.create(
+                    user=user,
+                    email=validated_data["email"],
+                    primary=True,
+                    verified=False,
+                )
+
+                # Send verification email
+                email_address.send_confirmation()
+            return user
+        except SMTPException as e:
+            logging.exception("Failed to send verification email.", e)
+            raise serializers.ValidationError({"email": "Failed to send verification email."})
+        except ValidationError as e:
+            logging.exception("Validation error:", e)
+            raise e
+        except Exception as e:
+            logging.exception("Failed to create user.", e)
+            error = "Failed to create user."
+            if settings.DEBUG:
+                error += str(e)
+            raise serializers.ValidationError({"creation": error})

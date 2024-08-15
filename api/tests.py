@@ -9,6 +9,7 @@ import json
 from datetime import date
 from unittest.mock import MagicMock, Mock, patch
 
+from allauth.account.models import EmailAddress
 from django.contrib.auth.models import User
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
@@ -443,3 +444,22 @@ class RegisterViewTests(APITestCase):
         self.assertIn("username", response.data)
         self.assertIn("email", response.data)
         self.assertIn("password", response.data)
+
+    def test_register_with_existing_username(self):
+        User.objects.create_user(username="existinguser", email="old@example.com", password="Oldpassword123")
+        url = reverse("auth_register")
+        data = {"username": "existinguser", "email": "newuser@example.com", "password": "Newuserpassword123"}
+        response = self.client.post(url, data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("username", response.data)
+
+    def test_register_with_existing_email(self):
+        user = User.objects.create_user(username="existinguser", email="old@example.com", password="Oldpassword123")
+        EmailAddress.objects.create(user_id=user.id, email="old@example.com")
+        url = reverse("auth_register")
+        data = {"username": "newuser", "email": "old@example.com", "password": "Newuserpassword123"}
+        response = self.client.post(url, data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("email", response.data)
