@@ -1,0 +1,4 @@
+domain = "example.com"
+mail_subdomain = "mail.example.com"
+zone_id = "AAAAAAAAAAAAAAAAAAAA"
+sender_email = "no-reply@example.com"

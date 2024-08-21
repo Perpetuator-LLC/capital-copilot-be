@@ -33,3 +33,19 @@ coverage run --source='.' manage.py test
 coverage report
 coverage html
 ```
+
+## Pre-Commit Setup
+
+This project uses `pre-commit` to run the above tools before each commit. If we are not at a certain percentage of
+coverage we can fail the commit, and a browser will open to show the coverage report. This is accomplished via the
+`.pre-commit-config.yaml` file which contains:
+
+```shell
+coverage run --source='.' manage.py test && coverage html || (open htmlcov/index.html && false)
+```
+
+To run the pre-commit hooks manually, use the following command:
+
+```shell
+pre-commit run django-coverage
+```

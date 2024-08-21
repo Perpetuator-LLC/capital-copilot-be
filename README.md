@@ -76,11 +76,13 @@ indicators -t TSLA -i 1d -s 2021-01-01 -e 2021-12-31 -f csv -i bbands -i kc -i s
 
 # TODO
 
-- Email verification
-- Register with Code (CODE-USER_ID) 5 invites
-- Crypto feed, summarize, with editing post
-- Social login
-- Stripe
+- [x] Email verification
+- [x] Forgot my password
+- [ ] Edit my account
+- [ ] Register with Code (CODE-USER_ID) 5 invites
+- [ ] Crypto feed, summarize, with editing post
+- [ ] Social login
+- [ ] Stripe
 
 ## Features
 

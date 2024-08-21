@@ -76,3 +76,31 @@ Once we are done with development, we can remove the old migrations and database
 rm -rf users/migrations-old
 rm -f db.sqlite3-old
 ```
+
+# Setting Up New DB
+
+Then you will want to run the following command:
+
+```shell
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
+
+After deleting the DB or installing on a fresh system you will want to seed the DB with the initial data. To do this you
+will need to run the following commands:
+
+```shell
+python manage.py createsuperuser
+```
+
+Fill this out with some login information.
+
+Visit and login here: http://localhost:8000/admin/
+
+To create the site or edit the existing one:
+
+- Sites
+- Add site / Click on the site
+
+Enter the name of the production site and?

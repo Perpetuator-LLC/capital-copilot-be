@@ -231,6 +231,7 @@ STATICFILES_FINDERS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTHENTICATION_BACKENDS = [
+    "api.authentication.VerifiedEmailBackend",
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
@@ -248,7 +249,7 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 
 # For emails
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.mail.me.com"
+EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
@@ -280,6 +281,8 @@ CSRF_COOKIE_SECURE = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
+    "https://copilot.perpetuator.com",
+    "https://capitalcopilot.com",
 ]
 
 # # Allow credentials

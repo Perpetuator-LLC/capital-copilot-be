@@ -32,6 +32,6 @@ if __name__ == "__main__":
         main()
         # time.sleep(10)
     except Exception as e:
-        logging.error(f"main caught exception: {e}", exc_info=e)
+        logging.exception(f"main caught exception: {e}", exc_info=e)
         print(f"main caught exception: {e}")
         sys.exit(1)

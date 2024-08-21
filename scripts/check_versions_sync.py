@@ -78,5 +78,5 @@ if __name__ == "__main__":
     try:
         main()
     except Exception as e:
-        logging.error(f"main caught exception: {e}", exc_info=e)
+        logging.exception(f"main caught exception: {e}", exc_info=e)
         sys.exit(1)

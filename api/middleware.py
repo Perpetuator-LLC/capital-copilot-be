@@ -5,6 +5,13 @@ This file is part of Capital Copilot by Perpetuator LLC and is released under th
 See the LICENSE file in the root of this project for the full license text.
 """
 
+import logging
+
+from django.http import JsonResponse
+from rest_framework import status
+
+from copilot import settings
+
 # Thought this was neededd, but it turns out the JWT has the User ID and APIs should not work if not validated...
 # from django.http import JsonResponse
 # from django.utils.deprecation import MiddlewareMixin
@@ -27,11 +34,6 @@ See the LICENSE file in the root of this project for the full license text.
 #         except Exception as e:
 #             return JsonResponse({'detail': str(e)}, status=401)
 
-from django.http import JsonResponse
-from rest_framework import status
-
-from copilot import settings
-
 
 class JSONErrorMiddleware:
     def __init__(self, get_response):
@@ -45,5 +47,6 @@ class JSONErrorMiddleware:
     def process_exception(request, exception):
         error = "An error occurred (uncaught)"
         if settings.DEBUG:
-            error += str(exception)
+            error += " " + str(exception)
+        logging.exception(error, exc_info=exception)
         return JsonResponse({"exceptions": error}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

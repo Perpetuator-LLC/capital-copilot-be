@@ -5,25 +5,32 @@ This file is part of Capital Copilot by Perpetuator LLC and is released under th
 See the LICENSE file in the root of this project for the full license text.
 """
 
-# from allauth.socialaccount.helpers import complete_social_login
-# from allauth.socialaccount.providers.github.views import GitHubOAuth2Adapter
-# from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from django.contrib.auth.models import User
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .serializers import RegisterSerializer
+from .serializers import (
+    CustomTokenObtainPairSerializer,
+    PasswordResetSerializer,
+    RegisterSerializer,
+)
 
-# from rest_framework_simplejwt.views import TokenObtainPairView
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer  # type: ignore[assignment] # reason: TokenViewBase is None
 
 
-# from .serializers import CustomTokenObtainPairSerializer, RegisterSerializer
+class PasswordResetView(generics.GenericAPIView):
+    serializer_class = PasswordResetSerializer
+    permission_classes = [AllowAny]
 
-
-# class CustomTokenObtainPairView(TokenObtainPairView):
-#     serializer_class = CustomTokenObtainPairSerializer
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(request=request)
+        return Response({"detail": "Password reset e-mail has been sent."}, status=status.HTTP_200_OK)
 
 
 class RegisterView(generics.CreateAPIView):
@@ -33,20 +40,12 @@ class RegisterView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        # if not serializer.is_valid(raise_exception=False):
-        #     return Response(
-        #         {
-        #             "errors": serializer.errors,
-        #         },
-        #         status=status.HTTP_400_BAD_REQUEST,
-        #     )
+        # NOTE: The front-end should handle the error messages in this raised exception format...
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        refresh = RefreshToken.for_user(user)
         return Response(
             {
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
+                "detail": f"Welcome {user.username}! Verify Email to activate account.",
             },
             status=status.HTTP_201_CREATED,
         )

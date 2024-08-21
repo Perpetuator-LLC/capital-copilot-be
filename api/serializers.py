@@ -7,37 +7,51 @@ See the LICENSE file in the root of this project for the full license text.
 
 import logging
 from smtplib import SMTPException
+from typing import Dict
 
+from allauth.account.forms import ResetPasswordForm
 from allauth.account.models import EmailAddress
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from copilot import settings
 
-# from rest_framework.response import Response
 
-# from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs) -> Dict[str, str]:
+        try:
+            user = User.objects.get(username=attrs["username"])
+            if user is None:
+                user = User.objects.get(email=attrs["username"])  # See if username is email
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"email": "User with this username or email does not exist."})
+        if not EmailAddress.objects.filter(user=user, email=user.email, verified=True).exists():
+            raise serializers.ValidationError(
+                {"email": "Email is not verified. Please verify your email before logging in."}
+            )
+        data = super().validate(attrs)
+        return data
 
 
-# TODO: were using this to add user to token, but it has user ID and I think GQL will fail without existing user...
-# class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-#     @classmethod
-#     def get_token(cls, user):
-#         token = super().get_token(user)
-#         token["email"] = user.email  # Add custom claims, if user changes email, they get logged out of all sessions
-#         return token
-#
-#     def validate(self, attrs):
-#         data = super().validate(attrs)
-#         refresh = self.get_token(self.user)
-#
-#         data["refresh"] = str(refresh)
-#         data["access"] = str(refresh.access_token)
-#
-#         return data
+class PasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        if not User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("No user is associated with this email address.")
+        return value
+
+    def save(self, request):
+        # Trigger password reset using Allauth's ResetPasswordForm
+        form = ResetPasswordForm({"email": self.validated_data["email"]})
+        if form.is_valid():
+            form.save(request=request)
+        else:
+            raise serializers.ValidationError(form.errors)
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -77,11 +91,11 @@ class RegisterSerializer(serializers.ModelSerializer):
                 email_address.send_confirmation()
             return user
         except SMTPException as e:
-            logging.exception("Failed to send verification email.", e)
+            logging.exception(f"Failed to send verification email: {str(e)}")
             raise serializers.ValidationError({"email": "Failed to send verification email."})
         except ValidationError as e:
-            logging.exception("Validation error:", e)
-            raise e
+            logging.exception(f"Validation error: {str(e)}")
+            raise
         except Exception as e:
             logging.exception("Failed to create user.", e)
             error = "Failed to create user."

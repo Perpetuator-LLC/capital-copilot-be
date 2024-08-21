@@ -128,25 +128,26 @@ Create the following templates in the `templates` directory:
 
 # To support email
 
-Currently, the domain mail is handled by iCloud. An app-specific password is required to use the domain mail.
+Currently, the domain mail is handled by AWS SES. An app-specific username and password is created for the email
+account. To generate these...
 
-See: https://appleid.apple.com
+- Make sure the domain is set up correct in AWS SES, see [TERRAFORM](./TERRAFORM.md) for more information.
 
-Once you have the app-specific password, add the following to `settings.py`:
+Then in the `.env` file, add the following:
 
 ```python
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.mail.me.com"
+EMAIL_HOST = "email-smtp.us-east-1.amazonaws.com"  # Replace with your SES region
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-```
+EMAIL_HOST_USER = "your-smtp-username"  # Replace with your SES SMTP username
+EMAIL_HOST_PASSWORD = "your-smtp-password"  # Replace with your SES SMTP password
+DEFAULT_FROM_EMAIL = "no-reply@yourdomain.com"  # Replace with your sender email
 
-Then in the `local_settings.py` file, add the following:
-
-```python
-DEFAULT_FROM_EMAIL = "user@perpetuator.com"
-EMAIL_HOST_USER = "user@me.com"
-EMAIL_HOST_PASSWORD = "app-specific-password"
+# Optional: Configuring email settings for allauth
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ```
 
 ## Test Emails
@@ -200,16 +201,24 @@ REST_FRAMEWORK = {
 }
 ```
 
+In the `settings.py` file, add the following:
+
+```python
 from datetime import timedelta
 
-SIMPLE_JWT = { 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5), 'REFRESH_TOKEN_LIFETIME': timedelta(days=1), ... } Add the
-token endpoints to your urls.py:
+SIMPLE_JWT = { 'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5), 'REFRESH_TOKEN_LIFETIME': timedelta(days=1), ... } 
+```
 
-python Copy code
+In the `urls.py` file, add the following:
 
-# urls.py
+```python
+from django.urls import path
+from rest_framework_simplejwt.views import ( TokenObtainPairView, TokenRefreshView, )
 
-from django.urls import path from rest_framework_simplejwt.views import ( TokenObtainPairView, TokenRefreshView, )
-
-urlpatterns = \[ ... path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'), ... \]
+urlpatterns = [ 
+  ...,
+  path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+  path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'), 
+  ...,
+]
+```

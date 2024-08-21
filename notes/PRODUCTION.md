@@ -1,3 +1,5 @@
+NOTE: This is all wrong now with front-end and back-end separation.
+
 # Static Site Generation
 
 As part of the production deployment process we need to run:

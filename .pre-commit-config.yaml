@@ -66,9 +66,12 @@ repos:
       - id: mdformat
         name: mdformat
         entry: mdformat
-        language: system
+        language: python
         # Specify additional_dependencies if your pre-commit runs in an isolated environment
-        # additional_dependencies: [mdformat, mdformat-black]
+#        additional_dependencies: [mdformat, mdformat-black]
+        additional_dependencies:
+          - mdformat-toc
+          - mdformat-gfm
         args: ["--wrap", "120", "--number", "--end-of-line", "lf"]
         types: [markdown]
         files: .

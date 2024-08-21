@@ -1,0 +1,68 @@
+# -- Ansible --
+
+# Sensitive value files
+*.vault
+*.secret.yml
+
+# Retry files
+*.retry
+
+# Editor backups
+*~
+*.swp
+*.tmp
+
+# Ansible configuration
+ansible.cfg
+
+# Local Ansible data
+.ansible/
+
+# Dynamic inventory scripts and variables
+hosts
+inventory/*.ini
+
+# -- Terraform --
+# Ignore all plan files
+*.tfplan
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+
+# Exclude all .tfvars files, which might contain sensitive data, such as
+# password, private keys, and other secrets. Alternatively, you can
+# exclude specific .tfvars files if you want to include some but not others.
+*.tfvars
+*.tfvars.json
+
+# Ignore override files as they are usually used to override resources locally and are not checked in
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+# Ignore any .terraform.lock.hcl files, which may contain provider selection information
+.terraform.lock.hcl
+
+# Ignore files that may contain system-specific or user-specific information
+.terraformrc
+terraform.rc
+
+# Ignore directories created by Terraform plugins/providers
+.terraform/plugins/
+.terraform/providers/
+
+# Ignore any files that might appear in the root directory as part of Terraform operations
+terraform.tfstate
+terraform.tfstate.backup

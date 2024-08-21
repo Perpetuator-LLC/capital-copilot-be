@@ -1,3 +1,5 @@
+NOTE: This is all wrong now with front-end and back-end separation.
+
 # Overview of Front-End Development
 
 The tools we use:

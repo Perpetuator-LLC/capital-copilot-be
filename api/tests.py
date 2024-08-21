@@ -11,6 +11,7 @@ from unittest.mock import MagicMock, Mock, patch
 
 from allauth.account.models import EmailAddress
 from django.contrib.auth.models import User
+from django.http.response import JsonResponse
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -18,8 +19,14 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIClient, APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
 
+from api.middleware import JSONErrorMiddleware
 from api.schema import schema
-from api.serializers import RegisterSerializer
+from api.serializers import (
+    CustomTokenObtainPairSerializer,
+    PasswordResetSerializer,
+    RegisterSerializer,
+)
+from copilot import settings
 
 
 class APITests(TestCase):
@@ -428,8 +435,8 @@ class RegisterViewTests(APITestCase):
         response = self.client.post(url, data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertIn("access", response.data)
-        self.assertIn("refresh", response.data)
+        self.assertIn("activate", response.data["detail"])
+        # self.assertIn("refresh", response.data)
 
         user = User.objects.get(username=data["username"])
         self.assertEqual(user.email, data["email"])
@@ -463,3 +470,94 @@ class RegisterViewTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("email", response.data)
+
+
+class CustomTokenObtainPairSerializerTests(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username="testuser", email="test@example.com", password="password123")
+        EmailAddress.objects.create(user=self.user, email=self.user.email, verified=True)
+
+    def test_validate_success(self):
+        # Assuming that the serializer uses token creation that would normally require correct credentials
+        data = {"username": "testuser", "password": "password123"}
+        serializer = CustomTokenObtainPairSerializer(data=data)
+        self.assertTrue(serializer.is_valid())
+
+        validated_data = serializer.validate(data)
+        self.assertIn("access", validated_data)
+        self.assertIn("refresh", validated_data)
+
+    def test_validate_no_user_found(self):
+        data = {"username": "nouser", "password": "password123"}
+        serializer = CustomTokenObtainPairSerializer(data=data)
+        with self.assertRaises(ValidationError) as context:
+            serializer.validate(data)
+        self.assertIn("email", context.exception.detail)
+
+    def test_validate_email_not_verified(self):
+        EmailAddress.objects.filter(user=self.user).update(verified=False)
+        data = {"username": "testuser", "password": "password123"}
+        serializer = CustomTokenObtainPairSerializer(data=data)
+        with self.assertRaises(ValidationError) as context:
+            serializer.validate(data)
+        self.assertIn("email", context.exception.detail)
+        self.assertIn("not verified", context.exception.detail["email"])
+
+
+class PasswordResetSerializerTests(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username="testuser", email="test@example.com", password="password123")
+        self.factory = RequestFactory()
+
+    def test_email_validation_success(self):
+        serializer = PasswordResetSerializer(data={"email": "test@example.com"})
+        self.assertTrue(serializer.is_valid())
+
+    def test_email_validation_failure(self):
+        serializer = PasswordResetSerializer(data={"email": "nonexistent@example.com"})
+        with self.assertRaises(ValidationError) as context:
+            serializer.is_valid(raise_exception=True)
+        self.assertIn("email", context.exception.detail)  # Check that 'email' is a key in the details
+        self.assertIn(
+            "No user is associated with this email address.", context.exception.detail["email"][0]
+        )  # Check the message
+
+    def test_password_reset(self):
+        request = self.factory.get("/")  # Simulating a request object
+        serializer = PasswordResetSerializer(data={"email": "test@example.com"})
+        serializer.is_valid()
+        serializer.save(request=request)  # Assuming save triggers the reset flow correctly
+
+
+class JSONErrorMiddlewareTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.middleware = JSONErrorMiddleware(self.get_response)
+
+    def get_response(self, request):
+        # This will not raise an exception by itself, allowing us to manually control when exceptions are handled
+        return JsonResponse({"success": True}, status=200)
+
+    @patch("logging.exception")
+    def test_process_exception_handling(self, mock_logging):
+        request = self.factory.get("/")
+
+        # Manually simulate an exception to see how process_exception handles it
+        exception = Exception("Test unhandled exception")
+        response = self.middleware.process_exception(request, exception)
+
+        # Check that the response is a JSON and 500 status code
+        self.assertIsInstance(response, JsonResponse)
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        response_data = json.loads(response.content)
+        self.assertIn("exceptions", response_data)
+
+        expected_error = "An error occurred (uncaught)"
+        if settings.DEBUG:
+            expected_error += " " + str(exception)
+        self.assertEqual(response_data["exceptions"], expected_error)
+
+        # Verify logging was called as expected
+        mock_logging.assert_called_once_with(expected_error, exc_info=exception)
