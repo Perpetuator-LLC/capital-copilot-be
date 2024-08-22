@@ -9,6 +9,8 @@ import json
 from datetime import date
 from unittest.mock import MagicMock, Mock, patch
 
+import pandas as pd
+import requests
 from allauth.account.models import EmailAddress
 from django.contrib.auth.models import User
 from django.http.response import JsonResponse
@@ -20,7 +22,7 @@ from rest_framework.test import APIClient, APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
 
 from api.middleware import JSONErrorMiddleware
-from api.schema import schema
+from api.schema import get_earnings_dates, schema
 from api.serializers import (
     CustomTokenObtainPairSerializer,
     PasswordResetSerializer,
@@ -42,66 +44,12 @@ class APITests(TestCase):
         self.token = AccessToken.for_user(self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(self.token))
 
+    @patch("api.schema.get_earnings_dates")
     @patch("os.getenv")
     @patch("openbb.package.equity_price.ROUTER_equity_price.historical")
-    def test_successful_data_retrieval(self, mock_historical, mock_getenv):
-        # Setup Mocks
+    def test_successful_data_retrieval(self, mock_historical, mock_getenv, mock_get_earnings_dates):
         mock_getenv.return_value = "fake_api_key"
-
-        # Mock OpenBB response
-
-        mock_df = Mock()
-        mock_df.iterrows.return_value = [
-            (
-                date(2023, 1, 1),
-                {
-                    "open": 100,
-                    "high": 110,
-                    "low": 90,
-                    "close": 105,
-                    "volume": 1000,
-                    "SQZ_ON": 1,
-                    "SQZ_20_2.0_20_1.5": 0,
-                    "KCLe_20_1.0": 85,
-                    "KCBe_20_1.0": 102,
-                    "KCUe_20_1.0": 120,
-                    "KCLe_20_2.0": 80,
-                    "KCBe_20_2.0": 102,
-                    "KCUe_20_2.0": 125,
-                    "KCLe_20_3.0": 75,
-                    "KCBe_20_3.0": 102,
-                    "KCUe_20_3.0": 130,
-                },
-            ),
-            (
-                date(2023, 1, 2),
-                {
-                    "open": 106,
-                    "high": 115,
-                    "low": 95,
-                    "close": 110,
-                    "volume": 1500,
-                    "SQZ_ON": 1,
-                    "SQZ_20_2.0_20_1.5": 0,
-                    "KCLe_20_1.0": 85,
-                    "KCBe_20_1.0": 102,
-                    "KCUe_20_1.0": 120,
-                    "KCLe_20_2.0": 80,
-                    "KCBe_20_2.0": 102,
-                    "KCUe_20_2.0": 125,
-                    "KCLe_20_3.0": 75,
-                    "KCBe_20_3.0": 102,
-                    "KCUe_20_3.0": 130,
-                },
-            ),
-        ]
-
-        mock_ta = Mock()
-        mock_df.ta = mock_ta
-
-        mock_squeeze_result = MagicMock()
-        mock_ta.squeeze.return_value = mock_squeeze_result
-
+        mock_get_earnings_dates.return_value = get_mock_earnings_data()
         mock_squeeze_series = MagicMock()
 
         def mock_at(index):
@@ -111,16 +59,13 @@ class APITests(TestCase):
                 return 0
 
         mock_squeeze_series.at.side_effect = mock_at
+        mock_historical.return_value, mock_squeeze_result = get_mock_historical_data()
         mock_squeeze_result.__getitem__.side_effect = lambda key: (
             mock_squeeze_series if key in ["SQZ_ON"] else MagicMock()
         )
 
-        mock_historical_data = MagicMock()
-        mock_historical_data.to_df.return_value = mock_df
-        mock_historical.return_value = mock_historical_data
-
         # Simulate authenticated request
-        mock_user = Mock()
+        mock_user = MagicMock()
         mock_user.is_authenticated = True
         self.client.force_authenticate(user=mock_user, token=self.token)
 
@@ -208,6 +153,123 @@ class TestAutocomplete(TestCase):
         )
 
 
+def get_mock_historical_data():
+    mock_df = Mock()
+    mock_df.iterrows.return_value = [
+        (
+            date(2023, 1, 1),
+            {
+                "open": 100,
+                "high": 110,
+                "low": 90,
+                "close": 105,
+                "volume": 1000,
+                "SQZ_ON": 1,
+                "SQZ_20_2.0_20_1.5": 12,
+                "KCLe_20_1.0": 85,
+                "KCBe_20_1.0": 102,
+                "KCUe_20_1.0": 120,
+                "KCLe_20_2.0": 80,
+                "KCBe_20_2.0": 102,
+                "KCUe_20_2.0": 125,
+                "KCLe_20_3.0": 75,
+                "KCBe_20_3.0": 102,
+                "KCUe_20_3.0": 130,
+            },
+        ),
+        (
+            date(2023, 1, 2),
+            {
+                "open": 106,
+                "high": 115,
+                "low": 95,
+                "close": 110,
+                "volume": 1500,
+                "SQZ_ON": 0,
+                "SQZ_20_2.0_20_1.5": 13,
+                "KCLe_20_1.0": 85,
+                "KCBe_20_1.0": 102,
+                "KCUe_20_1.0": 120,
+                "KCLe_20_2.0": 80,
+                "KCBe_20_2.0": 102,
+                "KCUe_20_2.0": 125,
+                "KCLe_20_3.0": 75,
+                "KCBe_20_3.0": 102,
+                "KCUe_20_3.0": 130,
+            },
+        ),
+    ]
+    mock_ta = Mock()
+    mock_df.ta = mock_ta
+    mock_squeeze_result = MagicMock()
+    mock_ta.squeeze.return_value = mock_squeeze_result
+    mock_historical_data = MagicMock()
+    mock_historical_data.to_df.return_value = mock_df
+    return mock_historical_data, mock_squeeze_result
+
+
+def get_mock_earnings_data():
+    mock_df = pd.DataFrame(
+        {
+            "symbol": ["AAPL", "AAPL", "AAPL"],
+            "name": ["Apple Inc", "Apple Inc", "Apple Inc"],
+            "reportDate": ["2024-10-31", "2025-01-30", "2025-04-30"],
+            "fiscalDateEnding": ["2024-09-30", "2024-12-31", "2025-03-31"],
+            "estimate": ["1.59", "", ""],
+            "currency": ["USD", "USD", "USD"],
+        }
+    )
+    return mock_df
+
+
+class GetEarningsDatesTests(TestCase):
+    @patch("requests.Session.get")
+    def test_get_earnings_dates_success(self, mock_get):
+        # Mock the CSV data returned by the API
+        mock_csv = """symbol,name,reportDate,fiscalDateEnding,estimate,currency
+AAPL,Apple Inc,2024-10-31,2024-09-30,1.59,USD
+AAPL,Apple Inc,2025-01-30,2024-12-31,,USD
+AAPL,Apple Inc,2025-04-30,2025-03-31,,USD"""
+
+        # Mock the response from the requests.Session().get call
+        mock_response = MagicMock()
+        mock_response.content.decode.return_value = mock_csv
+        mock_get.return_value = mock_response
+
+        # Expected DataFrame
+        expected_df = pd.DataFrame(
+            {
+                "symbol": ["AAPL", "AAPL", "AAPL"],
+                "name": ["Apple Inc", "Apple Inc", "Apple Inc"],
+                "reportDate": ["2024-10-31", "2025-01-30", "2025-04-30"],
+                "fiscalDateEnding": ["2024-09-30", "2024-12-31", "2025-03-31"],
+                "estimate": ["1.59", "", ""],
+                "currency": ["USD", "USD", "USD"],
+            }
+        )
+
+        # Call the function
+        api_key = "fake_api_key"
+        symbol = "AAPL"
+        result_df = get_earnings_dates(symbol, api_key)
+
+        # Assert that the returned DataFrame matches the expected DataFrame
+        pd.testing.assert_frame_equal(result_df, expected_df)
+
+    @patch("requests.Session.get")
+    def test_get_earnings_dates_failure(self, mock_get):
+        # Simulate an exception during the request
+        mock_get.side_effect = requests.exceptions.RequestException("API request failed")
+
+        # Call the function
+        api_key = "fake_api_key"
+        symbol = "AAPL"
+        result_df = get_earnings_dates(symbol, api_key)
+
+        # Assert that the function returns None on failure
+        self.assertIsNone(result_df)
+
+
 class ChartDataTests(TestCase):
     def setUp(self):
         self.client = Client(schema)
@@ -257,67 +319,16 @@ class ChartDataTests(TestCase):
             executed.formatted, {"data": {"getChartData": {"success": False, "message": "No ticker provided"}}}
         )
 
+    @patch("api.schema.get_earnings_dates")
     @patch("openbb.package.equity_price.ROUTER_equity_price.historical")
-    def test_successful_data_retrieval(self, mock_historical):
+    def test_successful_data_retrieval(self, mock_historical, mock_get_earnings_dates):
+        mock_df = get_mock_earnings_data()
+        mock_get_earnings_dates.return_value = mock_df
+
         mock_user = Mock()
         mock_user.is_authenticated = True
 
-        mock_df = Mock()
-        mock_df.iterrows.return_value = [
-            (
-                date(2023, 1, 1),
-                {
-                    "open": 100,
-                    "high": 110,
-                    "low": 90,
-                    "close": 105,
-                    "volume": 1000,
-                    "SQZ_ON": 1,
-                    "SQZ_20_2.0_20_1.5": 12,
-                    "KCLe_20_1.0": 85,
-                    "KCBe_20_1.0": 102,
-                    "KCUe_20_1.0": 120,
-                    "KCLe_20_2.0": 80,
-                    "KCBe_20_2.0": 102,
-                    "KCUe_20_2.0": 125,
-                    "KCLe_20_3.0": 75,
-                    "KCBe_20_3.0": 102,
-                    "KCUe_20_3.0": 130,
-                },
-            ),
-            (
-                date(2023, 1, 2),
-                {
-                    "open": 106,
-                    "high": 115,
-                    "low": 95,
-                    "close": 110,
-                    "volume": 1500,
-                    "SQZ_ON": 0,
-                    "SQZ_20_2.0_20_1.5": 13,
-                    "KCLe_20_1.0": 85,
-                    "KCBe_20_1.0": 102,
-                    "KCUe_20_1.0": 120,
-                    "KCLe_20_2.0": 80,
-                    "KCBe_20_2.0": 102,
-                    "KCUe_20_2.0": 125,
-                    "KCLe_20_3.0": 75,
-                    "KCBe_20_3.0": 102,
-                    "KCUe_20_3.0": 130,
-                },
-            ),
-        ]
-
-        mock_ta = Mock()
-        mock_df.ta = mock_ta
-
-        mock_squeeze_result = MagicMock()
-        mock_ta.squeeze.return_value = mock_squeeze_result
-
-        mock_historical_data = MagicMock()
-
-        mock_historical_data.to_df.return_value = mock_df
-        mock_historical.return_value = mock_historical_data
+        mock_historical.return_value, _ = get_mock_historical_data()
 
         query = """
         {

@@ -179,6 +179,9 @@ def parse_earnings_data(earnings_df: DataFrame) -> list[EarningsData]:
 
 def get_earnings_dates(symbol, api_key):
     try:
+        # Cannot use the obb.equity.calendar.earnings function because it only supports the "fmp" provider
+        # See: .venv/lib/python3.11/site-packages/openbb/package/equity.py
+        # NOTE: This API seems to work with the API key: "fake_api_key"
         CSV_URL = (
             f"https://www.alphavantage.co/query"
             f"?function=EARNINGS_CALENDAR"

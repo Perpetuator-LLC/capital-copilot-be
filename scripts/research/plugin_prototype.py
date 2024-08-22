@@ -9,12 +9,11 @@ import logging
 import sys
 
 from copilot.copilot_shared import process_env
-from copilot.logging_service import LoggingService
 
 
 def main():
     process_env()
-    LoggingService.configure_logging()
+    logging.logLevel = logging.INFO
     actions = []
     for plugin in ActionProvider.plugins:
         actions.append(plugin())
