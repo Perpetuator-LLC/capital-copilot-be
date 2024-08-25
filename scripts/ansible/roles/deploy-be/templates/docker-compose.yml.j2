@@ -4,7 +4,7 @@ version: '3.7'
 
 services:
   web:
-    container_name: copilot_django
+    container_name: copilot-be-django
     build: .
     command: poetry run gunicorn copilot.wsgi:application --bind 0.0.0.0:8000
     volumes:
@@ -17,15 +17,15 @@ services:
     restart: always
 
   nginx:
-    container_name: copilot_nginx
+    container_name: copilot_be_nginx
     image: nginx:stable-alpine
     ports:
       - "${COPILOT_NGINX_PORT:-80}:80"
     environment:
-      - VIRTUAL_HOST=copilot.perpetuator.com
+      - VIRTUAL_HOST={{ letsencrypt_host }}
       - VIRTUAL_PATH=/
-      - LETSENCRYPT_HOST=copilot.perpetuator.com
-      - LETSENCRYPT_EMAIL=nik@perpetuator.com
+      - LETSENCRYPT_HOST={{ letsencrypt_host }}
+      - LETSENCRYPT_EMAIL={{ letsencrypt_email }}
     depends_on:
       - web
     volumes:

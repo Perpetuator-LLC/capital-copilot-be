@@ -46,6 +46,7 @@ mdformat-black = "^0.1.1"
 coverage = "^7.4.4"
 langchain = "^0.2.12"
 langchain-openai = "^0.1.21"
+ansible = "^10.3.0"
 
 [tool.black]
 line-length = 120

@@ -1,0 +1,79 @@
+# Copyright (c) 2024 Perpetuator LLC
+---
+#- name: Ensure Docker is installed
+#  apt:
+#    name: docker.io
+#    state: present
+#    update_cache: yes
+#
+#- name: Ensure Docker Compose is installed
+#  get_url:
+#    url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-`uname -s`-`uname -m`
+#    dest: /usr/local/bin/docker-compose
+#    mode: '0755'
+#  when: ansible_distribution == "Ubuntu"
+#
+#- name: Create project directory
+#  file:
+#    path: "{{ host_src_path }}"
+#    state: directory
+#    mode: '0755'
+
+- name: Debug host_src_path
+  debug:
+    msg: "host_src_path is {{ host_src_path }}"
+
+- name: Clone or update the Angular project from Git
+  git:
+    repo: "git@github.com:Perpetuator-LLC/capital-copilot-fe.git"
+    dest: "{{ host_src_path }}"
+    version: "main"
+    force: yes
+
+- name: Ensure environments directory exists
+  file:
+    path: "{{ host_src_path }}/src/environments"
+    state: directory
+    mode: '0755'
+
+- name: Create environment.prod.ts file
+  copy:
+    dest: "{{ host_src_path }}/src/environments/environment.ts"
+    content: |
+      export const environment = {
+        production: true,
+        TEST_USERNAME: '{{ test_username | default('') }}',
+        TEST_EMAIL: '{{ test_email | default('') }}',
+        TEST_PASSWORD: '{{ test_password | default('') }}',
+      }
+
+- name: Copy Dockerfile template
+  template:
+    src: Dockerfile.j2
+    dest: "{{ host_src_path }}/Dockerfile"
+
+- name: Copy Docker Compose template
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ host_src_path }}/docker-compose.yml"
+
+- name: Ensure nginx directory exists
+  file:
+    path: "{{ host_src_path }}/nginx"
+    state: directory
+    mode: '0755'
+
+- name: Copy Nginx configuration file
+  copy:
+    src: nginx.conf
+    dest: "{{ host_src_path }}/nginx/nginx.conf"
+
+#- name: Copy Angular project files
+#  synchronize:
+#    src: "{{ playbook_dir }}/your-angular-project/"
+#    dest: "{{ host_src_path }}"
+
+- name: Build and start the Angular frontend container
+  command: docker-compose -f "{{ host_src_path }}/docker-compose.yml" up -d
+  args:
+    chdir: "{{ host_src_path }}"

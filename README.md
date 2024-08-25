@@ -78,9 +78,10 @@ indicators -t TSLA -i 1d -s 2021-01-01 -e 2021-12-31 -f csv -i bbands -i kc -i s
 
 - [x] Email verification
 - [x] Forgot my password
-- [ ] Edit my account
-- [ ] Register with Code (CODE-USER_ID) 5 invites
+- [ ] Edit my account (email, username, password, cookie consent, signup checked, dark mode)
+- [ ] Add account Code (CODE-USER_ID) 5 invites
 - [ ] Crypto feed, summarize, with editing post
+- [ ] Reset debounce
 - [ ] Social login
 - [ ] Stripe
 

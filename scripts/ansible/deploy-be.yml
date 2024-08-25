@@ -1,0 +1,5 @@
+---
+- hosts: be_servers
+  become: yes
+  roles:
+    - deploy-be
