@@ -281,7 +281,7 @@ CSRF_COOKIE_SECURE = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
-    "https://copilot.perpetuator.io",
+    "https://copilot.perpetuator.com",
 ]
 
 # # Allow credentials
