@@ -2,15 +2,6 @@
 
 The [WAF.md](WAF.md) explains the network setup. This document explains the deployment process.
 
-__TODO:__ Ansible it
-
-```shell
-ssh lestrange
-cd /mnt/storage1
-git clone git@github.com:Perpetuator-LLC/capital-copilot-be.git
-cd capital-copilot-be
-```
-
 ## Django Debug in Container
 
 To see the logs and follow:
@@ -20,7 +11,7 @@ docker-compose logs -f
 ```
 
 ```shell
-docker exec -it copilot_django sh
+docker exec -it copilot-be-django bash
 #...?
 docker-compose up -d --build
 ```
@@ -33,7 +24,7 @@ For the initial setup of the Django admin we need to run:
 docker exec copilot_django poetry run python manage.py migrate
 ```
 
-To create the super user you need a TTY, so you need to run:
+To create the superuser you need a TTY, so you need to run:
 
 ```shell
 docker exec -it copilot_django sh

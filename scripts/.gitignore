@@ -5,6 +5,7 @@ vault.yml
 
 # Ignore inventory files
 *.hosts.ini
+hosts.ini
 
 # Sensitive value files
 *.vault

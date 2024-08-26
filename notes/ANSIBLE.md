@@ -50,3 +50,12 @@ Then to debug the server:
 ```shell
 ansible-playbook deploy-be.yml --check -vvv
 ```
+
+To debug variables, use the `debug` module:
+
+```yaml
+- name: Display all variables/facts collected for a host
+  debug:
+    var: hostvars[inventory_hostname]
+  tags: always
+```

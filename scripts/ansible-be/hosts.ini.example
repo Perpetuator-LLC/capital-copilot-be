@@ -1,0 +1,20 @@
+; Copyright (c) 2024 Perpetuator LLC
+[all:vars]
+env=prod
+
+[be_servers]
+192.168.1.123
+
+[be_servers:vars]
+letsencrypt_host=copilot.example.io
+letsencrypt_email=user@example.com
+host_src_path=/opt/copilot/capital-copilot-be
+default_from_email=no-reply@example.com
+iam_user=ses-smtp-user.20240101-100000
+email_host=email-smtp.us-east-1.amazonaws.com
+email_host_user=AAAAAAAAAAAAAAAAAAAA
+contact_email=support@example.com
+debug=False
+allowed_hosts=copilot.example.com,127.0.0.1,localhost
+csrf_trusted_origins=http://192.168.1.123:4200,https://copilot.example.com
+account_default_http_protocol="http"

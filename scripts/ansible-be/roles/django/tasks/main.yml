@@ -1,0 +1,96 @@
+# Copyright (c) 2024 Perpetuator LLC
+---
+- name: Debug host_src_path
+  debug:
+    msg: "host_src_path is {{ host_src_path }}"
+  tags: always
+
+- name: Clone or update the Django project from Git
+  git:
+    repo: "git@github.com:Perpetuator-LLC/capital-copilot-be.git"
+    dest: "{{ host_src_path }}"
+    version: "main"
+    force: yes
+
+- name: Include vault variables
+  ansible.builtin.include_vars:
+    file: vault.yml
+    name: vault
+
+- name: Create .env file
+  copy:
+    dest: "{{ host_src_path }}/.env"
+    content: |
+      DEFAULT_FROM_EMAIL={{ default_from_email }}
+      IAM_USER={{ iam_user }}
+      EMAIL_HOST={{ email_host }}
+      EMAIL_HOST_USER={{ email_host_user }}
+      CONTACT_EMAIL={{ contact_email }}
+      EMAIL_HOST_PASSWORD={{ vault.email_host_password }}
+      SECRET_KEY={{ vault.secret_key }}
+      DEBUG={{ debug }}
+      ALLOWED_HOSTS={{ allowed_hosts }}
+      CSRF_TRUSTED_ORIGINS={{ csrf_trusted_origins }}
+      ACCOUNT_DEFAULT_HTTP_PROTOCOL={{ account_default_http_protocol }}
+      ALPHA_VANTAGE_API_KEY={{ vault.alpha_vantage_api_key }}
+      OPENAI_API_KEY={{ vault.openai_api_key }}
+
+- name: Copy Dockerfile template
+  template:
+    src: Dockerfile.j2
+    dest: "{{ host_src_path }}/Dockerfile"
+
+- name: Copy Docker Compose template
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ host_src_path }}/docker-compose.yml"
+
+- name: Ensure nginx directory exists
+  file:
+    path: "{{ host_src_path }}/nginx"
+    state: directory
+    mode: '0755'
+
+- name: Copy Nginx configuration file
+  copy:
+    src: nginx.conf
+    dest: "{{ host_src_path }}/nginx/nginx.conf"
+
+- name: Check if SQLite database file exists
+  ansible.builtin.stat:
+    path: "{{ host_src_path }}/db.sqlite3"
+  register: db_file
+
+- name: Backup existing database
+  command: cp "{{ host_src_path }}/db.sqlite3" "{{ host_src_path }}/db.sqlite3.$(date +%Y%m%d%H%M%S).bak"
+  when: db_file.stat.exists
+
+- name: Create an empty SQLite database file if it does not exist
+  command: touch "{{ host_src_path }}/db.sqlite3" && chmod 644 "{{ host_src_path }}/db.sqlite3"
+  when: not db_file.stat.exists
+
+- name: Build and start the Angular frontend container
+  command: docker-compose -f "{{ host_src_path }}/docker-compose.yml" up -d
+  args:
+    chdir: "{{ host_src_path }}"
+
+- name: Migrate the database
+  command: docker exec copilot-be-django poetry run python manage.py migrate
+  args:
+    chdir: "{{ host_src_path }}"
+
+- name: Collect static files
+  command: docker exec copilot-be-django poetry run python manage.py collectstatic --noinput
+  args:
+    chdir: "{{ host_src_path }}"
+
+#- name: Create message files for Spanish locale
+#  command: docker exec copilot-be-django poetry run python manage.py makemessages -l es
+#  args:
+#    chdir: "{{ host_src_path }}"
+#
+#- name: Compile message files
+#  command: docker exec copilot-be-django poetry run python manage.py compilemessages
+#  args:
+#    chdir: "{{ host_src_path }}"
+

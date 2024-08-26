@@ -1,4 +1,4 @@
 ---
 - hosts: fe_servers
   roles:
-    - deploy-fe
+    - angular

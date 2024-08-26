@@ -1,3 +1,4 @@
+; Copyright (c) 2024 Perpetuator LLC
 [all:vars]
 env=prod
 
@@ -11,11 +12,3 @@ host_src_path=/opt/copilot/capital-copilot-fe
 test_username=
 test_email=
 test_password=
-
-[be_servers]
-192.168.1.123
-
-[be_servers:vars]
-letsencrypt_host=copilot.example.io
-letsencrypt_email=user@example.com
-host_src_path=/opt/copilot/capital-copilot-be

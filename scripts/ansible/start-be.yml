@@ -1,5 +1,0 @@
----
-- hosts: be_servers
-  become: yes
-  roles:
-    - setup-be

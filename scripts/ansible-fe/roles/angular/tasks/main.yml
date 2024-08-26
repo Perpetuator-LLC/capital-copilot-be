@@ -36,7 +36,7 @@
     state: directory
     mode: '0755'
 
-- name: Create environment.prod.ts file
+- name: Create environment.ts file
   copy:
     dest: "{{ host_src_path }}/src/environments/environment.ts"
     content: |
@@ -67,11 +67,6 @@
   copy:
     src: nginx.conf
     dest: "{{ host_src_path }}/nginx/nginx.conf"
-
-#- name: Copy Angular project files
-#  synchronize:
-#    src: "{{ playbook_dir }}/your-angular-project/"
-#    dest: "{{ host_src_path }}"
 
 - name: Build and start the Angular frontend container
   command: docker-compose -f "{{ host_src_path }}/docker-compose.yml" up -d
