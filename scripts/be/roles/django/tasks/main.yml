@@ -72,7 +72,12 @@
   when: not db_file.stat.exists
 
 - name: Build and start the Angular frontend container
-  command: docker-compose -f "{{ host_src_path }}/docker-compose.yml" up -d
+  command: docker-compose -f "{{ host_src_path }}/docker-compose.yml" up -d --build
+  args:
+    chdir: "{{ host_src_path }}"
+
+- name: Make migrations
+  command: docker exec copilot-be-django poetry run python manage.py makemigrations
   args:
     chdir: "{{ host_src_path }}"
 

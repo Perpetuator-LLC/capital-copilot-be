@@ -70,6 +70,6 @@
     dest: "{{ host_src_path }}/nginx/nginx.conf"
 
 - name: Build and start the Angular frontend container
-  command: docker-compose -f "{{ host_src_path }}/docker-compose.yml" up -d
+  command: docker-compose -f "{{ host_src_path }}/docker-compose.yml" up -d --build
   args:
     chdir: "{{ host_src_path }}"

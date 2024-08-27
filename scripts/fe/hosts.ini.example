@@ -6,6 +6,7 @@ env=prod
 192.168.1.123
 
 [fe_servers:vars]
+host_src_path=/opt/copilot/capital-copilot-fe
 letsencrypt_host=copilot.example.com
 letsencrypt_email=user@example.com
 host_src_path=/opt/copilot/capital-copilot-fe
