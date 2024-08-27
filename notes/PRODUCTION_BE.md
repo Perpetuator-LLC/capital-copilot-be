@@ -21,14 +21,20 @@ docker-compose up -d --build
 For the initial setup of the Django admin we need to run:
 
 ```shell
-docker exec copilot_django poetry run python manage.py migrate
+docker exec copilot-be-django poetry run python manage.py migrate
 ```
 
 To create the superuser you need a TTY, so you need to run:
 
 ```shell
-docker exec -it copilot_django sh
+docker exec -it copilot-be-django bash
 poetry run python manage.py createsuperuser
+```
+
+The password can be updated via:
+
+```shell
+python manage.py changepassword user
 ```
 
 Once you login as the super user you need update the site to be perpetuator.com and then add the social applications for
@@ -37,7 +43,7 @@ GitHub and Google, make sure to link them to the site.
 ## Django Check
 
 ```shell
-docker exec copilot_django poetry run python manage.py check --deploy
+docker exec copilot-be-django poetry run python manage.py check --deploy
 ```
 
 # Docker Compose Invocation
@@ -112,5 +118,5 @@ docker-compose logs -f
 ```
 
 ```shell
-docker exec -it copilot_django sh
+docker exec -it copilot-be-django sh
 ```

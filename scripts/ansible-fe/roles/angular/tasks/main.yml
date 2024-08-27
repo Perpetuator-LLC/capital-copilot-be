@@ -42,6 +42,7 @@
     content: |
       export const environment = {
         production: true,
+        API_URL: '{{ api_url }}',
         TEST_USERNAME: '{{ test_username | default('') }}',
         TEST_EMAIL: '{{ test_email | default('') }}',
         TEST_PASSWORD: '{{ test_password | default('') }}',

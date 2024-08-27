@@ -62,8 +62,10 @@
   register: db_file
 
 - name: Backup existing database
-  command: cp "{{ host_src_path }}/db.sqlite3" "{{ host_src_path }}/db.sqlite3.$(date +%Y%m%d%H%M%S).bak"
+  shell: cp "{{ host_src_path }}/db.sqlite3" "{{ host_src_path }}/db.sqlite3.$(date +%Y%m%d%H%M%S).bak"
   when: db_file.stat.exists
+  args:
+    executable: /bin/bash
 
 - name: Create an empty SQLite database file if it does not exist
   command: touch "{{ host_src_path }}/db.sqlite3" && chmod 644 "{{ host_src_path }}/db.sqlite3"
