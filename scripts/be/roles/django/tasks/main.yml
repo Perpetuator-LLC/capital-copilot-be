@@ -34,6 +34,7 @@
       ACCOUNT_DEFAULT_HTTP_PROTOCOL={{ account_default_http_protocol }}
       ALPHA_VANTAGE_API_KEY={{ vault.alpha_vantage_api_key }}
       OPENAI_API_KEY={{ vault.openai_api_key }}
+      FRONTEND_URL={{ frontend_url }}
 
 - name: Copy Dockerfile template
   template:

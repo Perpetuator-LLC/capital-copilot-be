@@ -5,7 +5,7 @@ This project uses Django and Allauth.
 _NOTE: Commands were run within `poetry shell`._
 
 ```shell
-poetry add django django-allauth
+poetry add django django-allauth dj-rest-auth
 django-admin startproject copilot
 python manage.py startapp users
 ```

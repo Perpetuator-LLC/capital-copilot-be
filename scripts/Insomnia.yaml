@@ -1,13 +1,13 @@
 _type: export
 __export_format: 4
-__export_date: 2024-08-12T18:06:14.888Z
+__export_date: 2024-08-28T05:39:04.554Z
 __export_source: insomnia.desktop.app:v9.3.3
 resources:
   - _id: req_a6a5b865bc3b47978d5a0024454d8304
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1722942659433
+    modified: 1724708979461
     created: 1721845637809
-    url: http://127.0.0.1:8000/graphql/
+    url: "{{ _.url }}/graphql/"
     name: GQL - Get Autocomplete
     description: ""
     method: POST
@@ -52,15 +52,15 @@ resources:
     _type: workspace
   - _id: req_e67f5db618e943feba4cd239a1c47c22
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1720325131279
+    modified: 1724708983992
     created: 1717959463431
-    url: http://127.0.0.1:8000/graphql/
+    url: "{{ _.url }}/graphql/"
     name: GQL - Get Price Data
     description: ""
     method: POST
     body:
       mimeType: application/graphql
-      text: '{"query":"query {\n  getChartData(ticker: \"TSLA\")
+      text: '{"query":"query {\n  getChartData(ticker: \"WMT\")
         {\n    success\n    message\n\t\tsqueeze
         {\n\t\t\tx\n\t\t\ty\n\t\t}\n    ohlc
         {\n      x\n      y\n    }\n    volume
@@ -93,37 +93,64 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
-  - _id: req_0e28e3dab04b4be9b0d5239cc1de1dfb
+  - _id: req_1b6a4108864a47b897f1cd4971b23474
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1722942657971
-    created: 1717354776372
-    url: http://127.0.0.1:8000/api/
-    name: Get Price Data
+    modified: 1724799412566
+    created: 1724795757904
+    url: "{{ _.url }}/auth/password/reset/confirm/"
+    name: Forgot Confirm
     description: ""
     method: POST
     body:
       mimeType: application/json
       text: |-
         {
-        	"ticker": "AAPL"
+        	"token": "ccfx25-bda2cc001d6610baee1412535eb6641a",
+        	"uid": "14",
+        	"new_password1": "letmein12",
+        	"new_password2": "letmein12"
         }
     parameters: []
     headers:
       - name: Content-Type
         value: application/json
-        id: pair_d3bd1b7520ae459595b37727a34839aa
       - name: User-Agent
         value: insomnia/9.2.0
-        id: pair_25fd3d4406874f64874e793e1388adb1
-      - id: pair_6aa67da1e15045c0a72d3d1d9a119539
-        name: Authorization
-        value: Bearer {% response 'body', 'req_359b0d8863ad46fe9eacc2889471e93b',
-          'b64::JC5hY2Nlc3M=::46b', 'never', 60 %}
-        description: ""
-    authentication:
-      type: none
+    authentication: {}
     preRequestScript: ""
-    metaSortKey: -1710944422498.25
+    metaSortKey: -1714149599372.625
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_2d45cb3f8d2244a4a45e24e2a7bb27b3
+    parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
+    modified: 1724820589122
+    created: 1724050288006
+    url: "{{ _.url }}/auth/password/reset/"
+    name: Forgot
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "{{ _.email }}"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    preRequestScript: ""
+    metaSortKey: -1710944422473.25
     isPrivate: false
     pathParameters: []
     settingStoreCookies: true
@@ -135,9 +162,9 @@ resources:
     _type: request
   - _id: req_adaab43b4fd64835803af24bf4350222
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1722942655899
+    modified: 1724784125215
     created: 1717468767695
-    url: http://127.0.0.1:8000/api/token/refresh/
+    url: "{{ _.url }}/api/token/refresh/"
     name: Refresh Token
     description: ""
     method: POST
@@ -145,7 +172,7 @@ resources:
       mimeType: application/json
       text: >-
         {
-        	"refresh": "{% response 'body', 'req_359b0d8863ad46fe9eacc2889471e93b', 'b64::JC5yZWZyZXNo::46b', 'when-expired', 60 %}"
+        	"refresh": "{% response 'body', 'req_359b0d8863ad46fe9eacc2889471e93b', 'b64::JC5rZXk=::46b', 'when-expired', 60 %}"
         }
     parameters: []
     headers:
@@ -155,7 +182,7 @@ resources:
         value: insomnia/9.2.0
     authentication: {}
     preRequestScript: ""
-    metaSortKey: -1710944422485.75
+    metaSortKey: -1710944422467
     isPrivate: false
     pathParameters: []
     settingStoreCookies: true
@@ -167,17 +194,17 @@ resources:
     _type: request
   - _id: req_359b0d8863ad46fe9eacc2889471e93b
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1722943360935
+    modified: 1724778707404
     created: 1717356120353
-    url: http://127.0.0.1:8000/api/token/
-    name: Get Refresh Token
+    url: "{{ _.url }}/auth/login/"
+    name: Login
     description: ""
     method: POST
     body:
       mimeType: application/json
       text: |-
         {
-        	"username": "{{ _.username }}",
+        	"email": "{{ _.email }}",
         	"password": "{{ _.password }}"
         }
     parameters: []
@@ -198,11 +225,108 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
+  - _id: req_21b361a68d7f4957bea7e766db4a1228
+    parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
+    modified: 1724796495434
+    created: 1724784582596
+    url: "{{ _.url }}/auth/logout/"
+    name: Logout
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "{{ _.email }}",
+        	"password": "{{ _.password }}"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    preRequestScript: ""
+    metaSortKey: -1710944422456.0625
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_b2ed2c5a08cc41988534df02cc96c475
+    parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
+    modified: 1724784319740
+    created: 1724784274662
+    url: "{{ _.url }}/auth/registration/resend-email/"
+    name: Verify Resend
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "{{ _.email }}"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    preRequestScript: ""
+    metaSortKey: -1710944422451.375
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_e34cae6e5e6e4deca5000a591e4ef3b2
+    parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
+    modified: 1724784277359
+    created: 1724778537381
+    url: "{{ _.url }}/auth/registration/verify-email/"
+    name: Verify
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"key": "MzE:1sj0yr:qo4vQaXyTpyCIyNabfpvgVvzGMt0H8J3HG0duNT-fek"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/9.2.0
+    authentication: {}
+    preRequestScript: ""
+    metaSortKey: -1710944422442
+    isPrivate: false
+    pathParameters: []
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
   - _id: req_e5bd1277d25c447090b914556acfa07c
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1722960779147
+    modified: 1724782807545
     created: 1722942634281
-    url: http://127.0.0.1:8000/api/register/
+    url: "{{ _.url }}/auth/registration/"
     name: Register
     description: ""
     method: POST
@@ -210,9 +334,10 @@ resources:
       mimeType: application/json
       text: |-
         {
-        	"username": "{{ _.username }}",
+        	"username": "{{ _.email }}",
         	"email": "{{ _.email }}",
-        	"password": "{{ _.password }}"
+        	"password1": "{{ _.password }}",
+        	"password2": "{{ _.password }}"
         }
     parameters: []
     headers:
@@ -252,20 +377,41 @@ resources:
     _type: environment
   - _id: jar_a699de087d1b2662321944b743628b4c1fb0ccbe
     parentId: wrk_688f2b0a04ba46bab70b4bb385e11e07
-    modified: 1723309368802
+    modified: 1724823394424
     created: 1717354745384
     name: Default Jar
     cookies:
       - key: csrftoken
-        value: teW9vjXkcpXNJroUpflUFha1gyUSpsvl
-        expires: 2025-08-09T17:02:48.000Z
+        value: Bw0WWJaod7or0HcejpZNl5yh5g88dooA
+        expires: 2025-08-27T04:13:18.000Z
         maxAge: 31449600
         domain: 127.0.0.1
         path: /
         secure: true
         hostOnly: true
         creation: 2024-06-09T19:01:31.690Z
-        lastAccessed: 2024-08-10T17:02:48.802Z
+        lastAccessed: 2024-08-28T04:13:18.898Z
         sameSite: lax
-        id: be0edace-a1cf-43aa-b001-47d7a9ed2fbb
+        id: cc967bdf-f408-48b6-818c-5e8fa49bc845
+      - key: messages
+        value: .eJztzFEKgCAMANCryL6HSCcIOoaISKxY5Sa67t8Z-vcd4MUIOV9DJVcao5wEGHAJCJvKwb0WYxVHtfDjBok5Uyd8r416I3uLafe7Vg8IkHBmM5vZzH5l6QPHeI9I:1sj1CI:9nwasYCwJOKglcZot0YeI4VEIUZmEg6ZQhgyJ_UrUTY
+        domain: 127.0.0.1
+        path: /
+        httpOnly: true
+        hostOnly: true
+        creation: 2024-08-27T17:01:36.953Z
+        lastAccessed: 2024-08-27T18:45:42.622Z
+        sameSite: lax
+        id: f97a1c13-f295-4ca0-8887-b63ec50cd1da
+      - key: sessionid
+        value: '""'
+        expires: 1970-01-01T00:00:00.000Z
+        maxAge: 0
+        domain: 127.0.0.1
+        path: /
+        hostOnly: true
+        creation: 2024-08-27T17:01:36.954Z
+        lastAccessed: 2024-08-28T05:36:34.423Z
+        sameSite: lax
+        id: 95754a28-2ed6-470c-b728-e6cf20141e56
     _type: cookie_jar

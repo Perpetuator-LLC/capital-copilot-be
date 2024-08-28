@@ -26,6 +26,7 @@ graphene-django = "^3.2.1"
 numpy = ">=1.0.0,<2.0.0"
 requests = "^2.32.3"
 types-requests = "^2.32.0.20240712"
+dj-rest-auth = "^6.0.0"
 
 [tool.poetry.group.dev.dependencies]
 #langchain = "^0.1.11"

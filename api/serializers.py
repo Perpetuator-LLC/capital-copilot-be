@@ -9,11 +9,13 @@ import logging
 from smtplib import SMTPException
 from typing import Dict
 
-from allauth.account.forms import ResetPasswordForm
 from allauth.account.models import EmailAddress
+from allauth.account.utils import user_pk_to_url_str
+from dj_rest_auth.serializers import PasswordResetSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.db import transaction
+from django.utils.safestring import mark_safe
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -21,6 +23,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from copilot import settings
 
 
+# TODO: No longer used, right?
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs) -> Dict[str, str]:
         try:
@@ -37,23 +40,19 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return data
 
 
-class PasswordResetSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-
-    def validate_email(self, value):
-        if not User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("No user is associated with this email address.")
-        return value
-
-    def save(self, request):
-        # Trigger password reset using Allauth's ResetPasswordForm
-        form = ResetPasswordForm({"email": self.validated_data["email"]})
-        if form.is_valid():
-            form.save(request=request)
-        else:
-            raise serializers.ValidationError(form.errors)
+def url_generator(request, user, token):
+    uid = user_pk_to_url_str(user)
+    return mark_safe(f"{settings.FRONTEND_URL}/reset?token={token}&uid={uid}")
 
 
+class CustomPasswordResetSerializer(PasswordResetSerializer):
+    def get_email_options(self):
+        return {
+            "url_generator": url_generator,
+        }
+
+
+# TODO: No longer used, right?
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, validators=[validate_password])
 
@@ -97,8 +96,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             logging.exception(f"Validation error: {str(e)}")
             raise
         except Exception as e:
-            logging.exception("Failed to create user.", e)
+            logging.exception("Failed to create user. ", exc_info=e)
             error = "Failed to create user."
             if settings.DEBUG:
-                error += str(e)
+                error += " " + str(e)
             raise serializers.ValidationError({"creation": error})

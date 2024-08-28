@@ -84,21 +84,24 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django_extensions",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.github",
-    "allauth.socialaccount.providers.google",
+    "api",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "rest_framework_simplejwt",
+    "dj_rest_auth",
+    "dj_rest_auth.registration",
     # "django_plotly_dash.apps.DjangoPlotlyDashConfig",
     "corsheaders",
     "common",
     # "users",
     # "copilot_plugin_view",
     # "copilot_plugin_dashboard",
-    "rest_framework",
-    "rest_framework_simplejwt",
-    "api",
     "graphene_django",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.github",
+    "allauth.socialaccount.providers.google",
 ]
 
 GRAPHENE = {"SCHEMA": "api.schema.schema"}
@@ -125,6 +128,7 @@ SIMPLE_JWT = {
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
     "TOKEN_TYPE_CLAIM": "token_type",
 }
+REST_USE_JWT = True
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -236,16 +240,29 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-SITE_ID = 1
+SITE_ID = int(os.getenv("SITE_ID", "1"))
 
-LOGIN_REDIRECT_URL = "/"
+# LOGIN_REDIRECT_URL = "/"
 
-# To support email/password login
+FRONTEND_URL = os.getenv("FRONTEND_URL")
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_CONFIRMATION_HMAC = False
+ACCOUNT_ADAPTER = "api.adapters.CustomAccountAdapter"
+# To support email/password login
+# def custom_email_verification_link(request, user, email_address, token):
+#     verification_url = f"{FRONTEND_URL}/verify-email?token={token}"
+#     return verification_url
+# ACCOUNT_EMAIL_CONFIRMATION_URL = custom_email_verification_link
+# ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = f'{FRONTEND_URL}/auth/registration/verify-email/'
+# ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = f'{FRONTEND_URL}/charts/'
+
+REST_AUTH = {
+    "PASSWORD_RESET_SERIALIZER": "api.serializers.CustomPasswordResetSerializer",
+}
 
 # For emails
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
