@@ -23,71 +23,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-# from api.views import CustomPasswordResetView
-
-# from rest_framework_simplejwt.views import TokenRefreshView
-
-# from api.views import (  # SocialLoginView,
-#     CustomTokenObtainPairView,
-#     PasswordResetView,
-#     RegisterView, VerifyEmailView,
-# )
-#
-# auth/password/reset/ [name='rest_password_reset']
-# auth/password/reset/confirm/ [name='rest_password_reset_confirm']
-# auth/login/ [name='rest_login']
-# auth/logout/ [name='rest_logout']
-# auth/user/ [name='rest_user_details']
-# auth/password/change/ [name='rest_password_change']
-# auth/registration/
-
 urlpatterns = [
     path("graphql/", include("api.urls")),
-    # path('password/reset/', CustomPasswordResetView.as_view(), name='password_reset'),
     path("auth/", include("dj_rest_auth.urls")),  # Auth endpoints using JWT
     path("auth/registration/", include("dj_rest_auth.registration.urls")),  # Registration and email verification
-    # path('password/reset/', CustomPasswordResetView.as_view(), name='password_reset'),
     path("accounts/", include("django.contrib.auth.urls")),
     path("admin/", admin.site.urls),
-    # path("graphql/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    # path("graphql/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    # path("home/", views.home_page, name="home_page"),
-    # path("api/token/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
-    # path("api/token/", CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
-    # path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    # path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    # path("api/auth/social/", include("allauth.socialaccount.urls")),
-    # path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    # path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    # path("api/register/", RegisterView.as_view(), name="auth_register"),
-    # path("api/forgot/", PasswordResetView.as_view(), name="password_reset"),
-    # path('api/verify/', VerifyEmailView.as_view(), name='verify-email'),
-    # path("api/social/<str:provider>/", SocialLoginView.as_view(), name="social_login"),
-    # path("api/", api_views.api, name="api"),
-    # path("landing/", views.landing_page, name="landing_page"),
-    # path("test/", views.test, name="test"),
-    # path("full/", dashboard_views.full_page, name="full_page"),
-    # path("dash/", dashboard_views.plotly_dash_page, name="plotly_dash_page"),
-    # path("dash/", include("django_plotly_dash.urls")),
-    # path("dash2/", dashboard_views.dash_view, name="dash_view"),
-    # path("holding/", dashboard_views.holdings_page, name="holding_page"),
-    # path("plotly/", dashboard_views.plotly_page, name="plotly_page"),
-    # path("dashboard/", dashboard_views.dashboard_page, name="dashboard_page"),
-    # path("options/", dashboard_views.options_page, name="options_page"),
-    # path("view/", view_views.dashboard_page, name="view_page"),
-    # path("accounts/", include("allauth.urls")),
-    # path("accounts/social/", views.social_accounts, name="social_accounts"),
-    # path(
-    #     "accounts/social/add/<provider_id>/",
-    #     views.add_social_account,
-    #     name="add_social_account",
-    # ),
-    # path(
-    #     "accounts/social/remove/<int:account_id>/",
-    #     views.remove_social_account,
-    #     name="remove_social_account",
-    # ),
-    # path("contact/", views.contact, name="contact"),
-    # path("set_dark_mode/", views.set_dark_mode, name="set_dark_mode"),
-    # path("users/preferences.js", views.user_preferences_js, name="user_preferences_js"),
 ]

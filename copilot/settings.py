@@ -128,7 +128,6 @@ SIMPLE_JWT = {
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
     "TOKEN_TYPE_CLAIM": "token_type",
 }
-REST_USE_JWT = True
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -262,7 +261,10 @@ ACCOUNT_ADAPTER = "api.adapters.CustomAccountAdapter"
 
 REST_AUTH = {
     "PASSWORD_RESET_SERIALIZER": "api.serializers.CustomPasswordResetSerializer",
+    "USE_JWT": True,
+    "JWT_AUTH_HTTPONLY": False,
 }
+# REST_USE_JWT = True
 
 # For emails
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
